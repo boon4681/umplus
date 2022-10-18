@@ -1,0 +1,54 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model user {
+  id          Int
+  user_id     Int
+  username    String
+  email       String
+  password    String
+  budget      Float
+  setting     Json     @db.Json
+  created     DateTime @db.Timestamp(6)
+  last_update DateTime @db.Timestamp(6)
+
+  @@id([id, user_id])
+}
+
+model send {
+  id             Int
+  transcation_id Int
+  sender_id      Int
+  receiver_id    Int
+  info           String
+  amount         Float
+  timestamp      DateTime @db.Timestamp(6)
+
+  @@id([id, transcation_id, sender_id, receiver_id])
+}
+
+model receive {
+  id             Int
+  transcation_id Int
+  sender_id      Int
+  receiver_id    Int
+  info           String
+  amount         Float
+  timestamp      DateTime @db.Timestamp(6)
+
+  @@id([id, transcation_id, sender_id, receiver_id])
+}
+
+model transcation {
+  id             Int
+  user_id        Int
+  transcation_id Int
+
+  @@id([id, user_id, transcation_id])
+}
