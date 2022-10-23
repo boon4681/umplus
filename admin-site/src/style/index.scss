@@ -11,3 +11,11 @@ body {
 .white-box {
     @apply shadow-1 rounded-[36px] bg-white overflow-hidden;
 }
+
+.dark-hover{
+    @apply hover:bg-[#424242] bg-[#2E3132] transition duration-200
+}
+
+.dark-hover.focus{
+    @apply bg-[#424242]
+}

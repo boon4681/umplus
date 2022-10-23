@@ -1,54 +1,52 @@
 generator client {
-  provider = "prisma-client-js"
+    provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
-}
-
-model user {
-  id          Int
-  user_id     Int
-  username    String
-  email       String
-  password    String
-  budget      Float
-  setting     Json     @db.Json
-  created     DateTime @db.Timestamp(6)
-  last_update DateTime @db.Timestamp(6)
-
-  @@id([id, user_id])
-}
-
-model send {
-  id             Int
-  transcation_id Int
-  sender_id      Int
-  receiver_id    Int
-  info           String
-  amount         Float
-  timestamp      DateTime @db.Timestamp(6)
-
-  @@id([id, transcation_id, sender_id, receiver_id])
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
 }
 
 model receive {
-  id             Int
-  transcation_id Int
-  sender_id      Int
-  receiver_id    Int
-  info           String
-  amount         Float
-  timestamp      DateTime @db.Timestamp(6)
-
-  @@id([id, transcation_id, sender_id, receiver_id])
+    id             Int         @id @default(autoincrement())
+    sender_id      Int         @unique
+    receiver_id    Int         @unique
+    info           String
+    amount         Float
+    timestamp      DateTime    @db.Timestamp(6)
+    transaction_id Int         @unique
+    transaction    transaction @relation(fields: [transaction_id], references: [transaction_id], onDelete: NoAction, onUpdate: NoAction)
 }
 
-model transcation {
-  id             Int
-  user_id        Int
-  transcation_id Int
+model send {
+    id               Int         @id @default(autoincrement())
+    sender_id        Int
+    receiver_id      Int
+    info             String
+    amount           Float
+    timestamp        DateTime    @db.Timestamp(6)
+    transaction_id   Int         @unique
+    transaction      transaction @relation(fields: [transaction_id], references: [transaction_id], onDelete: NoAction, onUpdate: NoAction)
+}
 
-  @@id([id, user_id, transcation_id])
+model transaction {
+    transaction_id Int      @id @default(autoincrement())
+    user_id        Int      @unique
+    timestamp        DateTime    @db.Timestamp(6)
+    user           user     @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction)
+    receive        receive?
+    send           send?
+}
+
+model user {
+    id               Int          @id @default(autoincrement())
+    user_id          Int          @unique
+    username         String       @unique
+    email            String       @unique
+    password         String
+    budget           Float
+    setting          Json         @db.Json
+    created          DateTime     @db.Timestamp(6)
+    last_update      DateTime     @db.Timestamp(6)
+    transaction      transaction?
 }

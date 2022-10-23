@@ -3,14 +3,15 @@ import Dashboard from './pages/Dashboard'
 import Login from './pages/Login'
 import './style/global.pcss'
 import './style/index.scss'
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useRoutes } from "react-router-dom";
+import { useAuth } from './hooks/useAuth'
 
 function App() {
-    const isLogin = false
+    const { isAuthenticated } = useAuth()
     return (
         <div className='flex justify-center'>
             <Routes>
-                <Route path="/" element={isLogin ? <Dashboard /> : <Login />}></Route>
+                <Route path="/" element={isAuthenticated == true ? <Dashboard /> : <Login />}></Route>
             </Routes>
         </div>
     )
