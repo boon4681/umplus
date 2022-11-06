@@ -9,44 +9,43 @@ datasource db {
 
 model receive {
     id             Int         @id @default(autoincrement())
-    sender_id      Int         @unique
-    receiver_id    Int         @unique
+    sender_id      Int         
+    receiver_id    Int         
     info           String
     amount         Float
-    timestamp      DateTime    @db.Timestamp(6)
+    timestamp      DateTime    @default(now()) @db.Timestamp(6)
     transaction_id Int         @unique
     transaction    transaction @relation(fields: [transaction_id], references: [transaction_id], onDelete: NoAction, onUpdate: NoAction)
 }
 
 model send {
-    id               Int         @id @default(autoincrement())
-    sender_id        Int
-    receiver_id      Int
-    info             String
-    amount           Float
-    timestamp        DateTime    @db.Timestamp(6)
-    transaction_id   Int         @unique
-    transaction      transaction @relation(fields: [transaction_id], references: [transaction_id], onDelete: NoAction, onUpdate: NoAction)
+    id             Int         @id @default(autoincrement())
+    sender_id      Int
+    receiver_id    Int
+    info           String
+    amount         Float
+    timestamp      DateTime    @default(now()) @db.Timestamp(6)
+    transaction_id Int         @unique
+    transaction    transaction @relation(fields: [transaction_id], references: [transaction_id], onDelete: NoAction, onUpdate: NoAction)
 }
 
 model transaction {
     transaction_id Int      @id @default(autoincrement())
-    user_id        Int      @unique
-    timestamp        DateTime    @db.Timestamp(6)
-    user           user     @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction)
+    user_id        Int      
+    timestamp      DateTime @default(now()) @db.Timestamp(6)
+    status         String
     receive        receive?
     send           send?
 }
 
 model user {
-    id               Int          @id @default(autoincrement())
-    user_id          Int          @unique
-    username         String       @unique
-    email            String       @unique
-    password         String
-    budget           Float
-    setting          Json         @db.Json
-    created          DateTime     @db.Timestamp(6)
-    last_update      DateTime     @db.Timestamp(6)
-    transaction      transaction?
+    id          BigInt       @id @default(autoincrement())
+    user_id     Int          @unique
+    username    String
+    email       String
+    password    String
+    budget      Float
+    setting     Json         @db.Json
+    created     DateTime     @default(now()) @db.Timestamp(6)
+    last_update DateTime     @updatedAt @db.Timestamp(6)
 }

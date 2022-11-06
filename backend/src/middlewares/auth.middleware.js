@@ -4,11 +4,10 @@ const { btime } = require('../utils/time');
 const prisma = new PrismaClient()
 
 const useAdminAuth = async (req, res, next) => {
-    if (!req.is('application/json'))
-        return res.status(400).json({
-            code: 400,
-            message: 'Bad Request'
-        })
+    if (!req.isJson) return res.status(400).json({
+        code: 400,
+        message: 'Bad Request'
+    })
     const auth = req.get('Authorization')
     let p
     if (auth && auth.includes('Bearer ') && (p = auth.indexOf('Bearer ')) === 0) {
@@ -29,11 +28,10 @@ const useAdminAuth = async (req, res, next) => {
 }
 
 const useUserAuth = async (req, res, next) => {
-    if (!req.is('application/json'))
-        return res.status(400).json({
-            code: 400,
-            message: 'Bad Request'
-        })
+    if (!req.isJson) return res.status(400).json({
+        code: 400,
+        message: 'Bad Request'
+    })
     const auth = req.get('Authorization')
     let p;
     if (auth && auth.includes('Bearer ') && (p = auth.indexOf('Bearer ')) === 0) {

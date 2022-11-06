@@ -76,7 +76,7 @@ const UserLogin = async (req, res) => {
                     user_id: user_id
                 }
             })
-            if (data && bhash.validate(password, data.password)) {
+            if (data && bhash.validate(password, Buffer.from(data.password, 'base64').toString())) {
                 const user = {
                     username: data.username,
                     user_id: data.user_id,
@@ -101,6 +101,37 @@ const UserLogin = async (req, res) => {
         message: 'Bad Request'
     })
 }
+
+const DummyRegister = async (req, res) => {
+    const { user_id, username, email, password, budget } = req.body
+    const check = await prisma.user.findUnique({
+        where:{
+            user_id: parseInt(user_id)
+        }
+    })
+    if(!check){
+        await prisma.user.create({
+            data: {
+                user_id: parseInt(user_id),
+                username,
+                email,
+                password: Buffer.from(bhash.hash(password)).toString('base64'),
+                budget,
+                setting: {}
+            }
+        })
+    }else{
+        return res.status(400).json({
+            code: 400,
+            message: 'Bad Request'
+        })
+    }
+    return res.status(200).json({
+        code: 200,
+        message: "done"
+    })
+}
+
 module.exports = {
-    AdminLogin, UserLogin
+    AdminLogin, UserLogin, DummyRegister
 }

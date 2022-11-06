@@ -1,4 +1,8 @@
 import { FC } from "react";
+import { Route, Routes } from "react-router-dom";
+import Dummy from "../components/Dashboard/Dummy";
+import DummyTransaction from "../components/Dashboard/DummyTransaction";
+import Transaction from "../components/Dashboard/Transaction";
 import Nav from "../components/Nav";
 import Rank from "../components/Rank";
 
@@ -6,9 +10,13 @@ export default () => {
     return (
         <div className="grid grid-cols-5 gap-8 w-full h-screen p-8 max-w-[1440px]">
             <Nav></Nav>
-            
-            <div className="col-span-3 white-box">
-                
+
+            <div className="col-span-3 white-box p-10">
+                <Routes>
+                    <Route path="/" element={<Transaction></Transaction>}></Route>
+                    <Route path="/dummy" element={<Dummy></Dummy>}></Route>
+                    <Route path="/dummy-transaction" element={<DummyTransaction></DummyTransaction>}></Route>
+                </Routes>
             </div>
             <div className="flex flex-col space-y-8">
                 <div>

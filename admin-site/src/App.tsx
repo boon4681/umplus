@@ -11,7 +11,7 @@ function App() {
     return (
         <div className='flex justify-center'>
             <Routes>
-                <Route path="/" element={isAuthenticated == true ? <Dashboard /> : <Login />}></Route>
+                <Route path="/*" element={isAuthenticated == true ? <Dashboard /> : <Login />}></Route>
             </Routes>
         </div>
     )

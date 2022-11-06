@@ -6,6 +6,57 @@ export interface User {
     name: string
 }
 
+class dip {
+    private verify = false;
+    private wait: Promise<any>
+    constructor(private token: string, private logout: () => void) {
+        this.wait = fetch('/api/v1/admin/auth/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${this.token}`,
+            },
+        }).then(res => res.status < 500 ? res.json() : { code: res.status }).then(res => {
+            if (res.code === 200) {
+                this.verify = true
+            } else {
+                this.logout()
+            }
+        })
+    }
+    async on() {
+        await this.wait
+        return {
+            get: async (at: string, init?: RequestInit) => {
+                return this.verify ? await fetch(at, {
+                    ...init, method: 'GET', headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${this.token}`,
+                    }
+                }).then(res => {
+                    // if (res.status !== 200) {
+                    //     this.logout()
+                    // }
+                    return res.json()
+                }) : null
+            },
+            post: async (at: string, init?: RequestInit) => {
+                return this.verify ? await fetch(at, {
+                    ...init, method: 'POST', headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${this.token}`,
+                    }
+                }).then(res => {
+                    // if (res.status !== 200) {
+                    //     this.logout()
+                    // }
+                    return res.json()
+                }) : null
+            }
+        }
+    }
+}
+
 export interface AuthContextType {
     isAuthenticated: boolean
     user: User | null
@@ -13,6 +64,7 @@ export interface AuthContextType {
     logout: () => void
     loading: boolean,
     isLoggedIn: boolean,
+    dip?: dip
 }
 
 export const AuthContext = React.createContext<AuthContextType>(
@@ -25,6 +77,7 @@ const AuthProvider: FC<JSX.IntrinsicElements['div']> = ({ children }) => {
     const [loading, setLoading] = useState(false)
     const [isLoggedIn, setIsLoggedIn] = useState(false)
     const [error, setError] = useState<any>();
+    const [dip_, setDip] = useState<dip>();
 
     const init = async () => {
         const token = localStorage.getItem('mis.ammart.token')
@@ -35,9 +88,10 @@ const AuthProvider: FC<JSX.IntrinsicElements['div']> = ({ children }) => {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`,
                 },
-
-            }).then(res => res.json())
+            }).then(res => res.status < 500 ? res.json() : { code: res.status })
             if (auth.code === 200) {
+                console.log("HI")
+                setDip(await new dip(token, logout))
                 setUser(auth.data.user)
                 setIsAuthenticated(true)
             } else {
@@ -65,7 +119,7 @@ const AuthProvider: FC<JSX.IntrinsicElements['div']> = ({ children }) => {
             setError(null)
         }
     }, [error])
-    
+
     const login = async (username?: string, password?: string) => {
         setIsLoggedIn(true)
         if (username && password) {
@@ -106,6 +160,7 @@ const AuthProvider: FC<JSX.IntrinsicElements['div']> = ({ children }) => {
             isAuthenticated,
             loading,
             isLoggedIn: isLoggedIn,
+            dip: dip_
         }}>
             <ToastContainer
                 position="top-right"

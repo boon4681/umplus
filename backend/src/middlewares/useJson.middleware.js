@@ -6,6 +6,7 @@ const useJson = (req,res,next) =>{
         code: 400,
         message: 'Bad Request'
     })
+    req.isJson = true
     next()
 }
 
