@@ -24,8 +24,8 @@ module.exports = {
                     "LINESeedHe",
                     "sans-serif"
                 ],
-                LINESeedBg:[
-                    "LINESeedBg",
+                LINESeedBd:[
+                    "LINESeedBd",
                     "sans-serif"
                 ],
                 LINESeedXBd:[

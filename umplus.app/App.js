@@ -11,6 +11,7 @@ import Login from './src/pages/Login';
 import { AuthProvider } from './src/components/AuthProvinder';
 import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
+import Routes from './src/Routes';
 
 function loadFont() {
     const [fontsLoaded] = useFonts({
@@ -46,7 +47,7 @@ export default function App() {
         <AuthProvider>
             <View className="flex" onLayout={onLayoutRootView}>
                 <Image className={`w-full h-full`} source={BG} />
-                <Login></Login>
+                <Routes></Routes>
                 <StatusBar style="auto" />
             </View>
         </AuthProvider>

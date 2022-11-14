@@ -99,7 +99,7 @@ export const AuthProvider = ({ children }) => {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    'user': username,
+                    'user_id': username,
                     'password': password
                 })
             }).catch(()=>{return {code: 500}})

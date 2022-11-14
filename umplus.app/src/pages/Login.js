@@ -8,8 +8,8 @@ import useValidator from '../hooks/useValidator';
 import { useAuth } from '../hooks/useAuth';
 
 const validator = yup.object().shape({
-    username: yup.string().length(5).matches(/\d+/).required(),
-    password: yup.string().length(13).matches(/\d+/).required()
+    username: yup.string().length(5,'เลขประจำตัวต้องมี 5 ตัวเท่านั้น').matches(/\d+/).required(),
+    password: yup.string().length(13,'รหัสผ่านต้องมี 13 ตัวเท่านั้น').matches(/\d+/).required()
 })
 
 export default function Login() {
@@ -52,7 +52,7 @@ export default function Login() {
                         className="font-LINESeedRg font-normal text-lg bg-white text-SonicSilver px-5 py-3 w-full border-2 border-RaisinBlack rounded-xl"
                         placeholder="เลขประจำตัว"
                     />
-                    <Text>{errors.username}</Text>
+                    <Text className='text-rose-500 font-LINESeedRg text-base'>{errors.username}</Text>
                 </View>
                 <View>
                     <Text className="font-LINESeedRg font-normal text-xl text-RaisinBlack">
@@ -66,6 +66,7 @@ export default function Login() {
                         className="font-LINESeedRg font-normal text-lg bg-white text-SonicSilver px-5 py-3 w-full border-2 border-RaisinBlack rounded-xl"
                         placeholder="เลขบัตรประชาชน"
                     />
+                    <Text className='text-rose-500 font-LINESeedRg text-base'>{errors.password}</Text>
                 </View>
                 <View>
                     <TouchableOpacity
