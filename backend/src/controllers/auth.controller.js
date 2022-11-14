@@ -55,7 +55,7 @@ const UserLogin = async (req, res) => {
         if (b && b.data.user_id) {
             const data = await prisma.user.findUnique({
                 where: {
-                    user_id: b.data.user_id
+                    user_id: parseInt(b.data.user_id)
                 }
             })
             if (data.user_id == b.data.user_id) {
@@ -73,7 +73,7 @@ const UserLogin = async (req, res) => {
         if (await UserLoginValidator.isValid({ user_id, password })) {
             const data = await prisma.user.findUnique({
                 where: {
-                    user_id: user_id
+                    user_id: parseInt(user_id)
                 }
             })
             if (data && bhash.validate(password, Buffer.from(data.password, 'base64').toString())) {
