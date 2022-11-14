@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "umplus.app",
-    "slug": "umplus.app",
+    "name": "umplus",
+    "slug": "umplus",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",

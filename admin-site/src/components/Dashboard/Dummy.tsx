@@ -86,7 +86,7 @@ export default () => {
                         <TextInput
                             value={username}
                             name="Username"
-                            type="username"
+                            type="text"
                             onChange={setUsername}
                             placeholder="Username"
                             error={error.username}
