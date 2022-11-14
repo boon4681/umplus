@@ -7,7 +7,7 @@ export default function Header() {
     const { isAuthenticated } = useAuth()
     return (
         <View className="flex items-center w-full flex-row">
-            <Image className="w-[100px] h-[80px]" source={Logo} />
+            <Image className="w-[80px] h-[60px]" source={Logo} />
             {isAuthenticated && <View className="ml-auto h-full flex justify-center">
                 <Image className="w-[24px] h-[24px]" source={MENUICON} />
             </View>}
