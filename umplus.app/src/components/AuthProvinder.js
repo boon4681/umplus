@@ -1,5 +1,7 @@
 import React, { Component, FC, useEffect, useMemo, useState } from "react";
+import { StyleSheet, Text, View, Image, ImageBackground, Platform, NativeModules, Button, Pressable, TouchableOpacity } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import LogTab from "./LogTab";
 
 const host = 'http://159.223.71.170:5173'
 
@@ -23,7 +25,7 @@ class dip {
             } else {
                 this.logout()
             }
-        }).catch(()=>{
+        }).catch(() => {
             this.verify = false
         })
     }
@@ -31,37 +33,37 @@ class dip {
         await this.wait
         return {
             get: async (at, init) => {
-                return this.verify ? await fetch(at, {
+                return this.verify ? await fetch(`${host}/api/${at}`, {
                     ...init, method: 'GET', headers: {
                         'Content-Type': 'application/json',
                         "Authorization": `Bearer ${this.token}`
                     }
                 }).then(res => {
                     return res.json()
-                }).catch(()=>null) : null
+                }).catch(() => null) : null
             },
             post: async (at, init) => {
-                return this.verify ? await fetch(at, {
+                return this.verify ? await fetch(`${host}/api/${at}`, {
                     ...init, method: 'POST', headers: {
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${this.token}`
                     }
                 }).then(res => {
                     return res.json()
-                }).catch(()=>null) : null
+                }).catch(() => null) : null
             }
         }
     }
 }
 
-export const AuthContext = React.createContext()
+export const AuthContext = React.createContext({})
 
 export const AuthProvider = ({ children }) => {
     const [isAuthenticated, setIsAuthenticated] = useState(false)
-    const [user, setUser] = useState(null)
+    const [user, setUser] = useState()
     const [loading, setLoading] = useState(false)
     const [isLoggedIn, setIsLoggedIn] = useState(false)
-    const [error, setError] = useState(null)
+    const [error, setError] = useState()
     const [DIP, setDIP] = useState()
 
     const logout = () => {
@@ -71,18 +73,20 @@ export const AuthProvider = ({ children }) => {
     }
 
     const init = async () => {
-        const token = AsyncStorage.getItem('mis.ammart.token')
+        const token = await AsyncStorage.getItem('mis.ammart.token')
         if (token) {
-            const auth = await fetch('http://159.223.71.170:5173/api/v1/user/auth/login', {
+            const auth = await fetch(`${host}/api/v1/user/auth/login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`
                 }
-            }).then(res => res.status < 500 ? { code: res.status, ...res.json() } : { code: res.status }).catch(()=>{return {code: 500}})
-            if (auth.code === 200) {
+            })
+            const { data } = await auth.json()
+            setUser(data)
+            if (auth.status === 200) {
                 setDIP(await new dip(token, logout))
-                setUser(auth.data.user)
+                setUser(data.user)
                 setIsAuthenticated(true)
             } else {
                 logout()
@@ -93,7 +97,7 @@ export const AuthProvider = ({ children }) => {
     const login = async (username, password) => {
         setIsLoggedIn(true)
         if (username && password) {
-            const res = await fetch('http://159.223.71.170:5173/api/v1/user/auth/login', {
+            const res = await fetch(`${host}/api/v1/user/auth/login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -102,12 +106,13 @@ export const AuthProvider = ({ children }) => {
                     'user_id': username,
                     'password': password
                 })
-            }).catch(()=>{return {code: 500}})
-            if (res.code === 200) {
+            })
+            const data = await res.json()
+            if (res.status === 200) {
                 setIsLoggedIn(false)
-                setUser(res.data.user)
+                setUser(data.user)
                 setIsAuthenticated(true)
-                AsyncStorage.setItem('mis.ammart.token', res.data.token)
+                AsyncStorage.setItem('mis.ammart.token', data.token)
                 return
             }
             setError(res.message)
@@ -123,16 +128,20 @@ export const AuthProvider = ({ children }) => {
     }, [error])
 
     return (
-        <AuthContext.Provider value={{
-            user,
-            login,
-            logout,
-            isAuthenticated,
-            loading,
-            isLoggedIn,
-            dip: DIP
-        }}>
+        <AuthContext.Provider
+            value={{
+                user,
+                login,
+                logout,
+                isAuthenticated,
+                loading,
+                isLoggedIn,
+                dip: DIP
+            }}
+            // style={{ flex: 1 }}
+        >
             {loading && children}
+            <LogTab content={user}></LogTab>
         </AuthContext.Provider>
     )
 }

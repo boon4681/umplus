@@ -13,11 +13,11 @@ const validator = yup.object().shape({
 })
 
 export default function Login() {
-    const [username, setUsername] = useState('')
-    const [password, setPassword] = useState('')
+    const [username, setUsername] = useState('32396')
+    const [password, setPassword] = useState('1111111111111')
     const [disable,setDisable] = useState(false)
     const [errors,setError] = useState({})
-    const {login} = useAuth()
+    const {login,isAuthenticated} = useAuth()
 
     const onPress = async () =>{
         const validate = await TestError()
@@ -38,8 +38,7 @@ export default function Login() {
 
     return (
         <Container>
-            <Header></Header>
-            <View className="px-5 w-full h-full flex flex-col justify-center space-y-4">
+            <View className="px-5 w-full h-full flex flex-col space-y-4 pt-10">
                 <View>
                     <Text className="font-LINESeedRg font-normal text-xl text-RaisinBlack">
                         Username

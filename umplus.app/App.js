@@ -12,6 +12,7 @@ import { AuthProvider } from './src/components/AuthProvinder';
 import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import Routes from './src/Routes';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 function loadFont() {
     const [fontsLoaded] = useFonts({
@@ -44,12 +45,13 @@ function loadFont() {
 export default function App() {
     const { fontsLoaded, onLayoutRootView } = loadFont()
     return (
-        <AuthProvider>
-            <View className="flex" onLayout={onLayoutRootView}>
-                <Image className={`w-full h-full`} source={BG} />
-                <Routes></Routes>
-                <StatusBar style="auto" />
+        <SafeAreaProvider>
+            <View className="flex w-full h-full" onLayout={onLayoutRootView}>
+                <AuthProvider>
+                    <Routes></Routes>
+                </AuthProvider>
             </View>
-        </AuthProvider>
+            <StatusBar style="auto" />
+        </SafeAreaProvider>
     );
 }

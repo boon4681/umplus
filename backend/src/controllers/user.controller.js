@@ -24,7 +24,7 @@ const User = {
     me: async (req, res) => {
         const data = await prisma.user.findUnique({
             where: {
-                user_id: req.jwt.user_id
+                user_id: parseInt(req.jwt.data.user_id)
             }
         })
         delete data.created
@@ -39,7 +39,7 @@ const User = {
         const { user_id } = req.body
         const history = await prisma.transaction.findMany({
             where: {
-                user_id: user_id,
+                user_id: parseInt(user_id),
                 timestamp: {
                     gte: new Date(Date.now() - (a_day * 30)).toISOString()
                 }
