@@ -8,21 +8,24 @@ import useValidator from '../hooks/useValidator';
 import { useAuth } from '../hooks/useAuth';
 
 const validator = yup.object().shape({
-    username: yup.string().length(5,'เลขประจำตัวต้องมี 5 ตัวเท่านั้น').matches(/\d+/).required(),
-    password: yup.string().length(13,'รหัสผ่านต้องมี 13 ตัวเท่านั้น').matches(/\d+/).required()
+    username: yup.string().length(5, 'เลขประจำตัวต้องมี 5 ตัวเท่านั้น').matches(/\d+/).required(),
+    password: yup.string().length(13, 'รหัสผ่านต้องมี 13 ตัวเท่านั้น').matches(/\d+/).required()
 })
 
-export default function Login() {
+export default function Login({ navigation }) {
     const [username, setUsername] = useState('32396')
     const [password, setPassword] = useState('1111111111111')
-    const [disable,setDisable] = useState(false)
-    const [errors,setError] = useState({})
-    const {login,isAuthenticated} = useAuth()
+    const [disable, setDisable] = useState(false)
+    const [errors, setError] = useState({})
+    const { login, isAuthenticated } = useAuth()
 
-    const onPress = async () =>{
+    const onPress = async () => {
         const validate = await TestError()
-        if(validate){
-            login(username,password)
+        if (validate) {
+            setDisable(true)
+            login(username, password).then(()=>{
+                setDisable(false)
+            })
         }
     }
     const TestError = async () => {
@@ -32,9 +35,14 @@ export default function Login() {
         return validate
     }
 
-    useEffect(()=>{
+    useEffect(() => {
         TestError()
-    },[username,password])
+    }, [username, password])
+
+    useEffect(() => {
+        if (isAuthenticated)
+            navigation.navigate('Home')
+    }, [isAuthenticated])
 
     return (
         <Container>
@@ -45,7 +53,7 @@ export default function Login() {
                     </Text>
                     <TextInput
                         defaultValue={username}
-                        onChangeText={(e)=>{
+                        onChangeText={(e) => {
                             setUsername(e)
                         }}
                         className="font-LINESeedRg font-normal text-lg bg-white text-SonicSilver px-5 py-3 w-full border-2 border-RaisinBlack rounded-xl"
@@ -59,7 +67,7 @@ export default function Login() {
                     </Text>
                     <TextInput
                         defaultValue={password}
-                        onChangeText={(e)=>{
+                        onChangeText={(e) => {
                             setPassword(e)
                         }}
                         className="font-LINESeedRg font-normal text-lg bg-white text-SonicSilver px-5 py-3 w-full border-2 border-RaisinBlack rounded-xl"

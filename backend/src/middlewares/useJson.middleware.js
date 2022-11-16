@@ -7,6 +7,9 @@ const useJson = (req,res,next) =>{
         message: 'Bad Request'
     })
     req.isJson = true
+    if(req.body == undefined){
+        req.body = {}
+    }
     next()
 }
 

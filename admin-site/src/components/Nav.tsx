@@ -23,6 +23,7 @@ export default () => {
                         <div className='mx-2'><BiTransferAlt className='w-8 h-8' /></div>
                         <div className='w-full'>Transation</div>
                     </NavLink>
+                    <div className="text-white/80 px-1">Developer</div>
                     <NavLink
                         to="/dummy"
                         className={({ isActive }) =>

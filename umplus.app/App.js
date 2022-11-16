@@ -1,6 +1,16 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Image, ImageBackground, Platform, NativeModules } from 'react-native';
 import { useEffect, useCallback } from 'react';
+import { AuthProvider } from './src/components/AuthProvinder';
+import { useFonts } from 'expo-font';
+import * as SplashScreen from 'expo-splash-screen';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import 'react-native-gesture-handler';
+import 'intl';
+import 'intl/locale-data/jsonp/en';
+import 'intl/locale-data/jsonp/th';
+import 'intl/locale-data/jsonp/th-TH';
+
 import Logo from './assets/Logo.png'
 import MENUICON from './assets/menu_icon.png'
 import BG from './assets/BG.png'
@@ -8,11 +18,7 @@ import Scan_btn from './assets/scan_btn.png'
 import Nav_bg from './assets/nav.png'
 import Header from './src/components/Header';
 import Login from './src/pages/Login';
-import { AuthProvider } from './src/components/AuthProvinder';
-import { useFonts } from 'expo-font';
-import * as SplashScreen from 'expo-splash-screen';
 import Routes from './src/Routes';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 function loadFont() {
     const [fontsLoaded] = useFonts({
@@ -44,6 +50,12 @@ function loadFont() {
 
 export default function App() {
     const { fontsLoaded, onLayoutRootView } = loadFont()
+    if (!fontsLoaded) {
+        <SafeAreaProvider>
+            <View className="flex w-full h-full" onLayout={onLayoutRootView}></View>
+            <StatusBar style="auto" />
+        </SafeAreaProvider>
+    }
     return (
         <SafeAreaProvider>
             <View className="flex w-full h-full" onLayout={onLayoutRootView}>

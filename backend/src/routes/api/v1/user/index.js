@@ -4,7 +4,8 @@ const { useJson } = require('../../../../middlewares/useJson.middleware')
 
 const router = require('express').Router()
 
-router.use('/auth', useJson, require('./auth'))
-router.post('/@me', useJson, useUserAuth, User.me)
+router.use('/auth', require('./auth'))
+router.post('/@me', useUserAuth, User.me)
+router.use('/transaction', useUserAuth, require('./transction'))
 
-module.exports = router
+module.exports = router 

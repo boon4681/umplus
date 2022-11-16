@@ -28,7 +28,10 @@ app.use(express.urlencoded({
     extended: true
 }));
 
-app.use(require('./src/routes'))
+app.use((req,res,next)=>{
+    console.log(req.path)
+    next()
+},require('./src/routes'))
 
 // app.get('/users/:id', get_users.get_users)
 

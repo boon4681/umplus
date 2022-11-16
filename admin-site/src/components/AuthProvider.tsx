@@ -90,7 +90,6 @@ const AuthProvider: FC<JSX.IntrinsicElements['div']> = ({ children }) => {
                 },
             }).then(res => res.status < 500 ? res.json() : { code: res.status })
             if (auth.code === 200) {
-                console.log("HI")
                 setDip(await new dip(token, logout))
                 setUser(auth.data.user)
                 setIsAuthenticated(true)

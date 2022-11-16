@@ -64,12 +64,12 @@ export const AuthProvider = ({ children }) => {
     const [loading, setLoading] = useState(false)
     const [isLoggedIn, setIsLoggedIn] = useState(false)
     const [error, setError] = useState()
-    const [DIP, setDIP] = useState()
+    const [DIP, setDIP] = useState(new dip())
 
-    const logout = () => {
-        setUser(null)
+    const logout = async () => {
+        await AsyncStorage.removeItem('mis.ammart.token')
         setIsAuthenticated(false)
-        AsyncStorage.removeItem('mis.ammart.token')
+        setUser()
     }
 
     const init = async () => {
@@ -97,26 +97,28 @@ export const AuthProvider = ({ children }) => {
     const login = async (username, password) => {
         setIsLoggedIn(true)
         if (username && password) {
-            const res = await fetch(`${host}/api/v1/user/auth/login`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    'user_id': username,
-                    'password': password
+            try {
+                const res = await fetch(`${host}/api/v1/user/auth/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        'user_id': username,
+                        'password': password
+                    })
                 })
-            })
-            const data = await res.json()
-            if (res.status === 200) {
-                setIsLoggedIn(false)
-                setUser(data.user)
-                setIsAuthenticated(true)
-                AsyncStorage.setItem('mis.ammart.token', data.token)
-                return
-            }
-            setError(res.message)
-            logout()
+                const data = await res.json()
+                if (res.status === 200) {
+                    setIsLoggedIn(false)
+                    setUser(data.user)
+                    setIsAuthenticated(true)
+                    AsyncStorage.setItem('mis.ammart.token', data.token)
+                    return
+                }
+                setError(res.message)
+                logout()
+            } catch (error) {}
         }
         setIsLoggedIn(false)
     }
@@ -138,7 +140,7 @@ export const AuthProvider = ({ children }) => {
                 isLoggedIn,
                 dip: DIP
             }}
-            // style={{ flex: 1 }}
+        // style={{ flex: 1 }}
         >
             {loading && children}
             <LogTab content={user}></LogTab>

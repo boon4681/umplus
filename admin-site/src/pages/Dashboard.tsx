@@ -8,17 +8,16 @@ import Rank from "../components/Rank";
 
 export default () => {
     return (
-        <div className="grid grid-cols-5 gap-8 w-full h-screen p-8 max-w-[1440px]">
+        <div className="flex gap-8 w-full h-screen p-8 max-w-[1440px]">
             <Nav></Nav>
-
-            <div className="col-span-3 white-box p-10">
+            <div className="basis-3/5 white-box p-10" style={{overflow:'unset'}}>
                 <Routes>
                     <Route path="/" element={<Transaction></Transaction>}></Route>
                     <Route path="/dummy" element={<Dummy></Dummy>}></Route>
                     <Route path="/dummy-transaction" element={<DummyTransaction></DummyTransaction>}></Route>
                 </Routes>
             </div>
-            <div className="flex flex-col space-y-8">
+            {/* <div className="flex flex-col space-y-8">
                 <div>
                     <div className="white-box h-[600px]">
                         <div className="bg-[#1F2325] p-3 text-center text-white">
@@ -39,10 +38,10 @@ export default () => {
                         }
                     </div>
                 </div>
-                <div className="white-box h-full">
+                <div className="basis-1/5 white-box h-full">
 
                 </div>
-            </div>
+            </div> */}
         </div>
     )
 }

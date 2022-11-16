@@ -26,15 +26,22 @@ const Admin = {
         )
     },
     gettransaction: async (req, res) => {
-        const { timestamp, skip } = req.body
+        const { timestamp, skip, take } = req.body
         return res.json(
             await prisma.transaction.findMany({
                 where: {
                     timestamp: {
-                        lte: new Date(timestamp ? new Date(timestamp) : new Date.now()).toISOString(),
+                        lte: new Date(timestamp ? new Date(timestamp) : Date.now()).toISOString(),
                     }
                 },
-                take: 5,
+                orderBy: {
+                    transaction_id: 'desc',
+                },
+                include: {
+                    receive: true,
+                    send: true
+                },
+                take: take ? take : 5,
                 skip: skip ? skip : 0
             })
         )
@@ -54,7 +61,7 @@ const Admin = {
         )
     },
     getreceive: async (req, res) => {
-        const { timestamp, skip } = req.body
+        const { timestamp, skip } = req.body | {}
         return res.json(
             await prisma.receive.findMany({
                 where: {
@@ -128,6 +135,11 @@ const Admin = {
                         budget: { increment: (parseInt(amount)) }
                     }
                 })
+            } else {
+                return res.status(400).json({
+                    code: 400,
+                    message: 'Fail to create transaction'
+                })
             }
         } else {
             return res.status(400).json({
@@ -142,8 +154,8 @@ const Admin = {
     },
 }
 
-const Users={
-    user_send:async (req,res)=>{
+const User = {
+    user_send: async (req, res) => {
         const { sender_id, receiver_id, info, amount } = req.body;
         const is_exist = await prisma.user.findMany({
             where: {
@@ -205,6 +217,11 @@ const Users={
                         budget: { increment: (parseInt(amount)) }
                     }
                 })
+            } else {
+                return res.status(400).json({
+                    code: 400,
+                    message: 'Fail to create transaction'
+                })
             }
         } else {
             return res.status(400).json({
@@ -217,22 +234,28 @@ const Users={
             message: "done"
         })
     },
-    user_get_transaction: async (res,req)=>{
-        gettransaction: async (req, res) => {
-            const { timestamp, skip } = req.body
-            return res.json(
-                await prisma.transaction.findMany({
-                    where: {
-                        timestamp: {
-                            lte: new Date(timestamp ? new Date(timestamp) : new Date.now()).toISOString(),
-                        }
-                    },
-                    take: 10,
-                    skip: skip ? skip : 0
-                })
-            )
-        }
+    user_get_transaction: async (req, res) => {
+        const { timestamp, skip } = req.body | {}
+        return res.json(
+            await prisma.transaction.findMany({
+                where: {
+                    user_id: req.jwt.data.user_id,
+                    timestamp: {
+                        lte: new Date(timestamp ? new Date(timestamp) : Date.now()).toISOString(),
+                    }
+                },
+                orderBy: {
+                    'transaction_id': 'desc',
+                },
+                take: 10,
+                skip: skip ? skip : 0,
+                include: {
+                    receive: true,
+                    send: true
+                }
+            })
+        )
     }
 }
 
-module.exports = { Admin }
+module.exports = { Admin, User }

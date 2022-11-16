@@ -9,6 +9,8 @@ const useTransactionValidator = async (req, res, next) => {
     const { sender_id, receiver_id, info, amount } = req.body
     if (sender_id, receiver_id, info, amount) {
         if (await TransactionValidator.isValid({ sender_id, receiver_id, info, amount })) {
+            req.body.sender_id = parseInt(sender_id)
+            req.body.receiver_id = parseInt(receiver_id)
             return next()
         }
     }

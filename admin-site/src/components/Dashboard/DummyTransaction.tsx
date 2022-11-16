@@ -9,8 +9,8 @@ import { toast } from "react-toastify"
 export default () => {
     const { dip } = useAuth()
     const [users, setUsers] = useState<string[]>([]);
-    const [sender, setSender] = useState("")
-    const [receiver, setReceiver] = useState("")
+    const [sender_id, setSender] = useState("")
+    const [receiver_id, setReceiver] = useState("")
     const [info, setInfo] = useState("")
     const [amount, setAmount] = useState(0)
     const [error, setError] = useState<Record<string, string>>({})
@@ -22,15 +22,14 @@ export default () => {
     const onClick = async () => {
         const validate = await TestError()
         if (validate) {
-            const code = await (await dip!.on()).post('/api/v1/admin/dummy', {
+            const code = await (await dip!.on()).post('/api/v1/admin/transaction/dummy_transaction', {
                 body: JSON.stringify({
-                    sender,
-                    receiver,
+                    sender_id,
+                    receiver_id,
                     info,
                     amount
                 })
             })
-            console.log(code)
             if (code) {
                 if (code.code == 200) {
                     toast.success(`🍌 ${code.message}`, {
@@ -60,7 +59,7 @@ export default () => {
         init()
     }, [])
     const TestError = async () => {
-        const { validate, errors } = await Validator(TransactionValidator, { sender, receiver, info, amount })
+        const { validate, errors } = await Validator(TransactionValidator, { sender_id, receiver_id, info, amount })
         setError(errors)
         return validate
     }
@@ -69,10 +68,10 @@ export default () => {
             <div className="w-full max-w-sm">
                 <div className="grid grid-cols-2 gap-4 w-full">
                     <div>
-                        <Selection onChange={setSender} value={sender} name={"sender"} showName options={users.filter(a => a != receiver)} ></Selection>
+                        <Selection onChange={setSender} value={sender_id} name={"sender"} showName options={users.filter(a => a != receiver_id)} ></Selection>
                     </div>
                     <div>
-                        <Selection onChange={setReceiver} value={receiver} name={"receiver"} showName options={users.filter(a => a != sender)} ></Selection>
+                        <Selection onChange={setReceiver} value={receiver_id} name={"receiver"} showName options={users.filter(a => a != sender_id)} ></Selection>
                     </div>
                     <div>
                         <label className='text-lg'></label>
