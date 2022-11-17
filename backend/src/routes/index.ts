@@ -1,12 +1,12 @@
 import { Router } from "express"
 import useJson from "../middlewares/useJson.middleware"
 
-import AdminRouter from "./v1/admin"
-import UserRouter from "./v1/user"
+import AdminRouter from "./api/admin"
+import UserRouter from "./api/user"
 
 const router = Router()
 
-router.use('/api/v1/admin', useJson, AdminRouter)
-router.use('/api/v1/user', useJson, UserRouter)
+router.use('/api/admin', useJson, AdminRouter)
+router.use('/api/user', useJson, UserRouter)
 
 export default router

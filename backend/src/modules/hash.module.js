@@ -19,5 +19,5 @@ const bhash = function (salt, round) {
 
 
 module.exports = {
-    bhash: new bhash(process.env.BSALT, process.env.ROUND)
+    bhash: new bhash('HELLO HACKER IT\'s ME Boon4681', 11)
 }

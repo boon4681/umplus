@@ -17,6 +17,7 @@ enum AccountType {
 // Transaction status
 enum TXStatus {
     SUCCESS
+    PROCESS
     FAILED
     TX_NOT_ENOUGH_MONEY
     TX_ID_WAS_DECLARED
