@@ -1,6 +1,7 @@
 import React, { Component, FC, useEffect, useMemo, useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
+import axios, { AxiosRequestConfig } from 'axios'
 
 export interface User {
     name: string
@@ -24,36 +25,19 @@ class dip {
             }
         })
     }
-    async on() {
+    async fetch(at: string, method: AxiosRequestConfig['method'], init?: AxiosRequestConfig) {
         await this.wait
-        return {
-            get: async (at: string, init?: RequestInit) => {
-                return this.verify ? await fetch(at, {
-                    ...init, method: 'GET', headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${this.token}`,
-                    }
-                }).then(res => {
-                    // if (res.status !== 200) {
-                    //     this.logout()
-                    // }
-                    return res.json()
-                }) : null
-            },
-            post: async (at: string, init?: RequestInit) => {
-                return this.verify ? await fetch(at, {
-                    ...init, method: 'POST', headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${this.token}`,
-                    }
-                }).then(res => {
-                    // if (res.status !== 200) {
-                    //     this.logout()
-                    // }
-                    return res.json()
-                }) : null
-            }
-        }
+        return this.verify ? (
+            await axios({
+                ...init,
+                url: at,
+                method,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${this.token}`,
+                }
+            }).then(a => a.data)
+        ) : null
     }
 }
 

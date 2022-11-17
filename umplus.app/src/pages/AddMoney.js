@@ -34,7 +34,7 @@ const Header = () => {
 
 
 export default () => {
-    const {dip} = useAuth()
+    const { dip } = useAuth()
     const [num, setNum] = useState(0)
     const navigation = useNavigation()
     return (
@@ -59,16 +59,16 @@ export default () => {
                 </View>
                 <TouchableOpacity
                     onPress={() => {
-                        dip.on().then(a=>a.post('v1/user/transaction/add_money',{
-                            body:JSON.stringify({
+                        dip.fetch('v1/user/transaction/add_money', "POST", {
+                            data: {
                                 amount: num
-                            })
-                        }).then(a=>{
-                            if(a){
+                            }
+                        }).then(a => {
+                            if (a) {
                                 Toast.success(a.message)
                                 navigation.navigate('Home')
                             }
-                        }))
+                        })
                     }}
                     className={`px-5 py-3 w-full bg-[#3076FF] rounded-xl flex justify-center items-center mt-3`}
                 >

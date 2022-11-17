@@ -2,7 +2,8 @@ import { Request, Response } from "express";
 
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient()
-const { a_minute, a_day } = require('../utils/time')
+
+import { a_minute, a_day } from '../utils/time'
 
 const Admin: any = {
     last30minute: async (req: Request, res: Response) => {
@@ -275,7 +276,12 @@ const User = {
     },
     with_draw: async (req: any, res: Response) => {
         const { amount, account } = req.body
-        if (typeof amount == 'number' && typeof account == 'number') {
+        const is_exist = await prisma.user.findMany({
+            where: {
+                user_id: req.jwt.data.user_id
+            }
+        })
+        if (typeof amount == 'number' && typeof account == 'number' && is_exist.budget > amount) {
             const send_ts = await prisma.transaction.create({
                 data: {
                     user_id: req.jwt.data.user_id,
@@ -285,8 +291,8 @@ const User = {
             const send = await prisma.send.create({
                 data: {
                     sender_id: req.jwt.data.user_id,
-                    receiver_id:account,
-                    info:"ถอนเงินเข้ากระเป๋า admin",
+                    receiver_id: account,
+                    info: "ถอนเงินเข้ากระเป๋า admin",
                     amount,
                     transaction_id: send_ts.transaction_id
                 }
@@ -296,7 +302,7 @@ const User = {
                     user_id: req.jwt.data.user_id
                 },
                 data: {
-                    budget: { increment: -amount }
+                    budget: { decrement: amount }
                 }
             })
             return res.status(200).json({

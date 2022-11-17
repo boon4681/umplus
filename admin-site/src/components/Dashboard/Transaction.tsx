@@ -68,7 +68,7 @@ export default () => {
     const [all, setAll] = useState([])
     const chartRef = useRef(null);
     const load30min = async () => {
-        const data = await (await dip!.on()).post('/api/v1/admin/transaction/last30minute')
+        const data = await dip?.fetch('/api/v1/admin/transaction/last30minute', 'POST')
         if (data) {
             const d = data.map((a: any) => new Date(a.timestamp)) as Date[]
             setLast30(
@@ -85,7 +85,7 @@ export default () => {
     }
 
     const load7day = async () => {
-        const data = await (await dip!.on()).post('/api/v1/admin/transaction/last7day')
+        const data = await dip?.fetch('/api/v1/admin/transaction/last7day', 'POST')
         if (data) {
             const d = data.map((a: any) => new Date(a.timestamp)) as Date[]
             setLast7(
@@ -102,10 +102,10 @@ export default () => {
     }
 
     const loadAll = async () => {
-        const data = await (await dip!.on()).post('/api/v1/admin/transaction/history', {
-            body: JSON.stringify({
+        const data = await dip?.fetch('/api/v1/admin/transaction/history', 'POST', {
+            data: {
                 'take': 20
-            })
+            }
         })
         if (data) {
             setAll(data)
@@ -113,13 +113,13 @@ export default () => {
     }
 
     useEffect(() => {
-        if(dip){
+        if (dip) {
             load30min()
             load7day()
             loadAll()
         }
         const i = setInterval(() => {
-            if(dip){
+            if (dip) {
                 load30min()
                 load7day()
                 loadAll()
@@ -243,7 +243,7 @@ export default () => {
                         <div className="col-span-2 py-3">NAME</div>
                         <div className="py-3">VALUE</div>
                     </div>
-                    <div className="w-full overflow-y-scroll p-4" style={{flex:'1 1 0'}}>
+                    <div className="w-full overflow-y-scroll p-4" style={{ flex: '1 1 0' }}>
                         <div>
                             {
                                 all.map((a: any) => {

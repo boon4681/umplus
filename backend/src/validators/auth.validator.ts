@@ -18,4 +18,4 @@ const UserRegisterValidator = yup.object().shape({
     budget: yup.number().required()
 })
 
-export = { AdminLoginValidator, UserLoginValidator, UserRegisterValidator }
+export { AdminLoginValidator, UserLoginValidator, UserRegisterValidator }

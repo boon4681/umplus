@@ -105,17 +105,17 @@ export default () => {
             </View>
             <TouchableOpacity
                 onPress={() => {
-                    dip.on().then(a => a.post('v1/user/transaction/with_draw', {
-                        body: JSON.stringify({
+                    dip.fetch('v1/user/transaction/with_draw', "POST", {
+                        data: {
                             amount: num,
                             account: account
-                        })
+                        }
                     }).then(a => {
                         if (a) {
                             Toast.success(a.message)
                             navigation.navigate('Home')
                         }
-                    }))
+                    })
                 }}
                 className={`px-5 py-3 w-full bg-[#3076FF] rounded-xl flex justify-center items-center mt-10`}
             >

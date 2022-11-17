@@ -5,11 +5,11 @@ export default (dip) => {
     useEffect(() => {
         const load = () => {
             if (dip) {
-                dip.on().then(a => a.post('v1/user/transaction/history').then(data => {
+                dip.fetch('v1/user/transaction/history', 'POST').then(data => {
                     if (data) {
                         setHistory(data)
                     }
-                }))
+                })
             }
         }
         load()

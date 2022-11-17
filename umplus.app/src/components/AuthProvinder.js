@@ -2,6 +2,7 @@ import React, { Component, FC, useEffect, useMemo, useState } from "react";
 import { StyleSheet, Text, View, Image, ImageBackground, Platform, NativeModules, Button, Pressable, TouchableOpacity } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Toast } from 'toastify-react-native'
+import axios from 'axios'
 import LogTab from "./LogTab";
 
 const host = 'http://159.223.71.170:5173'
@@ -30,30 +31,19 @@ class dip {
             this.verify = false
         })
     }
-    async on() {
+    async fetch(at, method, init) {
         await this.wait
-        return {
-            get: async (at, init) => {
-                return this.verify ? await fetch(`${host}/api/${at}`, {
-                    ...init, method: 'GET', headers: {
-                        'Content-Type': 'application/json',
-                        "Authorization": `Bearer ${this.token}`
-                    }
-                }).then(res => {
-                    return res.json()
-                }).catch(() => null) : null
-            },
-            post: async (at, init) => {
-                return this.verify ? await fetch(`${host}/api/${at}`, {
-                    ...init, method: 'POST', headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${this.token}`
-                    }
-                }).then(res => {
-                    return res.json()
-                }).catch(() => null) : null
-            }
-        }
+        return this.verify ? (
+            await axios({
+                ...init,
+                url: `${host}/api/${at}`,
+                method,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${this.token}`,
+                }
+            }).then(a => a.data)
+        ) : null
     }
 }
 

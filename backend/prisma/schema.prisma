@@ -1,5 +1,6 @@
 generator client {
-    provider = "prisma-client-js"
+    provider        = "prisma-client-js"
+    previewFeatures = ["interactiveTransactions"]
 }
 
 datasource db {
@@ -7,47 +8,73 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
-model receive {
-    id             Int         @id @default(autoincrement())
-    sender_id      Int         
-    receiver_id    Int         
-    info           String
-    amount         Float
-    timestamp      DateTime    @default(now()) @db.Timestamp(6)
-    transaction_id Int         @unique
-    transaction    transaction @relation(fields: [transaction_id], references: [transaction_id], onDelete: NoAction, onUpdate: NoAction)
+enum AccountType {
+    STUDENT
+    ADMIN
+    MERCHANT
 }
 
-model send {
-    id             Int         @id @default(autoincrement())
-    sender_id      Int
-    receiver_id    Int
-    info           String
-    amount         Float
-    timestamp      DateTime    @default(now()) @db.Timestamp(6)
-    transaction_id Int         @unique
-    transaction    transaction @relation(fields: [transaction_id], references: [transaction_id], onDelete: NoAction, onUpdate: NoAction)
+// Transaction status
+enum TXStatus {
+    SUCCESS
+    FAILED
+    TX_NOT_ENOUGH_MONEY
+    TX_ID_WAS_DECLARED
 }
+
+enum TXType {
+    SEND
+    RECEIVE
+    ADD_MONEY
+    WITH_DRAW
+}
+
+// model receive {
+//     id             Int         @id @default(autoincrement())
+//     sender_id      Int
+//     receiver_id    Int
+//     info           String
+//     amount         Float
+//     timestamp      DateTime    @default(now()) @db.Timestamp(6)
+//     transaction_id Int         @unique
+//     transaction    transaction @relation(fields: [transaction_id], references: [transaction_id], onDelete: NoAction, onUpdate: NoAction)
+// }
+
+// model send {
+//     id             Int         @id @default(autoincrement())
+//     sender_id      Int
+//     receiver_id    Int
+//     info           String
+//     amount         Float
+//     timestamp      DateTime    @default(now()) @db.Timestamp(6)
+//     transaction_id Int         @unique
+//     transaction    transaction @relation(fields: [transaction_id], references: [transaction_id], onDelete: NoAction, onUpdate: NoAction)
+// }
 
 model transaction {
     transaction_id Int      @id @default(autoincrement())
-    user_id        Int      
+    user_id        Int
+    type           TXType
+    status         TXStatus
+    info           String
+    amount         Float
     timestamp      DateTime @default(now()) @db.Timestamp(6)
-    status         String
-    receive        receive?
-    send           send?
+    // receive        receive?
+    // send           send?
 }
 
 model user {
-    id          BigInt       @id @default(autoincrement())
-    user_id     Int          @unique
-    username    String
-    name        String
-    lastname    String
-    email       String
-    password    String
-    budget      Float
-    setting     Json         @db.Json
-    created     DateTime     @default(now()) @db.Timestamp(6)
-    last_update DateTime     @updatedAt @db.Timestamp(6)
+    id           BigInt      @id @default(autoincrement())
+    account_type AccountType
+    user_id      String      @unique
+    name         String
+    lastname     String
+    email        String
+    phone_number String
+    password     String
+    balance      Float
+    expense      Float
+    setting      Json        @db.Json
+    created      DateTime    @default(now()) @db.Timestamp(6)
+    last_update  DateTime    @updatedAt @db.Timestamp(6)
 }

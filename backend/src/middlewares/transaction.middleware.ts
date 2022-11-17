@@ -21,4 +21,4 @@ const useTransactionValidator = async (req: any, res: Response, next: NextFuncti
     })
 }
 
-export = { useTransactionValidator }
+export { useTransactionValidator }

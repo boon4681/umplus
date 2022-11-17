@@ -19,16 +19,16 @@ export default () => {
     const onClick = async () => {
         const validate = await TestError()
         if (validate) {
-            const code = await (await dip!.on()).post('/api/v1/admin/dummy', {
-                body: JSON.stringify({
+            
+            const code = await await dip?.fetch('/api/v1/admin/dummy','POST', {
+                data: {
                     user_id,
                     username,
                     email,
                     password,
                     budget
-                })
+                }
             })
-            console.log(code)
             if (code) {
                 if (code.code == 200) {
                     toast.success(`🍌 ${code.message}`, {

@@ -7,4 +7,4 @@ const TransactionValidator = yup.object().shape({
     amount: yup.number().min(1).required()
 })
 
-export = { TransactionValidator }
+export { TransactionValidator }

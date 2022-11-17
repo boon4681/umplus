@@ -15,20 +15,21 @@ export default () => {
     const [amount, setAmount] = useState(0)
     const [error, setError] = useState<Record<string, string>>({})
     const init = async () => {
-        const data = await (await dip!.on()).post('/api/v1/admin/all_user')
+        const data = await dip?.fetch('/api/v1/admin/all_user', 'POST')
+
         if (data)
             setUsers(data.map((a: any) => a.user_id))
     }
     const onClick = async () => {
         const validate = await TestError()
         if (validate) {
-            const code = await (await dip!.on()).post('/api/v1/admin/transaction/dummy_transaction', {
-                body: JSON.stringify({
+            const code = await dip?.fetch('/api/v1/admin/transaction/dummy_transaction', 'POST', {
+                data: {
                     sender_id,
                     receiver_id,
                     info,
                     amount
-                })
+                }
             })
             if (code) {
                 if (code.code == 200) {

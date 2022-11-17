@@ -28,7 +28,7 @@ class btime {
     }
 }
 
-export default {
+export {
     a_second,
     a_minute,
     a_hour,

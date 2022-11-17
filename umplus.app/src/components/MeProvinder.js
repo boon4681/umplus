@@ -11,11 +11,11 @@ export const MeProvinder = ({ children }) => {
     useEffect(() => {
         const load = () => {
             if (dip) {
-                dip.on().then(a => a.post('v1/user/@me').then(data => {
+                dip.fetch('v1/user/@me','POST').then(data => {
                     if (data) {
                         setMe(data)
                     }
-                }))
+                })
             }
         }
         load()
