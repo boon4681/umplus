@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient()
-const { a_minute, a_day } = require('../utils/time')
+import { a_minute, a_day } from "../utils/time"
 
 const Admin: any = {
     last30minute: async (req: Request, res: Response) => {
