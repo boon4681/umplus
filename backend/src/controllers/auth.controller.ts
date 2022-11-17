@@ -1,13 +1,15 @@
+import { Request, Response } from "express";
+
 const { AdminLoginValidator, UserLoginValidator } = require("../validators/auth.validator")
 const { bwt } = require('../modules/jwt.module')
 const { bhash } = require('../modules/hash.module')
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient()
 
-const AdminLogin = async (req, res) => {
+const AdminLogin = async (req: Request, res: Response) => {
     const auth = req.get('Authorization')
-    if (auth && auth.includes('Bearer ') && (p = auth.indexOf('Bearer ')) === 0) {
-        const b = bwt.decode(auth.slice(p + 7))
+    if (auth && auth.includes('Bearer ')) {
+        const b = bwt.decode(auth.slice(7))
         if (b && b.data.user) {
             if (b.data.user === process.env.ADMIN_USER) {
                 return res.json({
@@ -21,7 +23,7 @@ const AdminLogin = async (req, res) => {
         }
     }
     const { user, password } = req.body
-    if (user, password) {
+    if (user && password) {
         if (await AdminLoginValidator.isValid({ user, password })) {
             if (process.env.ADMIN_USER === user && process.env.ADMIN_PASSWORD === password) {
                 const token = bwt.encode({ user: user, name: user })
@@ -48,10 +50,10 @@ const AdminLogin = async (req, res) => {
     })
 }
 
-const UserLogin = async (req, res) => {
+const UserLogin = async (req: Request, res: Response) => {
     const auth = req.get('Authorization')
-    if (auth && auth.includes('Bearer ') && (p = auth.indexOf('Bearer ')) === 0) {
-        const b = bwt.decode(auth.slice(p + 7))
+    if (auth && auth.includes('Bearer ')) {
+        const b = bwt.decode(auth.slice(7))
         if (b && b.data.user_id) {
             const data = await prisma.user.findUnique({
                 where: {
@@ -69,7 +71,7 @@ const UserLogin = async (req, res) => {
         }
     }
     const { user_id, password } = req.body
-    if (user_id, password) {
+    if (user_id && password) {
         if (await UserLoginValidator.isValid({ user_id, password })) {
             const data = await prisma.user.findUnique({
                 where: {
@@ -102,7 +104,7 @@ const UserLogin = async (req, res) => {
     })
 }
 
-const DummyRegister = async (req, res) => {
+const DummyRegister = async (req: Request, res: Response) => {
     const { user_id, username, email, password, budget } = req.body
     const check = await prisma.user.findUnique({
         where:{
@@ -132,6 +134,6 @@ const DummyRegister = async (req, res) => {
     })
 }
 
-module.exports = {
+export {
     AdminLogin, UserLogin, DummyRegister
 }

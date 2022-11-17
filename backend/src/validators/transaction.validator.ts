@@ -1,4 +1,4 @@
-const yup = require('yup')
+import * as yup from 'yup'
 
 const TransactionValidator = yup.object().shape({
     sender_id: yup.string().length(5).matches(/\d+/).required(),
@@ -7,4 +7,4 @@ const TransactionValidator = yup.object().shape({
     amount: yup.number().min(1).required()
 })
 
-module.exports = { TransactionValidator }
+export = { TransactionValidator }

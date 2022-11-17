@@ -1,20 +1,22 @@
+import { Request, Response } from "express";
+
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient()
 const { a_minute, a_day } = require('../utils/time')
 
-const Admin = {
-    last30minute: async (req, res) => {
-        return res.json(
-            await prisma.transaction.findMany({
-                where: {
-                    timestamp: {
-                        gte: new Date(Date.now() - (a_minute * 30)).toISOString()
-                    }
+const Admin: any = {
+    last30minute: async (req: Request, res: Response) => {
+        const data = await prisma.transaction.findMany({
+            where: {
+                timestamp: {
+                    gte: new Date(Date.now() - (a_minute * 30)).toISOString()
                 }
-            })
-        )
+            }
+        })
+
+        return res.json(data)
     },
-    last7day: async (req, res) => {
+    last7day: async (req: Request, res: Response) => {
         return res.json(
             await prisma.transaction.findMany({
                 where: {
@@ -25,7 +27,7 @@ const Admin = {
             })
         )
     },
-    gettransaction: async (req, res) => {
+    gettransaction: async (req: Request, res: Response) => {
         const { timestamp, skip, take } = req.body
         return res.json(
             await prisma.transaction.findMany({
@@ -46,13 +48,13 @@ const Admin = {
             })
         )
     },
-    getsend: async (req, res) => {
+    getsend: async (req: Request, res: Response) => {
         const { timestamp, skip } = req.body
         return res.json(
             await prisma.send.findMany({
                 where: {
                     timestamp: {
-                        lte: new Date(timestamp ? new Date(timestamp) : new Date.now()).toISOString(),
+                        lte: new Date(timestamp ? new Date(timestamp) : Date.now()).toISOString(),
                     }
                 },
                 take: 5,
@@ -60,13 +62,13 @@ const Admin = {
             })
         )
     },
-    getreceive: async (req, res) => {
-        const { timestamp, skip } = req.body | {}
+    getreceive: async (req: Request, res: Response) => {
+        const { timestamp, skip } = req.body
         return res.json(
             await prisma.receive.findMany({
                 where: {
                     timestamp: {
-                        lte: new Date(timestamp ? new Date(timestamp) : new Date.now()).toISOString(),
+                        lte: new Date(timestamp ? new Date(timestamp) : Date.now()).toISOString(),
                     }
                 },
                 take: 5,
@@ -74,7 +76,7 @@ const Admin = {
             })
         )
     },
-    dummyTransaction: async (req, res) => {
+    dummyTransaction: async (req: Request, res: Response) => {
         const { sender_id, receiver_id, info, amount } = req.body;
         const is_exist = await prisma.user.findMany({
             where: {
@@ -155,7 +157,7 @@ const Admin = {
 }
 
 const User = {
-    user_send: async (req, res) => {
+    user_send: async (req: Request, res: Response) => {
         const { sender_id, receiver_id, info, amount } = req.body;
         const is_exist = await prisma.user.findMany({
             where: {
@@ -234,7 +236,7 @@ const User = {
             message: "done"
         })
     },
-    add_money: async (req, res) => {
+    add_money: async (req: any, res: Response) => {
         const { amount } = req.body
         if (typeof amount == 'number') {
             const receive_ts = await prisma.transaction.create({
@@ -271,7 +273,7 @@ const User = {
             })
         }
     },
-    with_draw: async (req, res) => {
+    with_draw: async (req: any, res: Response) => {
         const { amount, account } = req.body
         if (typeof amount == 'number' && typeof account == 'number') {
             const send_ts = await prisma.transaction.create({
@@ -308,8 +310,8 @@ const User = {
             })
         }
     },
-    user_get_transaction: async (req, res) => {
-        const { timestamp, skip } = req.body | {}
+    user_get_transaction: async (req: any, res: Response) => {
+        const { timestamp, skip } = req.body
         return res.json(
             await prisma.transaction.findMany({
                 where: {
@@ -332,4 +334,7 @@ const User = {
     }
 }
 
-module.exports = { Admin, User }
+export {
+    Admin,
+    User
+}

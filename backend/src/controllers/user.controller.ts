@@ -1,9 +1,11 @@
+import { Request, Response } from "express";
+
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient()
 const { a_day } = require('../utils/time')
 
-const Admin = {
-    getAllUser: async (req, res) => {
+const Admin: any = {
+    getAllUser: async (req: Request, res: Response) => {
         const data = await (await prisma.user.findMany({
             select: {
                 'user_id': true,
@@ -11,9 +13,8 @@ const Admin = {
                 'budget': true,
                 'email': true
             }
-        })).map(a => {
-            return a
-        })
+        }))
+        
         return res.status(200).json(
             data
         )
@@ -21,7 +22,7 @@ const Admin = {
 }
 
 const User = {
-    me: async (req, res) => {
+    me: async (req: any, res: Response) => {
         const data = await prisma.user.findUnique({
             where: {
                 user_id: parseInt(req.jwt.data.user_id)
@@ -35,7 +36,7 @@ const User = {
             data
         )
     },
-    history: async (req, res) => {
+    history: async (req: Request, res: Response) => {
         const { user_id } = req.body
         const history = await prisma.transaction.findMany({
             where: {
@@ -53,6 +54,6 @@ const User = {
     }
 }
 
-module.exports = { Admin, User }
+export { Admin, User }
 
 

@@ -1,4 +1,4 @@
-const yup = require('yup')
+import * as yup from 'yup'
 
 const AdminLoginValidator = yup.object().shape({
     user: yup.string().required(),
@@ -18,4 +18,4 @@ const UserRegisterValidator = yup.object().shape({
     budget: yup.number().required()
 })
 
-module.exports = { AdminLoginValidator, UserLoginValidator, UserRegisterValidator }
+export = { AdminLoginValidator, UserLoginValidator, UserRegisterValidator }

@@ -1,13 +1,15 @@
-const fs = require('fs')
-const express = require('express')
+require("dotenv").config()
+
+import express from "express"
+// import cors from "cors"
+import Router from "./routes"
+
 const app = express()
-const cors = require('cors');
-require('dotenv').config()
 // import { PrismaClient } from '@prisma/client'
-const { PrismaClient } = require('@prisma/client');
-const { time } = require('console');
-const { resourceUsage } = require('process');
-const prisma = new PrismaClient()
+// const { PrismaClient } = require('@prisma/client');
+// const { time } = require('console');
+// const { resourceUsage } = require('process');
+// const prisma = new PrismaClient()
 
 // const func_list=[]
 // const Folder = ('./function/')
@@ -26,12 +28,14 @@ const prisma = new PrismaClient()
 app.use(express.json({ limit: '8mb' }))
 app.use(express.urlencoded({
     extended: true
-}));
+}))
 
-app.use((req,res,next)=>{
-    console.log(req.path)
-    next()
-},require('./src/routes'))
+// app.use((req: Request, res: Response, next: NextFunction) => {
+//     console.log(req.path)
+//     next()
+// }, Router)
+
+app.use(Router)
 
 // app.get('/users/:id', get_users.get_users)
 
