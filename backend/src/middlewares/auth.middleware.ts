@@ -16,8 +16,6 @@ const useAdminAuth = async (req: any, res: Response, next: NextFunction) => {
     if (auth && auth.includes('Bearer ') && (p = auth.indexOf('Bearer ')) === 0) {
         const b = bwt.decode(auth.slice(p + 7))
         if (b && b.data.user) {
-            // const expired = b.expire_date - Date.now()
-            // console.log(new btime(expired).toDay())
             if (b.data.user === process.env.ADMIN_USER) {
                 req.jwt = b
                 return next()
@@ -35,6 +33,7 @@ const useUserAuth = async (req: any, res: Response, next: NextFunction) => {
         code: 400,
         message: 'Bad Request'
     })
+    
     const auth = req.get('Authorization')
     let p;
     if (auth && auth.includes('Bearer ') && (p = auth.indexOf('Bearer ')) === 0) {

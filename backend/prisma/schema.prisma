@@ -25,42 +25,28 @@ enum TXStatus {
 enum TXType {
     SEND
     RECEIVE
-    ADD_MONEY
     WITH_DRAW
+    TOPUP_PROMPTPAY
+    TOPUP_TRUEMONEY
+    TOPUP_LINEPAY
 }
 
-// model receive {
-//     id             Int         @id @default(autoincrement())
-//     sender_id      Int
-//     receiver_id    Int
-//     info           String
-//     amount         Float
-//     timestamp      DateTime    @default(now()) @db.Timestamp(6)
-//     transaction_id Int         @unique
-//     transaction    transaction @relation(fields: [transaction_id], references: [transaction_id], onDelete: NoAction, onUpdate: NoAction)
-// }
-
-// model send {
-//     id             Int         @id @default(autoincrement())
-//     sender_id      Int
-//     receiver_id    Int
-//     info           String
-//     amount         Float
-//     timestamp      DateTime    @default(now()) @db.Timestamp(6)
-//     transaction_id Int         @unique
-//     transaction    transaction @relation(fields: [transaction_id], references: [transaction_id], onDelete: NoAction, onUpdate: NoAction)
-// }
+enum TXChongWay {
+    MB_QRCODE
+    // ST_CARD
+    // CARD_QRCODE
+    // MOBILE_NFC
+}
 
 model transaction {
-    transaction_id Int      @id @default(autoincrement())
-    user_id        Int
+    transaction_id BigInt   @id @default(autoincrement())
+    sender_id      String
+    receiver_id    String
     type           TXType
     status         TXStatus
     info           String
     amount         Float
     timestamp      DateTime @default(now()) @db.Timestamp(6)
-    // receive        receive?
-    // send           send?
 }
 
 model user {
