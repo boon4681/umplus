@@ -2,11 +2,14 @@ import { StyleSheet, Text, View, Image, ImageBackground, Platform, NativeModules
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { useAuth } from "./hooks/useAuth"
+
 import Home from "./pages/Home"
 import Login from "./pages/Login"
 import Transaction from './pages/Transaction';
+import AddMoney from './pages/AddMoney';
 import Setting from './pages/Setting';
-import Header from './components/Header';
+import WithDraw from './pages/WithDraw';
+
 import { MeProvinder } from './components/MeProvinder';
 
 const Theme = {
@@ -37,9 +40,10 @@ export default () => {
                                 animation: 'slide_from_right'
                             }
                         }
-
                     >
                         <Stack.Screen name="Home" component={Home} />
+                        <Stack.Screen name="AddMoney" component={AddMoney} />
+                        <Stack.Screen name="WithDraw" component={WithDraw} />
                         <Stack.Screen name="Transaction" component={Transaction} />
                         <Stack.Screen name="Setting" component={Setting} />
                     </Stack.Navigator>

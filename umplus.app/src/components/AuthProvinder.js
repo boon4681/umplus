@@ -1,6 +1,7 @@
 import React, { Component, FC, useEffect, useMemo, useState } from "react";
 import { StyleSheet, Text, View, Image, ImageBackground, Platform, NativeModules, Button, Pressable, TouchableOpacity } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Toast } from 'toastify-react-native'
 import LogTab from "./LogTab";
 
 const host = 'http://159.223.71.170:5173'
@@ -97,28 +98,26 @@ export const AuthProvider = ({ children }) => {
     const login = async (username, password) => {
         setIsLoggedIn(true)
         if (username && password) {
-            try {
-                const res = await fetch(`${host}/api/v1/user/auth/login`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        'user_id': username,
-                        'password': password
-                    })
+            const res = await fetch(`${host}/api/v1/user/auth/login`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    'user_id': username,
+                    'password': password
                 })
-                const data = await res.json()
-                if (res.status === 200) {
-                    setIsLoggedIn(false)
-                    setUser(data.user)
-                    setIsAuthenticated(true)
-                    AsyncStorage.setItem('mis.ammart.token', data.token)
-                    return
-                }
-                setError(res.message)
-                logout()
-            } catch (error) {}
+            })
+            const data = await res.json()
+            if (res.status === 200) {
+                setIsLoggedIn(false)
+                setUser(data.user)
+                setIsAuthenticated(true)
+                AsyncStorage.setItem('mis.ammart.token', data.token)
+                return
+            }
+            setError(data.message)
+            logout()
         }
         setIsLoggedIn(false)
     }
@@ -126,7 +125,10 @@ export const AuthProvider = ({ children }) => {
         init()
     }, [])
     useEffect(() => {
-        // ERROR
+        if (error) {
+            Toast.error(`🍌 ${error}`)
+            setError(null)
+        }
     }, [error])
 
     return (

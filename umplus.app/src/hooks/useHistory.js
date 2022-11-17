@@ -15,7 +15,7 @@ export default (dip) => {
         load()
         const i = setInterval(() => {
             load()
-        }, 2000)
+        }, 2500)
         return () => clearInterval(i)
     }, [])
     return history

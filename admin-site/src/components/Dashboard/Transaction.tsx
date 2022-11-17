@@ -108,7 +108,6 @@ export default () => {
             })
         })
         if (data) {
-            data.reverse()
             setAll(data)
         }
     }
@@ -244,7 +243,7 @@ export default () => {
                         <div className="col-span-2 py-3">NAME</div>
                         <div className="py-3">VALUE</div>
                     </div>
-                    <div className="w-full h-[480px] overflow-y-scroll p-4">
+                    <div className="w-full overflow-y-scroll p-4" style={{flex:'1 1 0'}}>
                         <div>
                             {
                                 all.map((a: any) => {

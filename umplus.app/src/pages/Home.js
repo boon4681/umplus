@@ -13,11 +13,14 @@ import { useEffect, useState } from 'react';
 import LogTab from '../components/LogTab';
 import BottomTab from '../components/BottomTab';
 import useMe from '../hooks/useMe';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { useNavigation } from '@react-navigation/native';
 
-export default function Home({ navigation }) {
+export default function Home() {
     const { user } = useAuth()
     const me = useMe()
-    
+    const navigation = useNavigation()
+
     return (
         <>
             <Container>
@@ -55,24 +58,34 @@ export default function Home({ navigation }) {
                 </View>
                 <View className="flex items-center">
                     <View className="flex flex-row space-x-6 mt-4">
-                        <View className="flex items-center">
+                        <TouchableOpacity
+                            onPress={() => {
+                                navigation.navigate("AddMoney")
+                            }}
+                            className="flex items-center"
+                        >
                             <View className="w-16 h-16 rounded-[25px] bg-[#0085FF] p-5">
                                 <Image className="w-full h-full" source={AddMONEY} />
                             </View>
                             <Text className="font-LINESeedRg text-black">เติมเงิน</Text>
-                        </View>
-                        <View className="flex items-center">
+                        </TouchableOpacity>
+                        <TouchableOpacity className="flex items-center">
                             <View className="w-16 h-16 rounded-[25px] bg-[#0085FF] p-0.5">
                                 <Image className="w-full h-full" source={SendMONEY} />
                             </View>
                             <Text className="font-LINESeedRg text-black">โอนเงิน</Text>
-                        </View>
-                        <View className="flex items-center">
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            onPress={() => {
+                                navigation.navigate("WithDraw")
+                            }}
+                            className="flex items-center"
+                        >
                             <View className="w-16 h-16 rounded-[25px] bg-[#0085FF] p-3.5">
                                 <Image className="w-full h-full" source={WithDrawMONEY} />
                             </View>
                             <Text className="font-LINESeedRg text-black">ถอนเงิน</Text>
-                        </View>
+                        </TouchableOpacity>
                     </View>
                 </View>
             </Container>

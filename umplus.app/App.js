@@ -6,6 +6,8 @@ import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import 'react-native-gesture-handler';
+import ToastManager from 'toastify-react-native'
+
 import 'intl';
 import 'intl/locale-data/jsonp/en';
 import 'intl/locale-data/jsonp/th';
@@ -62,6 +64,7 @@ export default function App() {
                 <AuthProvider>
                     <Routes></Routes>
                 </AuthProvider>
+                <ToastManager className="font-LINESeedRg select-none pointer-events-none" width={300} height={75}/>
             </View>
             <StatusBar style="auto" />
         </SafeAreaProvider>

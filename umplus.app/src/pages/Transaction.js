@@ -1,4 +1,4 @@
-import { ScrollView, Text, View, Image, ImageBackground, Platform, NativeModules, Button, Pressable, TouchableOpacity } from 'react-native';
+import { ScrollView, Text, View, Image, ImageBackground, Platform, NativeModules, Button, Pressable, TouchableOpacity, Animated } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Avatar from 'react-native-boring-avatars';
 
@@ -14,7 +14,7 @@ import SENTOUT from '../../assets/icons/sent_out.png'
 import RECEIVERMONEY from '../../assets/icons/receive_money.png'
 import INFODOWN from '../../assets/icons/info_down.png'
 import useMe from '../hooks/useMe';
-import { memo, useMemo, useState } from 'react';
+import { memo, useEffect, useMemo, useRef, useState } from 'react';
 import useHistory from '../hooks/useHistory';
 import LogTab from '../components/LogTab';
 
@@ -71,28 +71,81 @@ function IconMiniCard({ a }) {
 }
 
 function MiniCard({ data }) {
+    const { user } = useAuth()
     const time = MiniTime(data.timestamp)
+    const [show, setShow] = useState(false)
+    const info = data.send ? data.send : data.receive
+    const pan = useRef(new Animated.Value(65)).current;
+    const rot = useRef(new Animated.Value(0)).current
+    useEffect(() => {
+        if (show) {
+            Animated.timing(pan, {
+                toValue: 140,
+                duration: 200,
+                useNativeDriver: false
+            }).start();
+            Animated.timing(rot, {
+                toValue: 180,
+                duration: 200,
+                useNativeDriver: false
+            }).start();
+        } else {
+            Animated.timing(pan, {
+                toValue: 65,
+                duration: 200,
+                useNativeDriver: false
+            }).start();
+            Animated.timing(rot, {
+                toValue: 0,
+                duration: 200,
+                useNativeDriver: false
+            }).start();
+        }
+    }, [show])
+    const spin = rot.interpolate({
+        inputRange: [0, 180],
+        outputRange: ['0deg', '180deg']
+    })
     return (
         <TouchableOpacity
-            className="flex flex-row items-center border-b border-b-[#ECECEC]"
+            onPress={() => setShow(!show)}
+            className="flex flex-col border-b border-b-[#ECECEC] overflow-hidden"
         >
-            <Image className="w-[65px] h-[65px]" source={data.send ? SENTOUT : RECEIVERMONEY} />
-            <View>
-                <Text className="font-LINESeedRg text-[#3B3B3B] text-[16px]">{data.send ? 'โอนออก' : 'รับโอนเงิน'}</Text>
-                <Text className="font-LINESeedRg text-[#6F6C6C] text-[14px] -mt-1.5">
-                    {time}
-                </Text>
-            </View>
-            <View className="h-full ml-auto pr-3 pt-3.5 flex flex-col items-end">
-                {
-                    (data.send) ? (
-                        <Text className="font-LINESeedRg text-[#FF4242] text-[16px]">-{data.send.amount} บาท</Text>
-                    ) : (
-                        <Text className="font-LINESeedRg text-[#00C07B] text-[16px]">{data.receive.amount} บาท</Text>
-                    )
-                }
-                <Image className="w-[18px] h-[18px] opacity-80" source={INFODOWN} />
-            </View>
+            <Animated.View style={{ height: pan }}>
+                <View className="flex flex-row items-center w-full h-[65px]">
+                    <Image className="w-[65px] h-[65px]" source={data.send ? SENTOUT : RECEIVERMONEY} />
+                    <View>
+                        <Text className="font-LINESeedRg text-[#3B3B3B] text-[16px]">{data.send ? 'โอนออก' : 'รับโอนเงิน'}</Text>
+                        <Text className="font-LINESeedRg text-[#6F6C6C] text-[14px] -mt-1.5">
+                            {time}
+                        </Text>
+                    </View>
+                    <View className="h-full ml-auto pr-3 pt-3.5 flex flex-col items-end">
+                        {
+                            (data.send) ? (
+                                <Text className="font-LINESeedRg text-[#FF4242] text-[16px]">-{data.send.amount} บาท</Text>
+                            ) : (
+                                <Text className="font-LINESeedRg text-[#00C07B] text-[16px]">{data.receive.amount} บาท</Text>
+                            )
+                        }
+                        <Animated.Image style={{ transform: [{ rotate: spin }] }} className="w-[18px] h-[18px] opacity-80" source={INFODOWN} />
+                    </View>
+                </View>
+                <View className="px-2 mt-1 pb-3">
+                    <View className="flex flex-row">
+                        <Text className="font-LINESeedRg text-[#6E6C6C] text-[14px]">รหัสอ้างอิง:</Text>
+                        <Text className="font-LINESeedRg text-[#6E6C6C] text-[14px] ml-auto">#{data.transaction_id}</Text>
+                    </View>
+                    <View className="flex flex-row">
+                        <Text className="font-LINESeedRg text-[#6E6C6C] text-[14px]">เลขที่บัญชีปลายทาง:</Text>
+                        <Text className="font-LINESeedRg text-[#6E6C6C] text-[14px] ml-auto">{info.receiver_id}</Text>
+                    </View>
+                    <View className="flex flex-row">
+                        <Text className="font-LINESeedRg text-[#6E6C6C] text-[14px]">บันทึกช่วยจำ:</Text>
+                        <Text className="font-LINESeedRg text-[#6E6C6C] text-[14px] ml-auto">{info.info}</Text>
+                    </View>
+                </View>
+            </Animated.View>
         </TouchableOpacity>
     )
 }

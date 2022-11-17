@@ -234,6 +234,80 @@ const User = {
             message: "done"
         })
     },
+    add_money: async (req, res) => {
+        const { amount } = req.body
+        if (typeof amount == 'number') {
+            const receive_ts = await prisma.transaction.create({
+                data: {
+                    user_id: req.jwt.data.user_id,
+                    status: "complete"
+                }
+            })
+            const receive = await prisma.receive.create({
+                data: {
+                    sender_id: 9999999,
+                    receiver_id: req.jwt.data.user_id,
+                    info: "ของฝากจาก admin (เติมตัง)",
+                    amount,
+                    transaction_id: receive_ts.transaction_id
+                }
+            })
+            await prisma.user.update({
+                where: {
+                    user_id: req.jwt.data.user_id
+                },
+                data: {
+                    budget: { increment: amount }
+                }
+            })
+            return res.status(200).json({
+                code: 200,
+                message: "done"
+            })
+        } else {
+            return res.status(400).json({
+                code: 400,
+                message: 'Bad Request'
+            })
+        }
+    },
+    with_draw: async (req, res) => {
+        const { amount, account } = req.body
+        if (typeof amount == 'number' && typeof account == 'number') {
+            const send_ts = await prisma.transaction.create({
+                data: {
+                    user_id: req.jwt.data.user_id,
+                    status: "complete"
+                }
+            })
+            const send = await prisma.send.create({
+                data: {
+                    sender_id: req.jwt.data.user_id,
+                    receiver_id:account,
+                    info:"ถอนเงินเข้ากระเป๋า admin",
+                    amount,
+                    transaction_id: send_ts.transaction_id
+                }
+            })
+            await prisma.user.update({
+                where: {
+                    user_id: req.jwt.data.user_id
+                },
+                data: {
+                    budget: { increment: -amount }
+                }
+            })
+            return res.status(200).json({
+                code: 200,
+                message: "done"
+            })
+        } else {
+            return res.status(400).json({
+                code: 400,
+                message: 'Bad Request'
+            })
+        }
+    },
     user_get_transaction: async (req, res) => {
         const { timestamp, skip } = req.body | {}
         return res.json(

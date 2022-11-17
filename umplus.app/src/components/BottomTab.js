@@ -14,7 +14,9 @@ export default () => {
     return (
         <View className="flex items-center absolute left-0 bottom-0 w-screen">
             <Image className="absolute bottom-0 w-full h-[110px]" source={Nav_bg} />
-            <Image className="absolute bottom-6 w-[110px] h-[110px]" source={Scan_btn} />
+            <TouchableOpacity className="absolute bottom-6 w-[110px] h-[110px]">
+                <Image className="w-[110px] h-[110px]" source={Scan_btn} />
+            </TouchableOpacity>
             <View className="flex flex-row space-x-0.5 px-2">
                 <TouchableOpacity
                     onPress={() => {
@@ -27,12 +29,12 @@ export default () => {
                     </View>
                     <Text className="font-LINESeedRg text-white text-[10px]">Home</Text>
                 </TouchableOpacity>
-                <View className="flex items-center p-1.5 pb-2.5 basis-1/5">
+                <TouchableOpacity className="flex items-center p-1.5 pb-2.5 basis-1/5">
                     <View className="w-8 h-8">
                         <Image className="w-full h-full" source={NEWS} />
                     </View>
                     <Text className="font-LINESeedRg text-white text-[10px]">News</Text>
-                </View>
+                </TouchableOpacity>
                 <View className="w-[20px] basis-1/5"></View>
                 <TouchableOpacity
                     onPress={() => {
@@ -45,12 +47,12 @@ export default () => {
                     </View>
                     <Text className="font-LINESeedRg text-white text-[10px]">Transaction</Text>
                 </TouchableOpacity>
-                <View className="flex items-center p-1.5 pb-2.5 basis-1/5">
+                <TouchableOpacity className="flex items-center p-1.5 pb-2.5 basis-1/5">
                     <View className="w-8 h-8">
                         <Image className="w-full h-full" source={COUPONS} />
                     </View>
                     <Text className="font-LINESeedRg text-white text-[10px]">Coupons</Text>
-                </View>
+                </TouchableOpacity>
             </View>
         </View>
     )
