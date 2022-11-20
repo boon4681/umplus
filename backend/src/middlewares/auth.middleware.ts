@@ -23,6 +23,17 @@ const useAdminAuth = async (req: any, res: Response, next: NextFunction) => {
                 return next()
             }
         }
+        const data = await prisma.user.findUnique({
+            where: {
+                user_id: b.data.user_id
+            }
+        })
+        if(data){
+            if (b.data.user_id === data.user_id) {
+                req.jwt = data
+                return next()
+            }
+        }
     }
     return res.status(401).json({
         code: 401,

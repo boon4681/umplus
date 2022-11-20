@@ -74,9 +74,9 @@ export const AuthProvider = ({ children }) => {
                     'Authorization': `Bearer ${token}`
                 }
             })
-            const { data } = await auth.json()
-            setUser(data)
             if (auth.status === 200) {
+                const { data } = await auth.json()
+                setUser(data)
                 setDIP(await new dip(token, logout))
                 setUser(data.user)
                 setIsAuthenticated(true)

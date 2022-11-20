@@ -53,7 +53,7 @@ function loadFont() {
 export default function App() {
     const { fontsLoaded, onLayoutRootView } = loadFont()
     if (!fontsLoaded) {
-        <SafeAreaProvider>
+        return <SafeAreaProvider>
             <View className="flex w-full h-full" onLayout={onLayoutRootView}></View>
             <StatusBar style="auto" />
         </SafeAreaProvider>
@@ -64,7 +64,7 @@ export default function App() {
                 <AuthProvider>
                     <Routes></Routes>
                 </AuthProvider>
-                <ToastManager className="font-LINESeedRg select-none pointer-events-none" width={300} height={75}/>
+                <ToastManager className="font-LINESeedRg select-none pointer-events-none" width={300} height={75} />
             </View>
             <StatusBar style="auto" />
         </SafeAreaProvider>

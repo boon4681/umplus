@@ -182,7 +182,7 @@ function TableHelper<T, K extends yup.ObjectSchema<any, any>>(
             </div>
             <div className="w-full overflow-y-scroll overflow-x-auto relative" style={{ flex: '1 1 0' }}>
                 <table className="w-full text-left text-[15px]">
-                    <thead>
+                    <thead className='sticky top-0 bg-white shadow-border-b'>
                         <FieldHelper type={'name'} ignore={['password']} validator={validator}></FieldHelper>
                     </thead>
                     <tbody className="space-y-2">

@@ -10,9 +10,11 @@ export const TransactionValidator = yup.object().shape({
 export const TransactionResValidator = yup.object().shape({
     date: yup.string().required(),
     transaction_id: yup.number().required(),
-   firstname: yup.string().required(),
+    firstname: yup.string().required(),
     status: yup.string().required(),
-    amount: yup.number().min(0).required()
+    amount: yup.number().min(1).required()
 })
 
-// {transaction_id: 8, sender_id: "13737", receiver_id: "32396", type: "RECEIVE", status: "FAILED",…}
+export const TopupMoneyValidator = yup.object().shape({
+    amount: yup.number().min(1).required()
+})

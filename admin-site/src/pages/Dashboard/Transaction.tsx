@@ -315,7 +315,7 @@ export default () => {
                     </div>
                 </div>
             </div>
-            <div className="h-full pt-3 flex flex-col">
+            <div className="h-full pt-3 flex flex-col w-full">
                 <div className="text-xl mb-2">Transaction</div>
                 <TableHelper
                     asKey={'transaction_id'}
@@ -332,7 +332,7 @@ export default () => {
 const Custom = ({ value }: { value: any }) => {
     return <tr>
         <td className="px-4 py-2 whitespace-nowrap">{new Date(value.timestamp).toISOString()}</td>
-        <td className="px-4 py-2">#{value.transaction_id}</td>
+        <td className="px-4 py-2 text-end">#{value.transaction_id}</td>
         <td className="px-4 py-2 whitespace-nowrap">{value.type == 'SEND' ? value.sender.firstname + ' ' + value.sender.lastname : value.receiver.firstname + ' ' + value.receiver.lastname}</td>
         <td className="px-4 py-2">{value.status}</td>
         <td className="px-4 py-2 text-end">
@@ -347,4 +347,4 @@ const Custom = ({ value }: { value: any }) => {
     </tr>
 }
 
-const MemoCustomItem = memo(Custom)
+export const MemoCustomItem = memo(Custom)

@@ -7,6 +7,7 @@ const { useTransactionValidator } = require('../../middlewares/transaction.middl
 import { a_day, a_minute } from "../../utils/time"
 import { create } from "../../controllers/transaction"
 import { Database } from "../../database/data.source"
+import { TXStatus } from "@prisma/client"
 const prisma = Database
 
 
@@ -17,7 +18,7 @@ router.post('/auth/login', async (req, res, next) => {
     if (Authorization) {
         if (Authorization.includes('Bearer ')) {
             const b = bwt.decode(Authorization.slice(7))
-            if (b && b.data.user) {
+            if (b && b.data.user || b && b.data.user_id) {
                 if (b.data.user === 'banana') {
                     return res.json({
                         code: 200,
@@ -25,6 +26,19 @@ router.post('/auth/login', async (req, res, next) => {
                             user: {
                                 firstname: b.data.user
                             }
+                        }
+                    })
+                }
+                const data = await prisma.user.findUnique({
+                    where: {
+                        user_id: b.data.user_id
+                    }
+                })
+                if (data!.user_id == b.data.user_id) {
+                    return res.json({
+                        code: 200,
+                        data: {
+                            user: b.data
                         }
                     })
                 }
@@ -44,6 +58,43 @@ router.post('/auth/login', async (req, res, next) => {
                         },
                         token: token
                     }
+                })
+            }
+            const data = await prisma.user.findUnique({
+                where: {
+                    user_id: user
+                },
+                select: {
+                    user_id: true,
+                    firstname: true,
+                    lastname: true,
+                    email: true,
+                    phone_number: true,
+                    balance: true,
+                    expense: true,
+                    setting: true,
+                    password: true
+                }
+            })
+            if (data && bhash.validate(password, Buffer.from(data.password, 'base64').toString())) {
+                const user = {
+                    ...data,
+                    "password": undefined
+                }
+                // //@ts-ignore
+                // // delete user.password
+                const token = bwt.encode(user)
+                return res.status(200).json({
+                    code: 200,
+                    data: {
+                        user,
+                        token
+                    }
+                })
+            } else {
+                return res.status(401).json({
+                    code: 401,
+                    message: 'Unauthorized Username or Password is incorrect'
                 })
             }
         } else {
@@ -163,10 +214,55 @@ router.post('/account/users/:user_id', useAdminAuth, async (req, res, next) => {
             expense: true,
             setting: true
         }
-    })
+    }) as any
 
     return res.status(200).json(
         data
+    )
+})
+
+router.post('/account/users/:user_id/transaction/history', useAdminAuth, async (req, res, next) => {
+    const { user_id } = req.params
+    const { timestamp, skip, take } = req.body
+    return res.json(
+        await prisma.transaction.findMany({
+            where: {
+                timestamp: {
+                    lte: new Date(timestamp ? new Date(timestamp) : Date.now()).toISOString(),
+                },
+                OR: [
+                    {
+                        sender_id: user_id,
+                        type: 'SEND'
+                    },
+                    {
+                        receiver_id: user_id,
+                        type: {
+                            not: 'SEND'
+                        }
+                    }
+                ]
+            },
+            orderBy: {
+                transaction_id: 'desc',
+            },
+            include: {
+                receiver: {
+                    select: {
+                        firstname: true,
+                        lastname: true
+                    }
+                },
+                sender: {
+                    select: {
+                        firstname: true,
+                        lastname: true
+                    }
+                }
+            },
+            take: take ? take : 5,
+            skip: skip ? skip : 0
+        })
     )
 })
 
@@ -234,6 +330,90 @@ router.post('/account/merchants', useAdminAuth, async (req, res, next) => {
     return res.status(200).json(
         data
     )
+})
+
+router.post('/topup', useAdminAuth, async (req: any, res, next) => {
+    const { receiver_id, amount } = req.body
+    const sender = await prisma.transaction.create({
+        data: {
+            status: 'PROCESS',
+            type: 'TOPUP_UMBANK',
+            info: 'เติมเงินกับธนาคารโรงเรียน',
+            sender_id: req.jwt.user_id,
+            receiver_id,
+            amount
+        }
+    })
+    try {
+        const result = await prisma.$transaction(async (tx) => {
+            const receiver = await tx.user.findUnique({
+                where: {
+                    user_id: receiver_id
+                }
+            })
+            if (!receiver) {
+                throw new Error('FAILED')
+            }
+            const receive = await prisma.transaction.create({
+                data: {
+                    status: 'PROCESS',
+                    type: 'RECEIVE',
+                    info: 'เติมเงินกับธนาคารโรงเรียน',
+                    sender_id: req.jwt.user_id,
+                    receiver_id,
+                    amount
+                }
+            })
+            await tx.user.update({
+                where: {
+                    user_id: receiver_id
+                },
+                data: {
+                    balance: {
+                        increment: amount
+                    }
+                }
+            })
+            await prisma.transaction.update({
+                where: {
+                    transaction_id: receive.transaction_id
+                },
+                data: {
+                    status: 'SUCCESS'
+                }
+            })
+            return 'SUCCESS'
+        }) as TXStatus
+        await prisma.transaction.update({
+            where: {
+                transaction_id: sender.transaction_id
+            },
+            data: {
+                status: result
+            }
+        })
+        return res.status(200).json({
+            code: 200,
+            message: 'done'
+        })
+    } catch (error: any) {
+        await prisma.transaction.update({
+            where: {
+                transaction_id: sender.transaction_id
+            },
+            data: {
+                status: error.message
+            }
+        })
+        return res.status(400).json({
+            code: 400,
+            message: error.message
+        })
+    }
+})
+
+router.post('/withdraw', useAdminAuth, async (req, res, next) => {
+
 })
 
 router.post('/account/top_expensed', useAdminAuth, async (req, res, next) => {

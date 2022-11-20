@@ -41,7 +41,10 @@ export default () => {
     return (
         <>
             <Container header={Header}>
-                <UmplusQrCode></UmplusQrCode>
+                <Text className="font-LINESeedRg text-[#464646] text-lg text-center">
+                    ผ่าน ธนาคารโรงเรียน หรือ สหกรณ์โรงเรียน
+                </Text>
+                <UmplusQrCode path="topup"></UmplusQrCode>
                 {/* <Text className="font-LINESeedRg text-[#46464699] text-lg">
                     จำนวน
                 </Text>

@@ -24,7 +24,7 @@
     "intl": "^1.2.5",
     "nativewind": "^2.0.11",
     "qr-code-styling": "^1.6.0-rc.1",
-    "qrcode": "^1.5.1",
+    "qrcode": "1.5.0",
     "react": "18.0.0",
     "react-dom": "18.0.0",
     "react-native": "0.69.6",

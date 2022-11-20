@@ -71,10 +71,11 @@ function IconMiniCard({ a }) {
 }
 
 const format = {
-    SEND:'โอนออก',
+    SEND:'โอนเงิน',
     RECEIVE:'รับโอนเงิน',
     WITH_DRAW:'ถอนเงิน',
-    TOPUP_UMCOOP: 'เติมเงิน'
+    TOPUP_UMCOOP: 'เติมเงินผ่าน สหกรณ์ รร.',
+    TOPUP_UMBANK: 'เติมเงินผ่านธนาคาร รร.',
     // TOPUP_PROMPTPAY:'เติมเงิน (PROMPTPAY)',
     // TOPUP_TRUEMONEY:'เติมเงิน (TRUEMONEY)',
     // TOPUP_LINEPAY:'เติมเงิน (LINEPAY)',
@@ -125,7 +126,7 @@ function MiniCard({ data }) {
                 <View className="flex flex-row items-center w-full h-[65px]">
                     <Image className="w-[65px] h-[65px]" source={data.type === 'SEND' ? SENTOUT : RECEIVERMONEY} />
                     <View>
-                        <Text className="font-LINESeedRg text-[#3B3B3B] text-[16px]">{data.send ? 'โอนออก' : 'รับโอนเงิน'}</Text>
+                        <Text className="font-LINESeedRg text-[#3B3B3B] text-[16px]">{format[data.type]}</Text>
                         <Text className="font-LINESeedRg text-[#6F6C6C] text-[14px] -mt-1.5">
                             {time}
                         </Text>
@@ -180,7 +181,7 @@ export default () => {
                             <View className="w-[60px] h-[60px] rounded-[30px] border-2 border-[#1f232548]">
                                 <Avatar
                                     size={56}
-                                    name={`u${user.firstname}`}
+                                    name={`u${user.user_id}`}
                                     variant="beam"
                                     colors={['#FF5252', '#FF7752', '#FF9A52', '#FFB752', '#5E405B']}
                                 />
@@ -206,7 +207,7 @@ export default () => {
                 </View>
             </Container>
             <BottomTab></BottomTab>
-            <LogTab i={10} content={history}></LogTab>
+            {/* <LogTab i={10} content={history}></LogTab> */}
         </>
     )
 }

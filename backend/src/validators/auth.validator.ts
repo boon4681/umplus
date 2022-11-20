@@ -7,7 +7,7 @@ const AdminLoginValidator = yup.object().shape({
 
 const UserLoginValidator = yup.object().shape({
     user_id: yup.string().length(5).matches(/\d+/).required(),
-    password: yup.string().length(8).matches(/\d+/).required()
+    password: yup.string().min(8).matches(/\d+/).required()
 })
 
 const UserRegisterValidator = yup.object().shape({

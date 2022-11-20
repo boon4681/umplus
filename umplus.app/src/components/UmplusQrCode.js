@@ -1,11 +1,10 @@
-import { useEffect, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 import Svg, { Circle, Rect } from 'react-native-svg';
 import useMe from '../hooks/useMe';
 import LogTab from './LogTab';
-import QRCodeStyling from 'qr-code-styling'
-
-
-// const QRCode = require('qrcode')
+import { Canvas, Box, BoxShadow, Fill, rrect, rect, Group } from "@shopify/react-native-skia";
+import { Text, View } from 'react-native';
+import QRCode from 'qrcode'
 
 
 // function QRcode(text) {
@@ -40,6 +39,7 @@ import QRCodeStyling from 'qr-code-styling'
 //                 [...new Array(qr.size).keys()].map((a, y) => {
 //                     if (qr.get(x, y) == 1) {
 //                         return <Rect
+//                             key={x + '' + y}
 //                             x={(x + 1) * scale}
 //                             y={(y + 1) * scale}
 //                             width={scale}
@@ -62,26 +62,49 @@ import QRCodeStyling from 'qr-code-styling'
 //     )
 // }
 
-export const UmplusQrCode = () => {
-    const qrCode = new QRCodeStyling({
-        width: 300,
-        height: 300,
-        type: "svg",
-        data: "https://www.facebook.com/",
-        image: "https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg",
-        dotsOptions: {
-            color: "#4267b2",
-            type: "rounded"
-        },
-        backgroundOptions: {
-            color: "#e9ebee",
-        },
-        imageOptions: {
-            crossOrigin: "anonymous",
-            margin: 20
+const CANVAS = ({path}) => {
+    const [qr, setQr] = useState()
+    const me = useMe()
+    useEffect(() => {
+        setQr(QRCode.create(`umplus://boon4681.com/${me.user_id}/${path || ''}`, { errorCorrectionLevel: 'Q' }).modules)
+    }, [])
+    if (!qr) {
+        return <></>
+    }
+    const scale = Math.round(256 / qr.size)
+    const data = []
+    for (let y = 0; y < qr.size; y++) {
+        for (let x = 0; x < qr.size; x++) {
+            if (qr.get(x, y) == 1) {
+                data.push(<Box key={'qrcode-' + x + ',' + y} box={rect((y) * scale, (x) * scale, scale, scale)} color="#444444"></Box>)
+            }
         }
-    });
-    return(
-        <></>
-    )
+    }
+    return <View className="rounded-md overflow-hidden p-3 bg-white">
+        <View className="rounded-md overflow-hidden" style={{ width: scale * qr.size, height: scale * qr.size }}>
+            <Canvas style={{ width: scale * qr.size, height: scale * qr.size }} >
+                <Fill color="#FFFFFF"></Fill>
+                {data}
+            </Canvas>
+        </View>
+    </View>
+}
+
+const MemoCANVAS = memo(CANVAS)
+
+export const UmplusQrCode = ({ path }) => {
+    return <View className="p-5 bg-[#3076FF] flex justify-center items-center rounded-2xl shadow-lg" style={{
+        shadowColor: "#3076FF",
+        shadowOffset: {
+            width: 2,
+            height: 4,
+        },
+        shadowOpacity: 0.30,
+        shadowRadius: 4.65,
+
+        elevation: 8,
+    }}>
+        <MemoCANVAS path={path}></MemoCANVAS>
+        <Text className="font-LINESeedRg text-3xl mt-8 text-white">Umplus</Text>
+    </View>
 }

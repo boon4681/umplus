@@ -95,14 +95,6 @@ router.post('/@me', useUserAuth, async (req: any, res, next) => {
     )
 })
 
-router.post('/topup', useUserAuth, async (req, res, next) => {
-
-})
-
-router.post('/withdraw', useUserAuth, async (req, res, next) => {
-
-})
-
 router.post('/transaction/create', useUserAuth, useTransactionValidator, create)
 
 router.post('/transaction/history', useUserAuth, async (req: any, res, next) => {
@@ -116,12 +108,12 @@ router.post('/transaction/history', useUserAuth, async (req: any, res, next) => 
                 OR: [
                     {
                         sender_id: req.jwt.data.user_id,
-                        type:'SEND'
+                        type: 'SEND'
                     },
                     {
                         receiver_id: req.jwt.data.user_id,
-                        type:{
-                            not:'SEND'
+                        type: {
+                            not: 'SEND'
                         }
                     }
                 ]

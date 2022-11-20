@@ -53,6 +53,10 @@ body {
     transform: rotate(45deg);
 }
 
+.shadow-border-b{
+    box-shadow: inset 0px -1px 0 0 #e5e7eb;
+}
+
 button{
     @apply select-none
 }

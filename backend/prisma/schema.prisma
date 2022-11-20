@@ -29,16 +29,9 @@ enum TXType {
     WITH_DRAW
     TOPUP_UMCOOP
     TOPUP_UMBANK
-    TOPUP_PROMPTPAY
-    TOPUP_TRUEMONEY
-    TOPUP_LINEPAY
-}
-
-enum TXChongWay {
-    MB_QRCODE
-    // ST_CARD
-    // CARD_QRCODE
-    // MOBILE_NFC
+    // TOPUP_PROMPTPAY
+    // TOPUP_TRUEMONEY
+    // TOPUP_LINEPAY
 }
 
 model transaction {

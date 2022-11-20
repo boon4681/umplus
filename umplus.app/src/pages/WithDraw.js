@@ -12,6 +12,7 @@ import BackARROW from '../../assets/icons/back_arrow.png'
 import { TextInput } from 'react-native-gesture-handler';
 import { useState } from 'react';
 import useMe from '../hooks/useMe';
+import { UmplusQrCode } from '../components/UmplusQrCode';
 
 const Header = () => {
     const navigation = useNavigation()
@@ -52,7 +53,7 @@ export default () => {
                         <View className="w-[60px] h-[60px] rounded-[30px] border-2 border-[#1f232548]">
                             <Avatar
                                 size={56}
-                                name={`u${user.username}`}
+                                name={`u${user.user_id}`}
                                 variant="beam"
                                 colors={['#FF5252', '#FF7752', '#FF9A52', '#FFB752', '#5E405B']}
                             />
@@ -62,15 +63,23 @@ export default () => {
                     </View>
                     <View className="flex items-end basis-3/4">
                         <Text className="font-LINESeedRg text-white text-lg mt-3">ยอดเงินคงเหลือ (บาท)</Text>
-                        <Text className="font-LINESeedRg text-white text-2xl -mt-1.5">{me ? '฿' + me.budget.toFixed(2) : ""}</Text>
-                        <Text className="font-LINESeedRg text-white text-md mt-auto">{user.username}</Text>
+                        <Text className="font-LINESeedRg text-white text-2xl -mt-1.5">{me ? '฿' + me.balance.toFixed(2) : ""}</Text>
+                        <Text className="font-LINESeedRg text-white text-md mt-auto">{user.firstname + ' '+ user.lastname}</Text>
                     </View>
                 </View>
             </View>
-            <Text className="font-LINESeedRg text-[#46464699] text-lg mt-4">
+            <View className="pt-2">
+                <UmplusQrCode path="withdraw"></UmplusQrCode>
+            </View>
+            {/* <Text className="font-LINESeedRg text-[#46464699] text-lg mt-4">
                 เลขบัญชี
             </Text>
             <View className="flex flex-row border-b border-b-[#46464699]">
+                {`${account}` == '0' ? (
+                    <Text className="font-LINESeedRg text-[#00000099] text-[20px] absolute right-0 pointer-events-none">
+                        ระบุเลขบัญชี
+                    </Text>
+                ) : null}
                 <TextInput
                     className="font-LINESeedRg text-[#46464699] text-[20px] text-right pr-0 mr-8 w-full"
                     style={{ color: `${account}` == '0' ? 'transparent' : undefined }}
@@ -80,11 +89,6 @@ export default () => {
                         setAccount(!isNaN(parseInt(text)) ? parseInt(text) : 0)
                     }}
                 ></TextInput>
-                {`${account}` == '0' ? (
-                    <Text className="font-LINESeedRg text-[#00000099] text-[20px] absolute right-0 pointer-events-none">
-                        ระบุเลขบัญชี
-                    </Text>
-                ) : null}
             </View>
             <Text className="font-LINESeedRg text-[#46464699] text-lg">
                 จำนวน
@@ -120,7 +124,7 @@ export default () => {
                 className={`px-5 py-3 w-full bg-[#3076FF] rounded-xl flex justify-center items-center mt-10`}
             >
                 <Text className="text-white font-LINESeedRg text-lg">ตกลง</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
         </Container>
     )
 }

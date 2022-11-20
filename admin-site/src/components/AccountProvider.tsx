@@ -7,7 +7,7 @@ import { UserRegisterValidator } from "../validators/auth.validator";
 export interface Account {
     account_type: string,
     user_id: string,
-   firstname: string,
+    firstname: string,
     lastname: string,
     email: string,
     phone_number: string,
@@ -21,7 +21,7 @@ export interface AccountContextType {
     create: (
         account_type: string,
         user_id: string,
-       firstname: string,
+        firstname: string,
         lastname: string,
         email: string,
         phone_number: string,
@@ -59,17 +59,17 @@ export const AccountProvinder: FC<JSX.IntrinsicElements['div']> = (
     const create = async (
         account_type: string,
         user_id: string,
-       firstname: string,
+        firstname: string,
         lastname: string,
         email: string,
         phone_number: string,
         password: string,
         balance: number,
     ) => {
-        const { validate, errors } = await Validator(UserRegisterValidator, { account_type, user_id,firstname, lastname, email, phone_number, password, balance })
+        const { validate, errors } = await Validator(UserRegisterValidator, { account_type, user_id, firstname, lastname, email, phone_number, password, balance })
         if (validate) {
             const res = await await dip?.fetch('/api/admin/account/create', 'POST', {
-                data: { account_type, user_id,firstname, lastname, email, phone_number, password, balance }
+                data: { account_type, user_id, firstname, lastname, email, phone_number, password, balance }
             })
             if (res) {
                 if (res.code == 200) {

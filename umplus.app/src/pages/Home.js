@@ -28,19 +28,19 @@ export default function Home() {
                     <View className=" bg-white p-1.5 rounded-xl flex flex-row items-center">
                         <View className="w-[44px] h-[44px]">
                             {
-                                me ? <Avatar
+                                user ? <Avatar
                                     size={44}
-                                    name={`u${user.username}`}
+                                    name={`u${user.user_id}`}
                                     variant="beam"
                                     colors={['#FF5252', '#FF7752', '#FF9A52', '#FFB752', '#5E405B']}
                                 /> : null
                             }
                         </View>
                         <View className="px-2 flex flex-col">
-                            <Text className="font-LINESeedBd text-base">
-                                {user.user_id}
+                            <Text className="font-LINESeedRg text-base">
+                                {user.firstname + ' ' + user.lastname}
                             </Text>
-                            <Text className="text-xs font-LINESeedRg -mt-1">เลขประจำตัวนักเรียน</Text>
+                            <Text className="text-sm font-LINESeedRg -mt-1">เลขประจำตัวนักเรียน: {user.user_id}</Text>
                         </View>
                     </View>
                 </View>
@@ -52,7 +52,7 @@ export default function Home() {
                             <Text className="font-LINESeedRg text-white text-xl -mt-3">Balance</Text>
                         </View>
                         <View className="w-full h-full flex items-center mt-[10%]">
-                            <Text className="font-LINESeedRg text-white text-[52px]">{me ? (me.budget || 0).toFixed(2) : ''}</Text>
+                            <Text className="font-LINESeedRg text-white text-[52px]">{user ? (user.balance || 0).toFixed(2) : ''}</Text>
                         </View>
                     </View>
                 </View>
