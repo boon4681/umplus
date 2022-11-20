@@ -4,7 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default ({ content, i }) => {
     const [open, setOpen] = useState(true)
-    return (<View></View>)
+    // return (<View></View>)
     return (
         <View className="absolute w-full" style={{
             top: (i | 1) * 24,

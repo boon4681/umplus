@@ -1,13 +1,13 @@
 import { Router } from "express"
 import { useAdminAuth, useUserAuth } from "../../middlewares/auth.middleware"
-import { PrismaClient } from "@prisma/client"
 import { a_day, a_minute } from "../../utils/time"
 import { useTransactionValidator } from "../../middlewares/transaction.middleware"
 import { create } from "../../controllers/transaction"
 import { UserLoginValidator } from "../../validators/auth.validator"
 import { bwt } from "../../modules/jwt.module"
 import { bhash } from "../../modules/hash.module"
-const prisma = new PrismaClient()
+import { Database } from "../../database/data.source"
+const prisma = Database
 const router = Router()
 
 router.post('/auth/login', async (req, res, next) => {
@@ -39,7 +39,7 @@ router.post('/auth/login', async (req, res, next) => {
                 },
                 select: {
                     user_id: true,
-                    name: true,
+                    firstname: true,
                     lastname: true,
                     email: true,
                     phone_number: true,
@@ -83,7 +83,7 @@ router.post('/@me', useUserAuth, async (req: any, res, next) => {
             },
             select: {
                 user_id: true,
-                name: true,
+                firstname: true,
                 lastname: true,
                 email: true,
                 phone_number: true,
@@ -115,10 +115,14 @@ router.post('/transaction/history', useUserAuth, async (req: any, res, next) => 
                 },
                 OR: [
                     {
-                        sender_id: req.jwt.data.user_id
+                        sender_id: req.jwt.data.user_id,
+                        type:'SEND'
                     },
                     {
-                        receiver_id: req.jwt.data.user_id
+                        receiver_id: req.jwt.data.user_id,
+                        type:{
+                            not:'SEND'
+                        }
                     }
                 ]
             },

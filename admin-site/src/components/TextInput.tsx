@@ -19,16 +19,12 @@ export default (props: {
     onKeyDown?: (event: React.KeyboardEvent<HTMLInputElement>) => void,
 }) => {
     const id = useID(props.name)
-    const [value, setValue] = useState(props.value || "")
+    const [value, setValue] = useState((props.value == undefined) ? "" : props.value)
 
     useEffect(() => {
         if (props.onChange)
             props.onChange(value)
     }, [value])
-
-    useEffect(() => {
-        setValue(props.value || "")
-    }, [props.value])
 
     return (
         <>
@@ -45,7 +41,7 @@ export default (props: {
                             if (props.onKeyDown)
                                 props.onKeyDown(e)
                         }}
-                        className={`w-full ${props.size ? props.size == "sm" ? 'p-2' : 'p-4' : 'p-4'} ${props.icon ? 'pr-12' : ''} text-sm ${props.error ? 'border-rose-500 error' : 'border-gray-200'} rounded-lg shadow-sm bg-white border-2 border-gray-500`}
+                        className={`w-full ${props.size ? props.size == "sm" ? 'p-2' : props.size == 'xs' ? 'p-1' : 'p-4' : 'p-4'} ${props.icon ? 'pr-12' : ''} text-sm ${props.error ? 'border-rose-500 error' : 'border-gray-200'} rounded-lg shadow-sm bg-white border-2 border-gray-500`}
                         type={props.type || "text"}
                         readOnly={props.readonly}
                         placeholder={(props.showName || props.showBoth) ? props.showBoth ? props.placeholder : '' : props.placeholder || ""}

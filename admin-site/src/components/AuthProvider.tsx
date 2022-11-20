@@ -4,14 +4,14 @@ import 'react-toastify/dist/ReactToastify.css';
 import axios, { AxiosRequestConfig } from 'axios'
 
 export interface User {
-    name: string
+   firstname: string
 }
 
 class dip {
     private verify = false;
     private wait: Promise<any>
     constructor(private token: string, private logout: () => void) {
-        this.wait = fetch('/api/v1/admin/auth/login', {
+        this.wait = fetch('/api/admin/auth/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -36,7 +36,7 @@ class dip {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${this.token}`,
                 }
-            }).then(a => a.data)
+            }).then(a => a.data).catch(a=>a.response.data)
         ) : null
     }
 }
@@ -66,13 +66,13 @@ const AuthProvider: FC<JSX.IntrinsicElements['div']> = ({ children }) => {
     const init = async () => {
         const token = localStorage.getItem('mis.ammart.token')
         if (token) {
-            const auth = await fetch('/api/v1/admin/auth/login', {
+            const auth = await fetch('/api/admin/auth/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`,
                 },
-            }).then(res => res.status < 500 ? res.json() : { code: res.status })
+            }).then(res => res.status < 500 ? res.json() : { code: res.status,message: res.statusText })
             if (auth.code === 200) {
                 setDip(await new dip(token, logout))
                 setUser(auth.data.user)
@@ -91,7 +91,7 @@ const AuthProvider: FC<JSX.IntrinsicElements['div']> = ({ children }) => {
     useEffect(() => {
         if (error != undefined) {
             toast.error(`🍌 ${error}`, {
-                position: "top-right",
+                position: "top-center",
                 theme: 'dark',
                 hideProgressBar: false,
                 closeOnClick: true,
@@ -106,7 +106,7 @@ const AuthProvider: FC<JSX.IntrinsicElements['div']> = ({ children }) => {
     const login = async (username?: string, password?: string) => {
         setIsLoggedIn(true)
         if (username && password) {
-            const res = await fetch('/api/v1/admin/auth/login', {
+            const res = await fetch('/api/admin/auth/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -115,7 +115,7 @@ const AuthProvider: FC<JSX.IntrinsicElements['div']> = ({ children }) => {
                     'user': username,
                     'password': password
                 })
-            }).then(res => res.json())
+            }).then(res => res.status < 500 ? res.json() : { code: res.status,message: res.statusText })
             if (res.code === 200) {
                 setIsLoggedIn(false)
                 setUser(res.data.user)
@@ -146,7 +146,7 @@ const AuthProvider: FC<JSX.IntrinsicElements['div']> = ({ children }) => {
             dip: dip_
         }}>
             <ToastContainer
-                position="top-right"
+                position="top-center"
                 autoClose={2000}
                 hideProgressBar={false}
                 newestOnTop={false}

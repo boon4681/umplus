@@ -7,13 +7,13 @@ const AdminLoginValidator = yup.object().shape({
 
 const UserLoginValidator = yup.object().shape({
     user_id: yup.string().length(5).matches(/\d+/).required(),
-    password: yup.string().length(13).matches(/\d+/).required()
+    password: yup.string().length(8).matches(/\d+/).required()
 })
 
 const UserRegisterValidator = yup.object().shape({
     account_type: yup.string().required(),
     user_id: yup.string().min(5).matches(/\d+/).required(),
-    name: yup.string().required(),
+    firstname: yup.string().required(),
     lastname: yup.string().required(),
     email: yup.string().email().required(),
     phone_number: yup.string().length(10).required(),

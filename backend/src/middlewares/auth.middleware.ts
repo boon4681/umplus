@@ -1,9 +1,10 @@
 import { Request, Response, NextFunction } from "express";
+import { Database } from "../database/data.source";
 
 const { bwt } = require('../modules/jwt.module')
 const { PrismaClient } = require('@prisma/client');
 const { btime } = require('../utils/time');
-const prisma = new PrismaClient()
+const prisma = Database
 
 const useAdminAuth = async (req: any, res: Response, next: NextFunction) => {
     if (!req.isJson) {
@@ -17,7 +18,7 @@ const useAdminAuth = async (req: any, res: Response, next: NextFunction) => {
     if (auth && auth.includes('Bearer ') && (p = auth.indexOf('Bearer ')) === 0) {
         const b = bwt.decode(auth.slice(p + 7))
         if (b && b.data.user) {
-            if (b.data.user === process.env.ADMIN_USER) {
+            if (b.data.user === 'banana') {
                 req.jwt = b
                 return next()
             }
@@ -47,9 +48,11 @@ const useUserAuth = async (req: any, res: Response, next: NextFunction) => {
                     user_id: b.data.user_id
                 }
             })
-            if (b.data.user_id === data.user_id) {
-                req.jwt = b
-                return next()
+            if(data){
+                if (b.data.user_id === data.user_id) {
+                    req.jwt = b
+                    return next()
+                }
             }
         }
     }

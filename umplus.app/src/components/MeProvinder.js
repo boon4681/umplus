@@ -11,7 +11,7 @@ export const MeProvinder = ({ children }) => {
     useEffect(() => {
         const load = () => {
             if (dip) {
-                dip.fetch('v1/user/@me','POST').then(data => {
+                dip.fetch('user/@me','POST').then(data => {
                     if (data) {
                         setMe(data)
                     }

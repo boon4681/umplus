@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import Dashboard from './pages/Dashboard'
 import Login from './pages/Login'
+import './style/index.css'
 import './style/global.pcss'
 import './style/index.scss'
 import { Routes, Route, useRoutes } from "react-router-dom";

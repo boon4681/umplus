@@ -3,11 +3,11 @@ import { useAdminAuth } from "../../middlewares/auth.middleware"
 import { bhash } from "../../modules/hash.module"
 import { bwt } from "../../modules/jwt.module"
 import { AdminLoginValidator, UserRegisterValidator } from "../../validators/auth.validator"
-const { useTransactionValidator } = require('../../../middlewares/transaction.middleware')
-import { PrismaClient } from "@prisma/client"
+const { useTransactionValidator } = require('../../middlewares/transaction.middleware')
 import { a_day, a_minute } from "../../utils/time"
 import { create } from "../../controllers/transaction"
-const prisma = new PrismaClient()
+import { Database } from "../../database/data.source"
+const prisma = Database
 
 
 const router = Router()
@@ -23,7 +23,7 @@ router.post('/auth/login', async (req, res, next) => {
                         code: 200,
                         data: {
                             user: {
-                                name: b.data.user
+                                firstname: b.data.user
                             }
                         }
                     })
@@ -35,12 +35,12 @@ router.post('/auth/login', async (req, res, next) => {
     if (user && password) {
         if (await AdminLoginValidator.isValid({ user, password })) {
             if (user === 'banana' && password === 'pythonpythan') {
-                const token = bwt.encode({ user, name: user })
+                const token = bwt.encode({ user, firstname: user })
                 return res.status(200).json({
                     code: 200,
                     data: {
                         user: {
-                            name: user
+                            firstname: user
                         },
                         token: token
                     }
@@ -59,29 +59,55 @@ router.post('/auth/login', async (req, res, next) => {
     })
 })
 
+router.delete('/account', useAdminAuth, async (req, res, next) => {
+    const { user_id } = req.body
+    try {
+        await prisma.user.delete({
+            where: {
+                user_id: user_id
+            }
+        })
+        return res.status(200).json({
+            code: 200,
+            message: "done"
+        })
+    } catch (error) { }
+    return res.status(400).json({
+        code: 400,
+        message: 'Bad Request'
+    })
+})
+
 router.post('/account/create', useAdminAuth, async (req, res, next) => {
-    const { account_type, user_id, name, lastname, email, phone_number, password, balance } = req.body
-    if (await UserRegisterValidator.isValid({ account_type, user_id, name, lastname, email, phone_number, password, balance })) {
+    const { account_type, user_id, firstname, lastname, email, phone_number, password, balance } = req.body
+    if (await UserRegisterValidator.isValid({ account_type, user_id, firstname, lastname, email, phone_number, password, balance })) {
         const check = await prisma.user.findUnique({
             where: {
                 user_id: user_id
             }
         })
         if (!check) {
-            await prisma.user.create({
-                data: {
-                    account_type,
-                    user_id,
-                    name,
-                    lastname,
-                    email,
-                    phone_number,
-                    password: Buffer.from(bhash.hash(password)).toString('base64'),
-                    balance,
-                    expense: 0,
-                    setting: {}
-                }
-            })
+            try {
+                await prisma.user.create({
+                    data: {
+                        account_type,
+                        user_id,
+                        firstname,
+                        lastname,
+                        email,
+                        phone_number,
+                        password: Buffer.from(bhash.hash(password)).toString('base64'),
+                        balance,
+                        expense: 0,
+                        setting: {}
+                    }
+                })
+            } catch (error) {
+                return res.status(400).json({
+                    code: 400,
+                    message: 'Bad Request'
+                })
+            }
             return res.status(200).json({
                 code: 200,
                 message: "done"
@@ -105,7 +131,31 @@ router.post('/account/users', useAdminAuth, async (req, res, next) => {
         select: {
             account_type: true,
             user_id: true,
-            name: true,
+            firstname: true,
+            lastname: true,
+            email: true,
+            phone_number: true,
+            balance: true,
+            expense: true,
+            setting: true
+        }
+    })
+
+    return res.status(200).json(
+        data
+    )
+})
+
+router.post('/account/users/:user_id', useAdminAuth, async (req, res, next) => {
+    const { user_id } = req.params
+    const data = await prisma.user.findUnique({
+        where: {
+            user_id
+        },
+        select: {
+            account_type: true,
+            user_id: true,
+            firstname: true,
             lastname: true,
             email: true,
             phone_number: true,
@@ -127,7 +177,7 @@ router.post('/account/students', useAdminAuth, async (req, res, next) => {
         },
         select: {
             user_id: true,
-            name: true,
+            firstname: true,
             lastname: true,
             email: true,
             phone_number: true,
@@ -149,7 +199,7 @@ router.post('/account/admins', useAdminAuth, async (req, res, next) => {
         },
         select: {
             user_id: true,
-            name: true,
+            firstname: true,
             lastname: true,
             email: true,
             phone_number: true,
@@ -171,7 +221,7 @@ router.post('/account/merchants', useAdminAuth, async (req, res, next) => {
         },
         select: {
             user_id: true,
-            name: true,
+            firstname: true,
             lastname: true,
             email: true,
             phone_number: true,
@@ -211,6 +261,9 @@ router.post('/transaction/last30minute', useAdminAuth, async (req, res, next) =>
                 timestamp: {
                     gte: new Date(Date.now() - (a_minute * 30)).toISOString()
                 }
+            },
+            select: {
+                timestamp: true
             }
         })
     )
@@ -223,6 +276,9 @@ router.post('/transaction/last7day', useAdminAuth, async (req, res, next) => {
                 timestamp: {
                     gte: new Date(Date.now() - (a_day * 7)).toISOString()
                 }
+            },
+            select: {
+                timestamp: true
             }
         })
     )
@@ -239,6 +295,20 @@ router.post('/transaction/history', useAdminAuth, async (req, res, next) => {
             },
             orderBy: {
                 transaction_id: 'desc',
+            },
+            include: {
+                receiver: {
+                    select: {
+                        firstname: true,
+                        lastname: true
+                    }
+                },
+                sender: {
+                    select: {
+                        firstname: true,
+                        lastname: true
+                    }
+                }
             },
             take: take ? take : 5,
             skip: skip ? skip : 0

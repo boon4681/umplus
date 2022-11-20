@@ -42,7 +42,7 @@ export default () => {
                 <div className='flex flex-col text-black py-2'>
                     <label className='text-xl'>Username</label>
                     <TextInput
-                        name="Username"
+                       firstname="Username"
                         onChange={setUser}
                         placeholder="Username"
                         icon={<AiOutlineUser className="w-5 h-5 text-gray-400" />}
@@ -52,7 +52,7 @@ export default () => {
                 <div className='flex flex-col text-black py-2 ' >
                     <label className='text-xl'>Password</label>
                     <TextInput
-                        name="Password"
+                       firstname="Password"
                         type="password"
                         onChange={setPassword}
                         placeholder="Password"

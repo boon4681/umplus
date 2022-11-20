@@ -3,7 +3,7 @@ import useID from "../hooks/useID"
 
 type options = string[]
 
-export default (props: { name: string, className?: string, value?: string, error?: string, disabled?: boolean, onChange?: (value: string) => void, options: options, showName?: boolean }) => {
+export default (props: {name: string, className?: string, value?: string, error?: string, disabled?: boolean, onChange?: (value: string) => void, options: options, showName?: boolean }) => {
     const [selected, setSelected] = useState(props.value || "")
     const id = useID(props.name)
     useEffect(() => {

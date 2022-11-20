@@ -5,7 +5,8 @@ import { Toast } from 'toastify-react-native'
 import axios from 'axios'
 import LogTab from "./LogTab";
 
-const host = 'http://159.223.71.170:5173'
+// const host = 'http://159.223.71.170:5173'
+const host = 'http://192.168.0.100:5173'
 
 class dip {
     verify = false;
@@ -15,7 +16,7 @@ class dip {
     constructor(token, logout) {
         this.token = token
         this.logout = logout
-        this.wait = fetch(`${host}/api/v1/user/auth/login`, {
+        this.wait = fetch(`${host}/api/user/auth/login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -58,15 +59,15 @@ export const AuthProvider = ({ children }) => {
     const [DIP, setDIP] = useState(new dip())
 
     const logout = async () => {
-        await AsyncStorage.removeItem('mis.ammart.token')
+        await AsyncStorage.removeItem('umplus.boon4681.token')
         setIsAuthenticated(false)
         setUser()
     }
 
     const init = async () => {
-        const token = await AsyncStorage.getItem('mis.ammart.token')
+        const token = await AsyncStorage.getItem('umplus.boon4681.token')
         if (token) {
-            const auth = await fetch(`${host}/api/v1/user/auth/login`, {
+            const auth = await fetch(`${host}/api/user/auth/login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -87,27 +88,31 @@ export const AuthProvider = ({ children }) => {
     }
     const login = async (username, password) => {
         setIsLoggedIn(true)
-        if (username && password) {
-            const res = await fetch(`${host}/api/v1/user/auth/login`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    'user_id': username,
-                    'password': password
+        try {
+            if (username && password) {
+                setUser(`${host}/api/user/auth/login`)
+                const res = await fetch(`${host}/api/user/auth/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        'user_id': username,
+                        'password': password
+                    })
                 })
-            })
-            const data = await res.json()
-            if (res.status === 200) {
-                setIsLoggedIn(false)
-                setUser(data.user)
-                setIsAuthenticated(true)
-                AsyncStorage.setItem('mis.ammart.token', data.token)
-                return
+                const data = await res.json()
+                if (res.status === 200) {
+                    setIsLoggedIn(false)
+                    setUser(data.user)
+                    setIsAuthenticated(true)
+                    AsyncStorage.setItem('umplus.boon4681.token', data.token)
+                    return
+                }
+                setError(data.message)
+                logout()
             }
-            setError(data.message)
-            logout()
+        } catch (error) {
         }
         setIsLoggedIn(false)
     }

@@ -9,6 +9,7 @@ import BottomTab from '../components/BottomTab';
 import BackARROW from '../../assets/icons/back_arrow.png'
 import { TextInput } from 'react-native-gesture-handler';
 import { useState } from 'react';
+import { UmplusQrCode } from '../components/UmplusQrCode';
 
 const Header = () => {
     const navigation = useNavigation()
@@ -40,7 +41,8 @@ export default () => {
     return (
         <>
             <Container header={Header}>
-                <Text className="font-LINESeedRg text-[#46464699] text-lg">
+                <UmplusQrCode></UmplusQrCode>
+                {/* <Text className="font-LINESeedRg text-[#46464699] text-lg">
                     จำนวน
                 </Text>
                 <View className="flex flex-row border-b border-b-[#46464699]">
@@ -59,7 +61,7 @@ export default () => {
                 </View>
                 <TouchableOpacity
                     onPress={() => {
-                        dip.fetch('v1/user/transaction/add_money', "POST", {
+                        dip.fetch('user/transaction/topup', "POST", {
                             data: {
                                 amount: num
                             }
@@ -73,7 +75,7 @@ export default () => {
                     className={`px-5 py-3 w-full bg-[#3076FF] rounded-xl flex justify-center items-center mt-3`}
                 >
                     <Text className="text-white font-LINESeedRg text-lg">ตกลง</Text>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
             </Container>
         </>
     )

@@ -105,7 +105,7 @@ export default () => {
             </View>
             <TouchableOpacity
                 onPress={() => {
-                    dip.fetch('v1/user/transaction/with_draw', "POST", {
+                    dip.fetch('user/transaction/withdraw', "POST", {
                         data: {
                             amount: num,
                             account: account

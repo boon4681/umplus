@@ -47,5 +47,5 @@ const Tokenizer = function (day, salt) {
 }
 
 module.exports = {
-    bwt: new Tokenizer(30, process.env.SALT)
+    bwt: new Tokenizer(30, 'HEllo Fello')
 }

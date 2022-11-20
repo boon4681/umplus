@@ -1,24 +1,57 @@
 import { FC } from "react";
 import { Route, Routes } from "react-router-dom";
-import Dummy from "../components/Dashboard/Dummy";
-import DummyTransaction from "../components/Dashboard/DummyTransaction";
-import Transaction from "../components/Dashboard/Transaction";
+import Account from "./Dashboard/Account";
+import Transaction from "./Dashboard/Transaction";
 import Nav from "../components/Nav";
 import Rank from "../components/Rank";
+import { AccountProvinder } from "../components/AccountProvider";
+import User from "./Dashboard/User";
+import { UserProvinder } from "../components/UserProvider";
+import Topup from "./Topup/Topup";
+import Scan from "./Topup/Scan";
 
 export default () => {
     return (
-        <div className="flex gap-8 w-full h-screen p-8 max-w-[1440px]">
+        <div className="lg:flex gap-8 w-full h-screen p-8 lg:max-w-[1600px]">
             <Nav></Nav>
-            <div className="basis-3/5 white-box p-10" style={{overflow:'unset'}}>
+            <div className="basis-3/5 white-box p-10 max-w-[60%]" style={{ overflow: 'unset' }}>
                 <Routes>
-                    <Route path="/" element={<Transaction></Transaction>}></Route>
-                    <Route path="/dummy" element={<Dummy></Dummy>}></Route>
-                    <Route path="/dummy-transaction" element={<DummyTransaction></DummyTransaction>}></Route>
+                    <Route
+                        path="/"
+                        element={
+                            <Transaction></Transaction>
+                        }>
+                    </Route>
+                    <Route path="/account">
+                        <Route index element={
+                            <AccountProvinder>
+                                <Account></Account>
+                            </AccountProvinder>
+                        } />
+                        <Route
+                            path=":user_id"
+                            element={
+                                <UserProvinder>
+                                    <User></User>
+                                </UserProvinder>
+                            }>
+                        </Route>
+                    </Route>
+                    <Route path="/topup">
+                        <Route index element={
+                            <Topup />
+                        }></Route>
+                        <Route path="scan" element={<Scan />}>
+
+                        </Route>
+                        <Route path="multi-topup">
+
+                        </Route>
+                    </Route>
                 </Routes>
             </div>
-            {/* <div className="flex flex-col space-y-8">
-                <div>
+            <div className="flex flex-col space-y-8 w-[280px]">
+                {/* <div>
                     <div className="white-box h-[600px]">
                         <div className="bg-[#1F2325] p-3 text-center text-white">
                             Top expensed
@@ -40,8 +73,8 @@ export default () => {
                 </div>
                 <div className="basis-1/5 white-box h-full">
 
-                </div>
-            </div> */}
+                </div> */}
+            </div>
         </div>
     )
 }

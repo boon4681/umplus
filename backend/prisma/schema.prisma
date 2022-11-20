@@ -27,6 +27,8 @@ enum TXType {
     SEND
     RECEIVE
     WITH_DRAW
+    TOPUP_UMCOOP
+    TOPUP_UMBANK
     TOPUP_PROMPTPAY
     TOPUP_TRUEMONEY
     TOPUP_LINEPAY
@@ -40,7 +42,7 @@ enum TXChongWay {
 }
 
 model transaction {
-    transaction_id BigInt   @id @default(autoincrement())
+    transaction_id Int      @id @default(autoincrement())
     sender_id      String
     receiver_id    String
     type           TXType
@@ -48,20 +50,34 @@ model transaction {
     info           String
     amount         Float
     timestamp      DateTime @default(now()) @db.Timestamp(6)
+    sender         user     @relation("sender", fields: [sender_id], references: [user_id])
+    receiver       user     @relation("receiver", fields: [receiver_id], references: [user_id])
 }
 
 model user {
-    id           BigInt      @id @default(autoincrement())
-    account_type AccountType
-    user_id      String      @unique
-    name         String
-    lastname     String
-    email        String
-    phone_number String
-    password     String
-    balance      Float
-    expense      Float
-    setting      Json        @db.Json
-    created      DateTime    @default(now()) @db.Timestamp(6)
-    last_update  DateTime    @updatedAt @db.Timestamp(6)
+    id                   Int           @id @default(autoincrement())
+    account_type         AccountType
+    user_id              String        @unique
+    firstname            String
+    lastname             String
+    email                String
+    phone_number         String
+    password             String
+    balance              Float
+    expense              Float
+    setting              Json          @db.Json
+    created              DateTime      @default(now()) @db.Timestamp(6)
+    last_update          DateTime      @updatedAt @db.Timestamp(6)
+    stores               store[]
+    transaction_sender   transaction[] @relation("sender")
+    transaction_receiver transaction[] @relation("receiver")
+}
+
+model store {
+    id         Int    @id @default(autoincrement())
+    owner      user   @relation(fields: [ownerId], references: [user_id])
+    ownerId    String
+    store_name String
+    location   String
+    income     Float
 }

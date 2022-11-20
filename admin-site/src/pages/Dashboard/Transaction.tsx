@@ -1,7 +1,14 @@
-import { useEffect, useRef, useState } from "react"
+import { memo, useEffect, useRef, useState } from "react"
 import { useAuth } from "../../hooks/useAuth"
 import 'chart.js/auto';
 import { Chart, ChartProps } from 'react-chartjs-2';
+import TableHelper from "../../components/TableHelper";
+import { TransactionResValidator, TransactionValidator } from "../../validators/transaction.validator";
+import Modal from "../../components/Modal";
+import FieldHelper from "../../components/FieldHelper";
+import Validator from "../../utils/Validator";
+import Selection from '../../components/Selection'
+import { toast } from "react-toastify";
 const a_second = 1000
 const a_minute = 60 * a_second
 const a_hour = 60 * a_minute
@@ -63,19 +70,30 @@ const options: ChartProps["options"] = {
 export default () => {
     const { dip } = useAuth()
     const ref = useRef<HTMLCanvasElement>(document.createElement('canvas'))
+    const [value, setValue] = useState<any>()
     const [last30minute, setLast30] = useState([...new Array(7).keys()].map(a => 0))
     const [last7day, setLast7] = useState([...new Array(7).keys()].map(a => 0))
     const [all, setAll] = useState([])
     const chartRef = useRef(null);
+
+    const [users, setUsers] = useState<string[]>([]);
+    const init = async () => {
+        const data = await dip?.fetch('/api/admin/account/users', 'POST')
+
+        if (data) setUsers(data.map((a: any) => a.user_id))
+    }
+
+
     const load30min = async () => {
-        const data = await dip?.fetch('/api/v1/admin/transaction/last30minute', 'POST')
+        const data = await dip?.fetch('/api/admin/transaction/last30minute', 'POST')
         if (data) {
             const d = data.map((a: any) => new Date(a.timestamp)) as Date[]
+            const date = Date.now() - Date.now() % (a_minute*5)
             setLast30(
                 [...new Array(7).keys()].map(a => {
                     const i = (6 - a) * 5
-                    const end = Date.now() - i * a_minute
-                    const start = Date.now() - (i + 5) * a_minute
+                    const start = date - i * a_minute
+                    const end = date - (i - 5) * a_minute
                     return d.filter(a => {
                         return a >= new Date(start) && a < new Date(end)
                     }).length
@@ -85,14 +103,15 @@ export default () => {
     }
 
     const load7day = async () => {
-        const data = await dip?.fetch('/api/v1/admin/transaction/last7day', 'POST')
+        const data = await dip?.fetch('/api/admin/transaction/last7day', 'POST')
         if (data) {
             const d = data.map((a: any) => new Date(a.timestamp)) as Date[]
+            const date = Date.now() - Date.now() % a_day
             setLast7(
                 [...new Array(7).keys()].map(a => {
                     const i = (6 - a)
-                    const start = Date.now() - (i + 1) * a_day
-                    const end = Date.now() - i * a_day
+                    const start = date - i * a_day
+                    const end = date - (i - 1) * a_day
                     return d.filter(a => {
                         return a >= new Date(start) && a < new Date(end)
                     }).length
@@ -102,7 +121,7 @@ export default () => {
     }
 
     const loadAll = async () => {
-        const data = await dip?.fetch('/api/v1/admin/transaction/history', 'POST', {
+        const data = await dip?.fetch('/api/admin/transaction/history', 'POST', {
             data: {
                 'take': 20
             }
@@ -117,6 +136,7 @@ export default () => {
             load30min()
             load7day()
             loadAll()
+            init()
         }
         const i = setInterval(() => {
             if (dip) {
@@ -127,8 +147,69 @@ export default () => {
         }, 1000)
         return () => clearInterval(i)
     }, [])
+
+    const onClick = async (data: any) => {
+        const { validate, errors } = await Validator(TransactionValidator, data)
+        console.log(errors)
+        if (validate) {
+            const res = await await dip?.fetch('/api/admin/transaction/create', 'POST', {
+                data
+            })
+            if (res) {
+                if (res.code == 200) {
+                    toast.success(`🍌 ${res.message}`, {
+                        position: "top-center",
+                        theme: 'dark',
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                    });
+                } else {
+                    toast.error(`🍌 ${res.message}`, {
+                        position: "top-center",
+                        theme: 'dark',
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                    });
+                }
+            }
+        }
+    }
+
     return (
         <div className="flex flex-col h-full">
+            <div className="flex justify-end w-full space-x-3 pb-4">
+                <div>
+                    <Modal name="Create Transation">
+                        <div className="text-2xl mb-4">Create Transation</div>
+                        <div className="w-full flex flex-col items-center">
+                            <FieldHelper
+                                onChange={setValue}
+                                type={'fill'}
+                                validator={TransactionValidator}
+                                replace={{
+                                    'sender_id':
+                                        ({ value, onChange, name, values }) => {
+                                            return <Selection onChange={onChange} value={value} name={name} showName options={users.filter(a => a != values.receiver_id)} ></Selection>
+                                        },
+                                    'receiver_id':
+                                        ({ value, onChange, name, values }) => {
+                                            return <Selection onChange={onChange} value={value} name={name} showName options={users.filter(a => a != values.sender_id)} ></Selection>
+                                        },
+                                }}
+                            ></FieldHelper>
+                            <div className="w-full max-w-sm">
+                                <button onClick={() => { onClick(value) }} className='w-[100%] my-10 py-2 bg-blue-500 hover:bg-blue-800 text-white shadow-sm shadow-gray-500/80 rounded-lg'>Create</button>
+                            </div>
+                        </div>
+                    </Modal>
+                </div>
+            </div>
             <div className="flex space-x-4 w-full">
                 <div className="basis-3/6 shadow-1 p-4 rounded-xl">
                     <div>
@@ -208,7 +289,7 @@ export default () => {
                                             tooltip.style.left = (model.tooltip.caretX) + positionX + 20 + 'px';
                                             tooltip.style.top = height / 2 - 20 + 'px';
                                             tooltip.style.display = 'block';
-                                            tooltip.querySelector('.tooltip-label').textContent = new Date(Date.now() - (6 - model.tooltip.dataPoints[0].dataIndex) * a_day).toDateString();
+                                            tooltip.querySelector('.tooltip-label').textContent = new Date(Date.now() - (7 - model.tooltip.dataPoints[0].dataIndex) * a_day).toDateString();
                                             tooltip.querySelector('.tooltip-value .value').textContent = model.tooltip.dataPoints[0].raw;
                                         }
                                     }
@@ -236,39 +317,34 @@ export default () => {
             </div>
             <div className="h-full pt-3 flex flex-col">
                 <div className="text-xl mb-2">Transaction</div>
-                <div className="rounded-lg shadow-1 w-full h-full flex flex-col">
-                    <div className="grid grid-cols-6 border-b px-6">
-                        <div className="col-span-2 px-12 py-3">DATE</div>
-                        <div className="py-3">ID</div>
-                        <div className="col-span-2 py-3">NAME</div>
-                        <div className="py-3">VALUE</div>
-                    </div>
-                    <div className="w-full overflow-y-scroll p-4" style={{ flex: '1 1 0' }}>
-                        <div>
-                            {
-                                all.map((a: any) => {
-                                    return (
-                                        <div key={JSON.stringify(a)} className="grid grid-cols-6 mx-2 px-2 rounded-2xl cursor-pointer opacity-80 hover:bg-[#F1F3F4] hover:opacity-100">
-                                            <div className="col-span-2 py-3 pl-2">{new Date(a.timestamp).toISOString()}</div>
-                                            <div className="py-3">#{a.transaction_id}</div>
-                                            <div className="col-span-2 py-3">{a.user_id}</div>
-                                            <div className="py-3 text-end">
-                                                {
-                                                    a.send ? (
-                                                        <div className="text-rose-500">-{a.send.amount}฿</div>
-                                                    ) : (
-                                                        <div className="text-black/80">{a.receive.amount}฿</div>
-                                                    )
-                                                }
-                                            </div>
-                                        </div>
-                                    )
-                                })
-                            }
-                        </div>
-                    </div>
-                </div>
+                <TableHelper
+                    asKey={'transaction_id'}
+                    validator={TransactionResValidator}
+                    value={all as any[]}
+                    CustomItem={MemoCustomItem}
+                    ignore={['setting', 'expense']}
+                ></TableHelper>
             </div>
         </div>
     )
 }
+
+const Custom = ({ value }: { value: any }) => {
+    return <tr>
+        <td className="px-4 py-2 whitespace-nowrap">{new Date(value.timestamp).toISOString()}</td>
+        <td className="px-4 py-2">#{value.transaction_id}</td>
+        <td className="px-4 py-2 whitespace-nowrap">{value.type == 'SEND' ? value.sender.firstname + ' ' + value.sender.lastname : value.receiver.firstname + ' ' + value.receiver.lastname}</td>
+        <td className="px-4 py-2">{value.status}</td>
+        <td className="px-4 py-2 text-end">
+            {
+                value.type == 'SEND' ? (
+                    <div className="text-rose-500">-{value.amount}฿</div>
+                ) : (
+                    <div className="text-black/80">{value.amount}฿</div>
+                )
+            }
+        </td>
+    </tr>
+}
+
+const MemoCustomItem = memo(Custom)

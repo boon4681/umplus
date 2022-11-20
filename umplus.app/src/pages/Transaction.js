@@ -70,11 +70,21 @@ function IconMiniCard({ a }) {
     return <Image className="w-[65px] h-[65px]" source={a ? SENTOUT : RECEIVERMONEY} />
 }
 
+const format = {
+    SEND:'โอนออก',
+    RECEIVE:'รับโอนเงิน',
+    WITH_DRAW:'ถอนเงิน',
+    TOPUP_UMCOOP: 'เติมเงิน'
+    // TOPUP_PROMPTPAY:'เติมเงิน (PROMPTPAY)',
+    // TOPUP_TRUEMONEY:'เติมเงิน (TRUEMONEY)',
+    // TOPUP_LINEPAY:'เติมเงิน (LINEPAY)',
+}
+
 function MiniCard({ data }) {
     const { user } = useAuth()
     const time = MiniTime(data.timestamp)
     const [show, setShow] = useState(false)
-    const info = data.send ? data.send : data.receive
+    const info = data
     const pan = useRef(new Animated.Value(65)).current;
     const rot = useRef(new Animated.Value(0)).current
     useEffect(() => {
@@ -113,7 +123,7 @@ function MiniCard({ data }) {
         >
             <Animated.View style={{ height: pan }}>
                 <View className="flex flex-row items-center w-full h-[65px]">
-                    <Image className="w-[65px] h-[65px]" source={data.send ? SENTOUT : RECEIVERMONEY} />
+                    <Image className="w-[65px] h-[65px]" source={data.type === 'SEND' ? SENTOUT : RECEIVERMONEY} />
                     <View>
                         <Text className="font-LINESeedRg text-[#3B3B3B] text-[16px]">{data.send ? 'โอนออก' : 'รับโอนเงิน'}</Text>
                         <Text className="font-LINESeedRg text-[#6F6C6C] text-[14px] -mt-1.5">
@@ -122,10 +132,10 @@ function MiniCard({ data }) {
                     </View>
                     <View className="h-full ml-auto pr-3 pt-3.5 flex flex-col items-end">
                         {
-                            (data.send) ? (
-                                <Text className="font-LINESeedRg text-[#FF4242] text-[16px]">-{data.send.amount} บาท</Text>
+                            (data.type === 'SEND') ? (
+                                <Text className="font-LINESeedRg text-[#FF4242] text-[16px]">-{data.amount} บาท</Text>
                             ) : (
-                                <Text className="font-LINESeedRg text-[#00C07B] text-[16px]">{data.receive.amount} บาท</Text>
+                                <Text className="font-LINESeedRg text-[#00C07B] text-[16px]">{data.amount} บาท</Text>
                             )
                         }
                         <Animated.Image style={{ transform: [{ rotate: spin }] }} className="w-[18px] h-[18px] opacity-80" source={INFODOWN} />
@@ -170,7 +180,7 @@ export default () => {
                             <View className="w-[60px] h-[60px] rounded-[30px] border-2 border-[#1f232548]">
                                 <Avatar
                                     size={56}
-                                    name={`u${user.username}`}
+                                    name={`u${user.firstname}`}
                                     variant="beam"
                                     colors={['#FF5252', '#FF7752', '#FF9A52', '#FFB752', '#5E405B']}
                                 />
@@ -180,8 +190,8 @@ export default () => {
                         </View>
                         <View className="flex items-end basis-3/4">
                             <Text className="font-LINESeedRg text-white text-lg mt-3">ยอดเงินคงเหลือ (บาท)</Text>
-                            <Text className="font-LINESeedRg text-white text-2xl -mt-1.5">{me ? '฿' + me.budget.toFixed(2) : ""}</Text>
-                            <Text className="font-LINESeedRg text-white text-md mt-auto">{user.username}</Text>
+                            <Text className="font-LINESeedRg text-white text-2xl -mt-1.5">{me ? '฿' + me.balance.toFixed(2) : ""}</Text>
+                            <Text className="font-LINESeedRg text-white text-md mt-auto">{user.firstname + ' '+ user.lastname}</Text>
                         </View>
                     </View>
                 </View>
