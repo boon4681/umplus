@@ -28,9 +28,9 @@ export default function Home() {
                     <View className=" bg-white p-1.5 rounded-xl flex flex-row items-center">
                         <View className="w-[44px] h-[44px]">
                             {
-                                user ? <Avatar
+                                me ? <Avatar
                                     size={44}
-                                    name={`u${user.user_id}`}
+                                    name={`u${me.user_id}`}
                                     variant="beam"
                                     colors={['#FF5252', '#FF7752', '#FF9A52', '#FFB752', '#5E405B']}
                                 /> : null
@@ -52,7 +52,7 @@ export default function Home() {
                             <Text className="font-LINESeedRg text-white text-xl -mt-3">Balance</Text>
                         </View>
                         <View className="w-full h-full flex items-center mt-[10%]">
-                            <Text className="font-LINESeedRg text-white text-[52px]">{user ? (user.balance || 0).toFixed(2) : ''}</Text>
+                            <Text className="font-LINESeedRg text-white text-[52px]">{me ? (me.balance || 0).toFixed(2) : ''}</Text>
                         </View>
                     </View>
                 </View>
@@ -69,7 +69,11 @@ export default function Home() {
                             </View>
                             <Text className="font-LINESeedRg text-black">เติมเงิน</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity className="flex items-center">
+                        <TouchableOpacity 
+                            onPress={() => {
+                                navigation.navigate("Transfer")
+                            }}
+                            className="flex items-center">
                             <View className="w-16 h-16 rounded-[25px] bg-[#0085FF] p-0.5">
                                 <Image className="w-full h-full" source={SendMONEY} />
                             </View>

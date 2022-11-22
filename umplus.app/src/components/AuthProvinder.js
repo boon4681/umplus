@@ -6,7 +6,8 @@ import axios from 'axios'
 import LogTab from "./LogTab";
 
 // const host = 'http://159.223.71.170:5173'
-const host = 'http://192.168.0.100:5173'
+// const host = 'http://192.168.0.100:5173'
+const host = 'http://192.168.87.29:5173'
 
 class dip {
     verify = false;
@@ -105,6 +106,7 @@ export const AuthProvider = ({ children }) => {
                 if (res.status === 200) {
                     setIsLoggedIn(false)
                     setUser(data.user)
+                    setDIP(await new dip(data.token, logout))
                     setIsAuthenticated(true)
                     AsyncStorage.setItem('umplus.boon4681.token', data.token)
                     return

@@ -189,6 +189,9 @@ router.post('/account/users', useAdminAuth, async (req, res, next) => {
             balance: true,
             expense: true,
             setting: true
+        },
+        orderBy:{
+            user_id: 'asc'
         }
     })
 
@@ -334,6 +337,19 @@ router.post('/account/merchants', useAdminAuth, async (req, res, next) => {
 
 router.post('/topup', useAdminAuth, async (req: any, res, next) => {
     const { receiver_id, amount } = req.body
+    const found = await prisma.user.count({
+        where: {
+            user_id: {
+                in: [receiver_id + '', req.jwt.user_id + '']
+            }
+        }
+    })
+    if (found != 2) {
+        return res.status(400).json({
+            code: 400,
+            message: 'Bad Request'
+        })
+    }
     const sender = await prisma.transaction.create({
         data: {
             status: 'PROCESS',
@@ -354,22 +370,108 @@ router.post('/topup', useAdminAuth, async (req: any, res, next) => {
             if (!receiver) {
                 throw new Error('FAILED')
             }
-            const receive = await prisma.transaction.create({
-                data: {
-                    status: 'PROCESS',
-                    type: 'RECEIVE',
-                    info: 'เติมเงินกับธนาคารโรงเรียน',
-                    sender_id: req.jwt.user_id,
-                    receiver_id,
-                    amount
-                }
-            })
             await tx.user.update({
                 where: {
                     user_id: receiver_id
                 },
                 data: {
                     balance: {
+                        increment: amount
+                    }
+                }
+            })
+            await prisma.transaction.update({
+                where: {
+                    transaction_id: sender.transaction_id
+                },
+                data: {
+                    status: 'SUCCESS'
+                }
+            })
+            return 'SUCCESS'
+        }) as TXStatus
+        await prisma.transaction.update({
+            where: {
+                transaction_id: sender.transaction_id
+            },
+            data: {
+                status: result
+            }
+        })
+        return res.status(200).json({
+            code: 200,
+            message: 'done'
+        })
+    } catch (error: any) {
+        await prisma.transaction.update({
+            where: {
+                transaction_id: sender.transaction_id
+            },
+            data: {
+                status: error.message
+            }
+        })
+        return res.status(400).json({
+            code: 400,
+            message: error.message
+        })
+    }
+})
+
+router.post('/withdraw', useAdminAuth, async (req:any, res, next) => {
+    const { sender_id, amount } = req.body
+    const found = await prisma.user.count({
+        where: {
+            user_id: {
+                in: [sender_id + '', req.jwt.user_id + '']
+            }
+        }
+    })
+    if (found != 2) {
+        return res.status(400).json({
+            code: 400,
+            message: 'Bad Request'
+        })
+    }
+    const sender = await prisma.transaction.create({
+        data: {
+            status: 'PROCESS',
+            type: 'WITH_DRAW',
+            info: 'เติมเงินกับธนาคารโรงเรียน',
+            sender_id,
+            receiver_id: req.jwt.user_id,
+            amount
+        }
+    })
+    try {
+        const result = await prisma.$transaction(async (tx) => {
+            const sender = await tx.user.findUnique({
+                where: {
+                    user_id: sender_id
+                }
+            })
+            if (!sender) {
+                throw new Error('FAILED')
+            }
+            const receive = await prisma.transaction.create({
+                data: {
+                    status: 'PROCESS',
+                    type: 'RECEIVE',
+                    info: 'ถอนเงินกับธนาคารโรงเรียน',
+                    sender_id,
+                    receiver_id: req.jwt.user_id,
+                    amount
+                }
+            })
+            await tx.user.update({
+                where: {
+                    user_id: sender_id
+                },
+                data: {
+                    balance: {
+                        decrement: amount
+                    },
+                    expense:{
                         increment: amount
                     }
                 }
@@ -410,10 +512,6 @@ router.post('/topup', useAdminAuth, async (req: any, res, next) => {
             message: error.message
         })
     }
-})
-
-router.post('/withdraw', useAdminAuth, async (req, res, next) => {
-
 })
 
 router.post('/account/top_expensed', useAdminAuth, async (req, res, next) => {

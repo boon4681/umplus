@@ -10,7 +10,7 @@ const Modal = ({ children,name }: { children: ReactNode,name: string }) => {
                     <div>
                         <div className="fixed top-0 left-0 w-full h-full flex flex-col items-center pt-6 z-50">
                             <div onClick={() => setShow(false)} className='bg-black/20 w-full h-full absolute top-0 left-0'></div>
-                            <div className="bg-white w-full max-w-md p-6 rounded-lg shadow-sm relative">
+                            <div className="bg-white w-full max-w-md h-[80vh] overflow-auto p-6 rounded-lg shadow-sm relative">
                                 {children}
                             </div>
                         </div>

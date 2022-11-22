@@ -12,6 +12,7 @@ import BottomTab from '../components/BottomTab'
 import BackARROW from '../../assets/icons/back_arrow.png'
 import SENTOUT from '../../assets/icons/sent_out.png'
 import RECEIVERMONEY from '../../assets/icons/receive_money.png'
+import FAILED from '../../assets/icons/failed.png'
 import INFODOWN from '../../assets/icons/info_down.png'
 import useMe from '../hooks/useMe';
 import { memo, useEffect, useMemo, useRef, useState } from 'react';
@@ -71,10 +72,10 @@ function IconMiniCard({ a }) {
 }
 
 const format = {
-    SEND:'โอนเงิน',
-    RECEIVE:'รับโอนเงิน',
-    WITH_DRAW:'ถอนเงิน',
-    TOPUP_UMCOOP: 'เติมเงินผ่าน สหกรณ์ รร.',
+    SEND: 'โอนเงิน',
+    RECEIVE: 'รับโอนเงิน',
+    WITH_DRAW: 'ถอนเงิน',
+    TOPUP_UMCOOP: 'เติมเงินผ่านสหกรณ์ รร.',
     TOPUP_UMBANK: 'เติมเงินผ่านธนาคาร รร.',
     // TOPUP_PROMPTPAY:'เติมเงิน (PROMPTPAY)',
     // TOPUP_TRUEMONEY:'เติมเงิน (TRUEMONEY)',
@@ -124,7 +125,12 @@ function MiniCard({ data }) {
         >
             <Animated.View style={{ height: pan }}>
                 <View className="flex flex-row items-center w-full h-[65px]">
-                    <Image className="w-[65px] h-[65px]" source={data.type === 'SEND' ? SENTOUT : RECEIVERMONEY} />
+                    {
+                        data.status !== 'SUCCESS' && data.status !== "PROCESS" ?
+                            <Image className="w-[65px] h-[65px]" source={FAILED} />
+                            :
+                            <Image className="w-[65px] h-[65px]" source={data.type === 'SEND' || data.type === 'WITH_DRAW' ? SENTOUT : RECEIVERMONEY} />
+                    }
                     <View>
                         <Text className="font-LINESeedRg text-[#3B3B3B] text-[16px]">{format[data.type]}</Text>
                         <Text className="font-LINESeedRg text-[#6F6C6C] text-[14px] -mt-1.5">
@@ -133,7 +139,7 @@ function MiniCard({ data }) {
                     </View>
                     <View className="h-full ml-auto pr-3 pt-3.5 flex flex-col items-end">
                         {
-                            (data.type === 'SEND') ? (
+                            (data.type === 'SEND' || data.type === 'WITH_DRAW') ? (
                                 <Text className="font-LINESeedRg text-[#FF4242] text-[16px]">-{data.amount} บาท</Text>
                             ) : (
                                 <Text className="font-LINESeedRg text-[#00C07B] text-[16px]">{data.amount} บาท</Text>
@@ -192,7 +198,7 @@ export default () => {
                         <View className="flex items-end basis-3/4">
                             <Text className="font-LINESeedRg text-white text-lg mt-3">ยอดเงินคงเหลือ (บาท)</Text>
                             <Text className="font-LINESeedRg text-white text-2xl -mt-1.5">{me ? '฿' + me.balance.toFixed(2) : ""}</Text>
-                            <Text className="font-LINESeedRg text-white text-md mt-auto">{user.firstname + ' '+ user.lastname}</Text>
+                            <Text className="font-LINESeedRg text-white text-md mt-auto">{user.firstname + ' ' + user.lastname}</Text>
                         </View>
                     </View>
                 </View>

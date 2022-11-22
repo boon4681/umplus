@@ -15,10 +15,10 @@ export default () => {
                         Scan QRCode
                     </div>
                     <div className="text-xl">
-                        เติมผ่าน qrcode
+                        เติม และ ถอนผ่าน qrcode
                     </div>
                 </NavLink>
-                <NavLink to="multi" className="aspect-square max-w-[300px] max-h-[300px] w-full rounded-xl shadow-1 p-6 flex flex-col items-center cursor-pointer transition hover:-translate-y-2">
+                {/* <NavLink to="multi" className="aspect-square max-w-[300px] max-h-[300px] w-full rounded-xl shadow-1 p-6 flex flex-col items-center cursor-pointer transition hover:-translate-y-2">
                     <div className="aspect-square h-full">
                         <ImStack className="w-full h-full p-[10%] text-[#3455FF]/60"></ImStack>
                     </div>
@@ -28,7 +28,7 @@ export default () => {
                     <div className="text-xl">
                         เติมเท่ากันทีละหลายคน
                     </div>
-                </NavLink>
+                </NavLink> */}
             </div>
         </div>
     )

@@ -19,7 +19,8 @@ function FieldHelper<T extends yup.ObjectSchema<any, any>>({
     ignore,
     onChange,
     defaultValue,
-    replace
+    replace,
+    editIgnore
 }: {
     type: 'fill' | 'filltable' | 'name',
     defaultValue?: any,
@@ -34,7 +35,8 @@ function FieldHelper<T extends yup.ObjectSchema<any, any>>({
             onChange?: ((value: string) => void),
             error?: string
         }) => JSX.Element;
-    }
+    },
+    editIgnore?: string[]
 }) {
     const fields = validator.fields
     const keys = Object.keys(validator.fields).filter(key => !(ignore || []).includes(key))
@@ -72,6 +74,7 @@ function FieldHelper<T extends yup.ObjectSchema<any, any>>({
                                     error: errors[key]
                                 }) :
                                 <TextInput
+                                    disable={editIgnore?.includes(key)}
                                     value={
                                         (cast === 'number') ? value[key].toString() : value[key]
                                     }
@@ -95,6 +98,7 @@ function FieldHelper<T extends yup.ObjectSchema<any, any>>({
                 return (
                     <td key={key} className="px-4 py-2 border-b min-w-[140px]">
                         <TextInput
+                            disable={editIgnore?.includes(key)}
                             value={
                                 (cast === 'number') ? value[key].toString() : value[key]
                             }

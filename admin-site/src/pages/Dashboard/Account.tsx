@@ -67,6 +67,7 @@ export default () => {
                     Link={true}
                     validator={UserUpdateValidator}
                     ignore={['setting', 'expense']}
+                    editIgnore={['user_id','account_type','balance']}
                     tooltip={
                         [
                             {

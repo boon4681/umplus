@@ -95,7 +95,11 @@ router.post('/@me', useUserAuth, async (req: any, res, next) => {
     )
 })
 
-router.post('/transaction/create', useUserAuth, useTransactionValidator, create)
+router.post('/transaction/create', useUserAuth, (req: any, res, next) => {
+    req.body.sender_id = req.jwt.data.user_id
+    req.body.info = '-'
+    next()
+}, useTransactionValidator, create)
 
 router.post('/transaction/history', useUserAuth, async (req: any, res, next) => {
     const { timestamp, skip, take } = req.body
@@ -108,7 +112,9 @@ router.post('/transaction/history', useUserAuth, async (req: any, res, next) => 
                 OR: [
                     {
                         sender_id: req.jwt.data.user_id,
-                        type: 'SEND'
+                        type: {
+                            in: ['SEND', 'WITH_DRAW']
+                        }
                     },
                     {
                         receiver_id: req.jwt.data.user_id,
@@ -121,7 +127,7 @@ router.post('/transaction/history', useUserAuth, async (req: any, res, next) => 
             orderBy: {
                 transaction_id: 'desc',
             },
-            take: take ? take : 5,
+            take: take ? take : 30,
             skip: skip ? skip : 0
         })
     )

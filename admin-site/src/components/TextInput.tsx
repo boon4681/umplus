@@ -41,7 +41,7 @@ export default (props: {
                             if (props.onKeyDown)
                                 props.onKeyDown(e)
                         }}
-                        className={`w-full ${props.size ? props.size == "sm" ? 'p-2' : props.size == 'xs' ? 'p-1' : 'p-4' : 'p-4'} ${props.icon ? 'pr-12' : ''} text-sm ${props.error ? 'border-rose-500 error' : 'border-gray-200'} rounded-lg shadow-sm bg-white border-2 border-gray-500`}
+                        className={`w-full ${props.size ? props.size == "sm" ? 'p-2' : props.size == 'xs' ? 'p-1' : 'p-4' : 'p-4'} ${props.icon ? 'pr-12' : ''} text-sm ${props.error ? 'border-rose-500 error' : 'border-gray-200'} rounded-lg shadow-sm bg-white border-2 border-gray-500 ${props.disable ? 'opacity-30':''}`}
                         type={props.type || "text"}
                         readOnly={props.readonly}
                         placeholder={(props.showName || props.showBoth) ? props.showBoth ? props.placeholder : '' : props.placeholder || ""}

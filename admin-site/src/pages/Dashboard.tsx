@@ -9,6 +9,7 @@ import User from "./Dashboard/User";
 import { UserProvinder } from "../components/UserProvider";
 import Topup from "./Topup/Topup";
 import Scan from "./Topup/Scan";
+import Store from "./Dashboard/Store";
 
 export default () => {
     return (
@@ -47,6 +48,10 @@ export default () => {
                         <Route path="multi-topup">
 
                         </Route>
+                    </Route>
+                    <Route path="/store" element={
+                        <Store></Store>
+                    }>
                     </Route>
                 </Routes>
             </div>

@@ -3,6 +3,7 @@ import { RiShutDownLine } from 'react-icons/ri'
 import { BiTransferAlt } from 'react-icons/bi'
 import { GiTargetDummy } from 'react-icons/gi'
 import { FaMoneyBillWave } from 'react-icons/fa'
+import { IoStorefrontOutline } from 'react-icons/io5'
 import { FaRandom } from 'react-icons/fa'
 import { useAuth } from '../hooks/useAuth'
 import { NavLink } from 'react-router-dom'
@@ -35,13 +36,22 @@ export default () => {
                         <div className='w-full'>Account</div>
                     </NavLink>
                     <NavLink
+                        to="/store"
+                        className={({ isActive }) =>
+                            `flex h-[48px] items-center w-full text-center text-white py-2 rounded-lg cursor-pointer dark-hover bg-hide ${isActive ? 'focus' : ''}`
+                        }
+                    >
+                        <div className='mx-2'><IoStorefrontOutline className='w-6 h-6 mx-2' /></div>
+                        <div className='w-full'>Stores</div>
+                    </NavLink>
+                    <NavLink
                         to="/topup"
                         className={({ isActive }) =>
                             `flex h-[48px] items-center w-full text-center text-white py-2 rounded-lg cursor-pointer dark-hover bg-hide ${isActive ? 'focus' : ''}`
                         }
                     >
                         <div className='mx-2'><FaMoneyBillWave className='w-6 h-6 mx-2' /></div>
-                        <div className='w-full'>Topup</div>
+                        <div className='w-full'>Topup & Withdraw</div>
                     </NavLink>
                 </div>
                 <div className='flex w-full text-[#DCDCDC] m-2'>

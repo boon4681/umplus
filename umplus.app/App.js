@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Image, ImageBackground, Platform, NativeModules } from 'react-native';
+import { StyleSheet, Text, View, Image, ImageBackground, Platform, NativeModules, KeyboardAvoidingView } from 'react-native';
 import { useEffect, useCallback } from 'react';
 import { AuthProvider } from './src/components/AuthProvinder';
 import { useFonts } from 'expo-font';
@@ -7,7 +7,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import 'react-native-gesture-handler';
 import ToastManager from 'toastify-react-native'
-
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import 'intl';
 import 'intl/locale-data/jsonp/en';
 import 'intl/locale-data/jsonp/th';
@@ -60,11 +60,11 @@ export default function App() {
     }
     return (
         <SafeAreaProvider>
-            <View className="flex w-full h-full" onLayout={onLayoutRootView}>
+            <ToastManager className="font-LINESeedRg select-none pointer-events-none" width={300} height={75} />
+            <View behavior='padding' className="flex-1 min-h-screen" onLayout={onLayoutRootView}>
                 <AuthProvider>
                     <Routes></Routes>
                 </AuthProvider>
-                <ToastManager className="font-LINESeedRg select-none pointer-events-none" width={300} height={75} />
             </View>
             <StatusBar style="auto" />
         </SafeAreaProvider>

@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image, ImageBackground, Platform, NativeModules, Button, Pressable, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Image, ImageBackground, Platform, NativeModules, Button, Pressable, TouchableOpacity, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { useAuth } from "./hooks/useAuth"
@@ -11,6 +11,7 @@ import Setting from './pages/Setting';
 import WithDraw from './pages/WithDraw';
 
 import { MeProvinder } from './components/MeProvinder';
+import Transfer from './pages/Transfer';
 
 const Theme = {
     ...DefaultTheme,
@@ -23,32 +24,35 @@ const Theme = {
 const Stack = createStackNavigator();
 
 export default () => {
-    const { isAuthenticated,dip } = useAuth()
+    const { isAuthenticated, dip } = useAuth()
     if (!isAuthenticated)
         return (
             <Login></Login>
         )
     return (
-        <View className="w-full h-full absolute top-0 left-0" style={{ flex: 1 }}>
-            <MeProvinder>
-                <NavigationContainer theme={Theme}>
-                    <Stack.Navigator
-                        initialRouteName={"Home"}
-                        screenOptions={
-                            {
-                                headerShown: false,
-                                animation: 'slide_from_right'
+        <View className="w-full h-full absolute left-0 bottom-0" style={{ flex: 1 }}>
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                <MeProvinder>
+                    <NavigationContainer theme={Theme}>
+                        <Stack.Navigator
+                            initialRouteName={"Home"}
+                            screenOptions={
+                                {
+                                    headerShown: false,
+                                    animation: 'slide_from_right'
+                                }
                             }
-                        }
-                    >
-                        <Stack.Screen name="Home" component={Home} />
-                        <Stack.Screen name="AddMoney" component={AddMoney} />
-                        <Stack.Screen name="WithDraw" component={WithDraw} />
-                        <Stack.Screen name="Transaction" component={Transaction} />
-                        <Stack.Screen name="Setting" component={Setting} />
-                    </Stack.Navigator>
-                </NavigationContainer>
-            </MeProvinder>
+                        >
+                            <Stack.Screen name="Home" component={Home} />
+                            <Stack.Screen name="AddMoney" component={AddMoney} />
+                            <Stack.Screen name="WithDraw" component={WithDraw} />
+                            <Stack.Screen name="Transaction" component={Transaction} />
+                            <Stack.Screen name="Transfer" component={Transfer} />
+                            <Stack.Screen name="Setting" component={Setting} />
+                        </Stack.Navigator>
+                    </NavigationContainer>
+                </MeProvinder>
+            </TouchableWithoutFeedback>
         </View>
     )
 }

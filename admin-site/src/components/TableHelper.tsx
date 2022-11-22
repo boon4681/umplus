@@ -15,14 +15,16 @@ function Item({
     onClick,
     edit,
     validator,
-    Link
+    Link,
+    editIgnore,
 }: {
     ignore?: string[],
     edit: boolean,
     value: any,
     validator: yup.ObjectSchema<any, any>,
     onClick: (data: any, e: React.MouseEvent<HTMLTableRowElement, MouseEvent>) => void,
-    Link?: string
+    Link?: string,
+    editIgnore?: string[]
 }) {
     const navigator = useNavigate()
     const field_keys = Object.keys(validator.fields).filter(key => !(ignore || []).includes(key))
@@ -61,7 +63,7 @@ function Item({
             }}
             className={`rounded-2xl cursor-pointer hover:bg-[#F1F3F4] opacity-80 hover:opacity-100`}
         >
-            <FieldHelper type={'filltable'} validator={validator} defaultValue={value} ignore={ignore} />
+            <FieldHelper type={'filltable'} editIgnore={editIgnore} validator={validator} defaultValue={value} ignore={ignore} />
         </tr>
     }
 }
@@ -79,7 +81,8 @@ function TableHelper<T, K extends yup.ObjectSchema<any, any>>(
         asKey,
         loading,
         CustomItem,
-        Link
+        Link,
+        editIgnore
     }:
         {
             ignore?: string[],
@@ -89,7 +92,8 @@ function TableHelper<T, K extends yup.ObjectSchema<any, any>>(
             validator: K,
             tooltip?: TooltipOption[],
             CustomItem?: any,
-            Link?: boolean
+            Link?: boolean,
+            editIgnore?: (keyof T)[]
         }
 ) {
     const [pos, setPos] = useState({ left: 0, top: 0 })
@@ -191,7 +195,7 @@ function TableHelper<T, K extends yup.ObjectSchema<any, any>>(
                                 if (CustomItem) {
                                     return <CustomItem key={value[asKey] + ''} value={value}></CustomItem>
                                 }
-                                return <MemoItem Link={Link ? value[asKey] + '' : undefined} validator={validator} edit={selectedItem.get(value[asKey])?.edit || false} onClick={onClick} key={value[asKey] + ''} value={value} ignore={ignore}></MemoItem>
+                                return <MemoItem editIgnore={editIgnore as any} Link={Link ? value[asKey] + '' : undefined} validator={validator} edit={selectedItem.get(value[asKey])?.edit || false} onClick={onClick} key={value[asKey] + ''} value={value} ignore={ignore}></MemoItem>
                             })
                         }
                     </tbody>
