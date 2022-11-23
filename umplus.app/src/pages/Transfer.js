@@ -48,7 +48,7 @@ export default () => {
     const { user } = useAuth()
     const me = useMe()
     const [num, setNum] = useState(0)
-    const [account, setAccount] = useState(0)
+    const [account, setAccount] = useState('')
     const [info,setInfo] = useState('')
     return (
         <>
@@ -92,9 +92,9 @@ export default () => {
                         className="font-LINESeedRg text-[#46464699] text-[20px] text-right pr-0 w-full"
                         style={{ color: `${account}` == '0' ? 'transparent' : undefined }}
                         keyboardType={'number-pad'}
-                        value={account + ''}
+                        value={account}
                         onChangeText={(text) => {
-                            setAccount(!isNaN(parseInt(text)) ? parseInt(text) : 0)
+                            setAccount(text)
                         }}
                     ></TextInput>
                 </View>
@@ -106,7 +106,7 @@ export default () => {
                         className="font-LINESeedRg text-[#46464699] text-[20px] text-right pr-10 mr-8 w-full"
                         keyboardType={'number-pad'}
                         placeholder={'0 '}
-                        value={num + ''}
+                        value={num == 0 ? '' : num + ''}
                         onChangeText={(text) => {
                             setNum(!isNaN(parseInt(text)) ? parseInt(text) : 0)
                         }}

@@ -12,6 +12,7 @@ import WithDraw from './pages/WithDraw';
 
 import { MeProvinder } from './components/MeProvinder';
 import Transfer from './pages/Transfer';
+import News from './pages/News';
 
 const Theme = {
     ...DefaultTheme,
@@ -49,6 +50,7 @@ export default () => {
                             <Stack.Screen name="Transaction" component={Transaction} />
                             <Stack.Screen name="Transfer" component={Transfer} />
                             <Stack.Screen name="Setting" component={Setting} />
+                            <Stack.Screen name="News" component={News} />
                         </Stack.Navigator>
                     </NavigationContainer>
                 </MeProvinder>

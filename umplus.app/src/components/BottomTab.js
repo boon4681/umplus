@@ -9,7 +9,7 @@ import TRANSACTION from '../../assets/icons/transaction.png'
 import TABACTIVE from '../../assets/icons/tab_active.png'
 import COUPONS from '../../assets/icons/coupon.png'
 
-const ACTIVE = ({name}) => {
+const ACTIVE = ({ name }) => {
     const route = useRoute()
     return <>
         {
@@ -37,14 +37,18 @@ export default () => {
                         <Image className="w-full h-full" source={HOME} />
                     </View>
                     <Text className="font-LINESeedRg text-white text-[10px]">Home</Text>
-                    <ACTIVE name="Home"/>
+                    <ACTIVE name="Home" />
                 </TouchableOpacity>
-                <TouchableOpacity className="flex items-center p-1.5 pb-2.5 basis-1/5">
+                <TouchableOpacity
+                    onPress={() => {
+                        navigation.navigate('News')
+                    }}
+                    className="flex items-center p-1.5 pb-2.5 basis-1/5">
                     <View className="w-8 h-8">
                         <Image className="w-full h-full" source={NEWS} />
                     </View>
                     <Text className="font-LINESeedRg text-white text-[10px]">News</Text>
-                    <ACTIVE name="News"/>
+                    <ACTIVE name="News" />
                 </TouchableOpacity>
                 <View className="w-[20px] basis-1/5"></View>
                 <TouchableOpacity
@@ -57,14 +61,14 @@ export default () => {
                         <Image className="w-full h-full" source={TRANSACTION} />
                     </View>
                     <Text className="font-LINESeedRg text-white text-[10px]">Transaction</Text>
-                    <ACTIVE name="Transaction"/>
+                    <ACTIVE name="Transaction" />
                 </TouchableOpacity>
                 <TouchableOpacity className="flex items-center p-1.5 pb-2.5 basis-1/5">
                     <View className="w-8 h-8">
                         <Image className="w-full h-full" source={COUPONS} />
                     </View>
                     <Text className="font-LINESeedRg text-white text-[10px]">Coupons</Text>
-                    <ACTIVE name="Coupons"/>
+                    <ACTIVE name="Coupons" />
                 </TouchableOpacity>
             </View>
         </View>
