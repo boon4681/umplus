@@ -51,10 +51,10 @@ const Header = () => {
 
 const Card = ({ title, image, created, content }) => {
     return (
-        <View>
-            <Image className="w-[320px] h-[320px]" source={{ uri: image }} />
-            <Text>{title}</Text>
-            <Text>{content}</Text>
+        <View className="p-4 bg-blue-100 my-3 rounded-lg">
+            <Image className="w-full h-[200px] overflow-hidden rounded-lg" source={{ uri: image }} />
+            <Text className="font-LINESeedRg text-lg mt-4">{title.replace(/^\s+/g, '').replace(/[\r\n]/g,'')}</Text>
+            <Text className="font-LINESeedRg text-sm">{content}</Text>
         </View>
     )
 }
@@ -65,20 +65,22 @@ export default () => {
         (async () => {
             try {
                 const data = await fetch('http://www.ammart.ac.th/news').then(a => a.text())
-                setHtml(await Promise.all(parse(data).querySelectorAll('.table>tbody>tr').map(a => {
+                const html = await Promise.all(parse(data).querySelectorAll('.table>tbody>tr').map(a => {
                     const b = a.querySelectorAll('td')
                     return new Promise(async (resolve) => {
                         resolve({
                             title: b[1].querySelector('a').innerText,
                             // image: await fetch(b[0].querySelector('img').getAttribute('src')).then(a=>a.blob()).then(a=>"data:image/png;base64," +a),
-                            image: b[0].querySelector('img').getAttribute('src'),
+                            image: b[0].querySelector('img').getAttribute('src').replace('http://www.ammart.ac.th/', 'https://workspace.boon4681.com/'),
                             create: b[1].querySelectorAll('small')[1].innerText,
                             content: b[1].querySelectorAll('span').map(a =>
                                 a.innerText.replace(/\&\#\d+\;/g, (a) => String.fromCharCode(parseInt(a.replace(/&|#|;/g, '')), 8).replace('\b', ''))
-                            )
+                            ).join('')
                         })
                     })
-                })))
+                }))
+                // console.log(html)
+                setHtml(html)
             } catch (error) {
             }
         })();
@@ -86,13 +88,16 @@ export default () => {
     return (
         <>
             <Container header={Header}>
-                {
-                    html ?
-                        html.map((a) => {
-                            return <Card title={a.title} content={a.content}></Card>
-                        })
-                        : null
-                }
+                <ScrollView keyboardShouldPersistTaps="always" className="w-full bg-white rounded-2xl mt-2 px-2 flex flex-col space-y-1" >
+                    {
+                        html ?
+                            html.map((a) => {
+                                return <Card key={JSON.stringify(a)} title={a.title} image={a.image} content={a.content}></Card>
+                            })
+                            : null
+                    }
+                    <View className="pb-40"></View>
+                </ScrollView>
             </Container>
             <BottomTab></BottomTab>
             <LogTab i={10} content={html}></LogTab>

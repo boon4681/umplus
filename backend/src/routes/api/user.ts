@@ -96,8 +96,10 @@ router.post('/@me', useUserAuth, async (req: any, res, next) => {
 })
 
 router.post('/transaction/create', useUserAuth, (req: any, res, next) => {
-    req.body.sender_id = req.jwt.data.user_id
+    req.body.sender_id = req.jwt.data.user_id,
+    req.body.receiver_id = req.body.account
     req.body.info = '-'
+    req.body.type = 'SEND'
     next()
 }, useTransactionValidator, create)
 

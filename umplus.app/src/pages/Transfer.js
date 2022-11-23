@@ -45,7 +45,7 @@ const Header = () => {
 
 
 export default () => {
-    const { user } = useAuth()
+    const { user,dip } = useAuth()
     const me = useMe()
     const [num, setNum] = useState(0)
     const [account, setAccount] = useState('')
