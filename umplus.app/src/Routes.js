@@ -31,30 +31,28 @@ export default () => {
             <Login></Login>
         )
     return (
-        <View className="w-full h-full absolute left-0 bottom-0" style={{ flex: 1 }}>
-            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                <MeProvinder>
-                    <NavigationContainer theme={Theme}>
-                        <Stack.Navigator
-                            initialRouteName={"Home"}
-                            screenOptions={
-                                {
-                                    headerShown: false,
-                                    animation: 'slide_from_right'
-                                }
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <MeProvinder>
+                <NavigationContainer theme={Theme}>
+                    <Stack.Navigator
+                        initialRouteName={"Home"}
+                        screenOptions={
+                            {
+                                headerShown: false,
+                                animation: 'slide_from_right'
                             }
-                        >
-                            <Stack.Screen name="Home" component={Home} />
-                            <Stack.Screen name="AddMoney" component={AddMoney} />
-                            <Stack.Screen name="WithDraw" component={WithDraw} />
-                            <Stack.Screen name="Transaction" component={Transaction} />
-                            <Stack.Screen name="Transfer" component={Transfer} />
-                            <Stack.Screen name="Setting" component={Setting} />
-                            <Stack.Screen name="News" component={News} />
-                        </Stack.Navigator>
-                    </NavigationContainer>
-                </MeProvinder>
-            </TouchableWithoutFeedback>
-        </View>
+                        }
+                    >
+                        <Stack.Screen name="Home" component={Home} />
+                        <Stack.Screen name="AddMoney" component={AddMoney} />
+                        <Stack.Screen name="WithDraw" component={WithDraw} />
+                        <Stack.Screen name="Transaction" component={Transaction} />
+                        <Stack.Screen name="Transfer" component={Transfer} />
+                        <Stack.Screen name="Setting" component={Setting} />
+                        <Stack.Screen name="News" component={News} />
+                    </Stack.Navigator>
+                </NavigationContainer>
+            </MeProvinder>
+        </TouchableWithoutFeedback>
     )
 }

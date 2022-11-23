@@ -61,11 +61,11 @@ export default function App() {
     return (
         <SafeAreaProvider>
             <ToastManager className="font-LINESeedRg select-none pointer-events-none" width={300} height={75} />
-            <View behavior='padding' className="flex-1 min-h-screen" onLayout={onLayoutRootView}>
+            <KeyboardAvoidingView behavior='padding' className="flex-1 min-h-screen relative" onLayout={onLayoutRootView}>
                 <AuthProvider>
                     <Routes></Routes>
                 </AuthProvider>
-            </View>
+            </KeyboardAvoidingView>
             <StatusBar style="auto" />
         </SafeAreaProvider>
     );

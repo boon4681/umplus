@@ -6,8 +6,8 @@ import axios from 'axios'
 import LogTab from "./LogTab";
 
 // const host = 'http://159.223.71.170:5173'
-// const host = 'http://192.168.0.100:5173'
-const host = 'http://192.168.87.29:5173'
+const host = 'http://192.168.0.101:5173'
+// const host = 'http://192.168.87.29:5173'
 
 class dip {
     verify = false;
@@ -68,21 +68,25 @@ export const AuthProvider = ({ children }) => {
     const init = async () => {
         const token = await AsyncStorage.getItem('umplus.boon4681.token')
         if (token) {
-            const auth = await fetch(`${host}/api/user/auth/login`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
+            try {
+                const auth = await fetch(`${host}/api/user/auth/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    }
+                })
+                if (auth.status === 200) {
+                    const { data } = await auth.json()
+                    setUser(data)
+                    setDIP(await new dip(token, logout))
+                    setUser(data.user)
+                    setIsAuthenticated(true)
+                } else {
+                    logout()
                 }
-            })
-            if (auth.status === 200) {
-                const { data } = await auth.json()
-                setUser(data)
-                setDIP(await new dip(token, logout))
-                setUser(data.user)
-                setIsAuthenticated(true)
-            } else {
-                logout()
+            } catch (error) {
+                console.log(error)
             }
         }
         setLoading(true)

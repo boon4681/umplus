@@ -53,7 +53,7 @@ const Card = ({ title, image, created, content }) => {
     return (
         <View className="p-4 bg-blue-100 my-3 rounded-lg">
             <Image className="w-full h-[200px] overflow-hidden rounded-lg" source={{ uri: image }} />
-            <Text className="font-LINESeedRg text-lg mt-4">{title.replace(/^\s+/g, '').replace(/[\r\n]/g,'')}</Text>
+            <Text className="font-LINESeedRg text-[18px] leading-[24px] mt-4">{title.replace(/^\s+/g, '').replace(/[\r\n]/g,'')}</Text>
             <Text className="font-LINESeedRg text-sm">{content}</Text>
         </View>
     )
@@ -71,7 +71,7 @@ export default () => {
                         resolve({
                             title: b[1].querySelector('a').innerText,
                             // image: await fetch(b[0].querySelector('img').getAttribute('src')).then(a=>a.blob()).then(a=>"data:image/png;base64," +a),
-                            image: b[0].querySelector('img').getAttribute('src').replace('http://www.ammart.ac.th/', 'https://workspace.boon4681.com/'),
+                            image: b[0].querySelector('img').getAttribute('src'),
                             create: b[1].querySelectorAll('small')[1].innerText,
                             content: b[1].querySelectorAll('span').map(a =>
                                 a.innerText.replace(/\&\#\d+\;/g, (a) => String.fromCharCode(parseInt(a.replace(/&|#|;/g, '')), 8).replace('\b', ''))
