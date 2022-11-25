@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image, ImageBackground, Platform, NativeModules,TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Image, ImageBackground, Platform, NativeModules, TouchableOpacity } from 'react-native';
 import Avatar from 'react-native-boring-avatars';
 
 import Scan_btn from '../../assets/scan_btn.png'
@@ -16,9 +16,12 @@ import useMe from '../hooks/useMe';
 import { useNavigation } from '@react-navigation/native';
 
 export default function Home() {
-    const { user } = useAuth()
+    const { user, isAuthenticated } = useAuth()
     const me = useMe()
     const navigation = useNavigation()
+    if (!me) {
+        return <View></View>
+    }
 
     return (
         <>
@@ -68,7 +71,7 @@ export default function Home() {
                             </View>
                             <Text className="font-LINESeedRg text-black">เติมเงิน</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity 
+                        <TouchableOpacity
                             onPress={() => {
                                 navigation.navigate("Transfer")
                             }}

@@ -21,6 +21,7 @@ import Nav_bg from './assets/nav.png'
 import Header from './src/components/Header';
 import Login from './src/pages/Login';
 import Routes from './src/Routes';
+import { MeProvinder } from './src/components/MeProvinder';
 
 function loadFont() {
     const [fontsLoaded] = useFonts({
@@ -63,7 +64,9 @@ export default function App() {
             <ToastManager className="font-LINESeedRg select-none pointer-events-none" width={300} height={75} />
             <View behavior='height' className="flex-1 relative" onLayout={onLayoutRootView}>
                 <AuthProvider>
-                    <Routes></Routes>
+                    <MeProvinder>
+                        <Routes></Routes>
+                    </MeProvinder>
                 </AuthProvider>
             </View>
             <StatusBar style="auto" />

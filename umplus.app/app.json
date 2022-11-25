@@ -21,19 +21,26 @@
       "supportsTablet": false,
       "infoPlist": {
         "NSCameraUsageDescription": "This app uses the camera to scan qrcodes on scan to pay."
-      }
+      },
+      "bundleIdentifier": "com.boon4681.umplus"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
-      "permissions":[
+      "permissions": [
         "CAMERA"
-      ]
+      ],
+      "package": "com.boon4681.umplus"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "f3ed0c92-4670-430e-a114-1bdc7c3bf954"
+      }
     }
   }
 }
