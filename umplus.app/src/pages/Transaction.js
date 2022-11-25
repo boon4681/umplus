@@ -23,12 +23,12 @@ const Header = () => {
     const navigation = useNavigation()
 
     return (
-        <View className="px-5 pt-8">
+        <View className="px-5 pt-2">
             <View className="flex items-center w-full h-[60px] flex-row">
                 <TouchableOpacity
                     className="basis-1/6"
                     onPress={() => {
-                        navigation.pop()
+                        navigation.popToTop()
                     }}>
                     <Image className="w-[32px] h-[32px]" source={BackARROW} />
                 </TouchableOpacity>
@@ -204,7 +204,7 @@ export default () => {
                 </View>
                 <View className="flex-1 pb-20">
                     <Text className="font-LINESeedRg text-black text-xl mt-2">Transaction</Text>
-                    <ScrollView keyboardShouldPersistTaps="always" className="w-full bg-white rounded-2xl mt-2 px-2 pt-2 flex flex-col space-y-1" >
+                    <ScrollView keyboardShouldPersistTaps="always" className="w-full h-full bg-white rounded-2xl mt-2 px-2 pt-2 flex flex-col space-y-1" >
                         {
                             history.map(history => <MemoMiniCard key={history.transaction_id} data={history} />)
                         }

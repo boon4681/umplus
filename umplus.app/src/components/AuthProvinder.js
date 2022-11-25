@@ -6,8 +6,9 @@ import axios from 'axios'
 import LogTab from "./LogTab";
 
 // const host = 'http://159.223.71.170:5173'
-const host = 'http://192.168.0.101:5173'
-// const host = 'http://192.168.87.29:5173'
+// const host = 'http://192.168.0.101:5173'
+// const host = 'http://192.168.0.102:5173'
+const host = 'http://192.168.87.29:5173'
 
 class dip {
     verify = false;
@@ -34,18 +35,22 @@ class dip {
         })
     }
     async fetch(at, method, init) {
-        await this.wait
-        return this.verify ? (
-            await axios({
-                ...init,
-                url: `${host}/api/${at}`,
-                method,
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${this.token}`,
-                }
-            }).then(a => a.data)
-        ) : null
+        try{
+            await this.wait
+            return this.verify ? (
+                axios({
+                    ...init,
+                    url: `${host}/api/${at}`,
+                    method,
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${this.token}`,
+                    }
+                }).then(a => a.data).catch(a=>a.data)
+            ) : null
+        }catch(error){
+            return null
+        }
     }
 }
 

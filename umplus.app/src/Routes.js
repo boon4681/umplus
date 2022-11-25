@@ -13,6 +13,8 @@ import WithDraw from './pages/WithDraw';
 import { MeProvinder } from './components/MeProvinder';
 import Transfer from './pages/Transfer';
 import News from './pages/News';
+import ConfirmTransfer from './pages/ConfirmTransfer';
+import Camera from './pages/Camera';
 
 const Theme = {
     ...DefaultTheme,
@@ -44,12 +46,14 @@ export default () => {
                         }
                     >
                         <Stack.Screen name="Home" component={Home} />
+                        <Stack.Screen name="Setting" component={Setting} />
                         <Stack.Screen name="AddMoney" component={AddMoney} />
                         <Stack.Screen name="WithDraw" component={WithDraw} />
                         <Stack.Screen name="Transaction" component={Transaction} />
                         <Stack.Screen name="Transfer" component={Transfer} />
-                        <Stack.Screen name="Setting" component={Setting} />
+                        <Stack.Screen name="ConfirmTransfer" component={ConfirmTransfer} />
                         <Stack.Screen name="News" component={News} />
+                        <Stack.Screen name="Camera" component={Camera} />
                     </Stack.Navigator>
                 </NavigationContainer>
             </MeProvinder>

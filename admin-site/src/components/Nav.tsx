@@ -35,7 +35,7 @@ export default () => {
                         <div className='mx-2'><GiTargetDummy className='w-6 h-6 mx-2' /></div>
                         <div className='w-full'>Account</div>
                     </NavLink>
-                    <NavLink
+                    {/* <NavLink
                         to="/store"
                         className={({ isActive }) =>
                             `flex h-[48px] items-center w-full text-center text-white py-2 rounded-lg cursor-pointer dark-hover bg-hide ${isActive ? 'focus' : ''}`
@@ -43,7 +43,7 @@ export default () => {
                     >
                         <div className='mx-2'><IoStorefrontOutline className='w-6 h-6 mx-2' /></div>
                         <div className='w-full'>Stores</div>
-                    </NavLink>
+                    </NavLink> */}
                     <NavLink
                         to="/topup"
                         className={({ isActive }) =>

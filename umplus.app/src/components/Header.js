@@ -25,7 +25,7 @@ export default function Header() {
     const { isAuthenticated } = useAuth()
 
     return (
-        <View className="px-5 pt-8">
+        <View className="px-5">
             <View className="flex items-center w-full h-[60px] flex-row">
                 <Image className="w-[80px] h-[60px] -mt-2" source={Logo} />
                 {isAuthenticated && <LoggedIn />}

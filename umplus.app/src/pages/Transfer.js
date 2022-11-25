@@ -1,5 +1,5 @@
 import { ScrollView, Text, View, Image, ImageBackground, Platform, NativeModules, Button, Pressable, TouchableOpacity, Animated } from 'react-native';
-import { useNavigation } from "@react-navigation/native"
+import { useNavigation, useRoute } from "@react-navigation/native"
 import BottomTab from "../components/BottomTab"
 import Container from "../components/Container"
 import BackARROW from '../../assets/icons/back_arrow.png'
@@ -9,14 +9,18 @@ import CARD from '../../assets/card.png'
 import Avatar from 'react-native-boring-avatars';
 import { useAuth } from '../hooks/useAuth';
 import useMe from '../hooks/useMe';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { TextInput } from 'react-native-gesture-handler';
+import { Toast } from 'toastify-react-native'
+import * as yup from 'yup'
+import useValidator from '../hooks/useValidator';
+import { StatusBar } from 'expo-status-bar';
 
 const Header = () => {
     const navigation = useNavigation()
 
     return (
-        <View className="px-5 pt-8">
+        <View className="px-5 pt-2">
             <View className="flex items-center w-full h-[60px] flex-row">
                 <TouchableOpacity
                     className="basis-1/6"
@@ -45,11 +49,53 @@ const Header = () => {
 
 
 export default () => {
-    const { user,dip } = useAuth()
+    const navigation = useNavigation()
+    const route = useRoute()
+    const { user, dip } = useAuth()
     const me = useMe()
     const [num, setNum] = useState(0)
-    const [account, setAccount] = useState('')
-    const [info,setInfo] = useState('')
+    const [account, setAccount] = useState(route.params.user_id ? route.params.user_id : '')
+    const [info, setInfo] = useState('')
+    const [disable, setDisable] = useState(false)
+    const [errors, setError] = useState({})
+
+    const validator = yup.object().shape({
+        account: yup.string().length(5, 'เลขประจำตัวต้องมี 5 ตัวเท่านั้น').matches(/\d+/).notOneOf([user.user_id],'บัญชี่ที่โดนจะต้องไม่ใช่บัญชีของตนเอง').required(),
+        amount: yup.number().min(1,'ต้องโอนอย่างต่ำ 1 บาท').required()
+    })
+
+    const onPress = async () => {
+        const validate = await TestError()
+        if (validate) {
+            setDisable(true)
+            dip.fetch('/user/account/users', 'POST', {
+                data: {
+                    user_id: account
+                }
+            }).then((a) => {
+                if (a) {
+                    navigation.navigate("ConfirmTransfer",{
+                        amount:num,
+                        info,
+                        receiver:a
+                    })
+                    setDisable(false)
+                } else {
+                    Toast.error('ไม่พบบัญชีนี้')
+                }
+                // console.log(a)
+            })
+        }
+    }
+    const TestError = async () => {
+        const { validate, errors } = await useValidator(validator, { account, amount: num })
+        setError(errors)
+        setDisable(!validate)
+        return validate
+    }
+    useEffect(()=>{
+        TestError()
+    },[account,num])
     return (
         <>
             <Container header={Header}>
@@ -98,6 +144,7 @@ export default () => {
                         }}
                     ></TextInput>
                 </View>
+                <Text className='text-rose-500 font-LINESeedRg text-base'>{errors.account}</Text>
                 <Text className="font-LINESeedRg text-[#46464699] text-lg">
                     จำนวน
                 </Text>
@@ -115,6 +162,7 @@ export default () => {
                         บาท
                     </Text>
                 </View>
+                <Text className='text-rose-500 font-LINESeedRg text-base'>{errors.amount}</Text>
                 <Text className="font-LINESeedRg text-[#46464699] text-lg">
                     บันทึกช่วยจำ
                 </Text>
@@ -129,22 +177,10 @@ export default () => {
                     ></TextInput>
                 </View>
                 <TouchableOpacity
-                    onPress={() => {
-                        dip.fetch('user/transaction/create', "POST", {
-                            data: {
-                                amount: num,
-                                account: account
-                            }
-                        }).then(a => {
-                            if (a) {
-                                Toast.success(a.message)
-                                navigation.navigate('Home')
-                            }
-                        })
-                    }}
+                    onPress={onPress}
                     className={`px-5 py-3 w-full bg-[#3076FF] rounded-xl flex justify-center items-center mt-10`}
                 >
-                    <Text className="text-white font-LINESeedRg text-lg">ตกลง</Text>
+                    <Text className="text-white font-LINESeedRg text-lg">ต่อไป</Text>
                 </TouchableOpacity>
             </Container>
         </>

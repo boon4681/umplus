@@ -8,6 +8,7 @@ import NEWS from '../../assets/icons/news.png'
 import TRANSACTION from '../../assets/icons/transaction.png'
 import TABACTIVE from '../../assets/icons/tab_active.png'
 import COUPONS from '../../assets/icons/coupon.png'
+import SETTING from '../../assets/icons/setting.png'
 
 const ACTIVE = ({ name }) => {
     const route = useRoute()
@@ -23,7 +24,12 @@ export default () => {
     return (
         <View className="flex items-center absolute left-0 bottom-0 w-screen">
             <Image className="absolute bottom-0 w-full h-[110px]" source={Nav_bg} />
-            <TouchableOpacity className="absolute bottom-6 w-[110px] h-[110px]">
+            <TouchableOpacity
+                onPress={() => {
+                    navigation.navigate('Camera')
+                }}
+                className="absolute bottom-6 w-[110px] h-[110px]"
+            >
                 <Image className="w-[110px] h-[110px]" source={Scan_btn} />
             </TouchableOpacity>
             <View className="flex flex-row space-x-0.5 px-2">
@@ -63,13 +69,26 @@ export default () => {
                     <Text className="font-LINESeedRg text-white text-[10px]">Transaction</Text>
                     <ACTIVE name="Transaction" />
                 </TouchableOpacity>
-                <TouchableOpacity className="flex items-center p-1.5 pb-2.5 basis-1/5">
+                <TouchableOpacity
+                    onPress={() => {
+                        navigation.navigate('Setting')
+                    }}
+                    className="flex items-center p-1.5 pb-2.5 basis-1/5"
+                >
+                    <View className="w-8 h-8">
+                        <Image className="w-full h-full" source={SETTING} />
+                    </View>
+                    <Text className="font-LINESeedRg text-white text-[10px]">Setting</Text>
+                    <ACTIVE name="Setting" />
+                </TouchableOpacity>
+                {/* <View className="w-8 mr-6"></View> */}
+                {/* <TouchableOpacity className="flex items-center p-1.5 pb-2.5 basis-1/5">
                     <View className="w-8 h-8">
                         <Image className="w-full h-full" source={COUPONS} />
                     </View>
                     <Text className="font-LINESeedRg text-white text-[10px]">Coupons</Text>
                     <ACTIVE name="Coupons" />
-                </TouchableOpacity>
+                </TouchableOpacity> */}
             </View>
         </View>
     )

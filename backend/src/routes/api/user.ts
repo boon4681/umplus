@@ -95,10 +95,33 @@ router.post('/@me', useUserAuth, async (req: any, res, next) => {
     )
 })
 
+router.post('/account/users',useUserAuth,async(req,res)=>{
+    if(!req.body.user_id){
+        return res.status(400).json({
+            code: 400,
+            message: 'Bad Request'
+        })
+    }
+    const receiver = await prisma.user.findUnique({
+        where: {
+            user_id: req.body.user_id
+        },
+        select:{
+            user_id:true,
+            firstname:true,
+            lastname:true
+        }
+    })
+    return receiver ? res.json(receiver) : res.status(400).json({
+        code: 400,
+        message: 'Bad Request'
+    })
+})
+
 router.post('/transaction/create', useUserAuth, (req: any, res, next) => {
     req.body.sender_id = req.jwt.data.user_id,
     req.body.receiver_id = req.body.account
-    req.body.info = '-'
+    req.body.info = req.body.info ? req.body.info : '-'
     req.body.type = 'SEND'
     next()
 }, useTransactionValidator, create)
@@ -129,7 +152,7 @@ router.post('/transaction/history', useUserAuth, async (req: any, res, next) => 
             orderBy: {
                 transaction_id: 'desc',
             },
-            take: take ? take : 30,
+            take: take ? take : 10,
             skip: skip ? skip : 0
         })
     )

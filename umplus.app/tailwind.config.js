@@ -11,6 +11,10 @@ module.exports = {
                 RaisinBlack:"#1F2325",
                 SonicSilver:"#73787B"
             },
+            backgroundColor:{
+                RaisinBlack:"#1F2325",
+                SonicSilver:"#73787B"
+            },
             fontFamily: {
                 LINESeedTh: [
                     "LINESeedTh",

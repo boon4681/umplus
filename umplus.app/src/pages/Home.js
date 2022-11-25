@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image, ImageBackground, Platform, NativeModules } from 'react-native';
+import { StyleSheet, Text, View, Image, ImageBackground, Platform, NativeModules,TouchableOpacity } from 'react-native';
 import Avatar from 'react-native-boring-avatars';
 
 import Scan_btn from '../../assets/scan_btn.png'
@@ -13,7 +13,6 @@ import { useEffect, useState } from 'react';
 import LogTab from '../components/LogTab';
 import BottomTab from '../components/BottomTab';
 import useMe from '../hooks/useMe';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
 
 export default function Home() {

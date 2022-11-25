@@ -22,12 +22,12 @@ const Header = () => {
     const navigation = useNavigation()
 
     return (
-        <View className="px-5 pt-8">
+        <View className="px-5 pt-2">
             <View className="flex items-center w-full h-[60px] flex-row">
                 <TouchableOpacity
                     className="basis-1/6"
                     onPress={() => {
-                        navigation.pop()
+                        navigation.popToTop()
                     }}>
                     <Image className="w-[32px] h-[32px]" source={BackARROW} />
                 </TouchableOpacity>
