@@ -6,7 +6,7 @@ import BackARROW from '../../assets/icons/back_arrow.png'
 import MENUICON from '../../assets/menu_icon.png'
 import LOGOLIGHT from '../../assets/Logo-light.png'
 import CARD from '../../assets/card.png'
-import Avatar from 'react-native-boring-avatars';
+// import Avatar from 'react-native-boring-avatars';
 import { useAuth } from '../hooks/useAuth';
 import useMe from '../hooks/useMe';
 import { useEffect, useState } from 'react';
@@ -105,12 +105,12 @@ export default () => {
                         <View className="basis-1/4">
                             <Image className='w-[52px] h-[42px]' source={LOGOLIGHT} />
                             <View className="w-[60px] h-[60px] rounded-[30px] border-2 border-[#1f232548]">
-                                <Avatar
+                                {/* <Avatar
                                     size={56}
                                     name={`u${user.user_id}`}
                                     variant="beam"
                                     colors={['#FF5252', '#FF7752', '#FF9A52', '#FFB752', '#5E405B']}
-                                />
+                                /> */}
                             </View>
                             <Text className="font-LINESeedRg text-white text-xl mt-3">{user.user_id}</Text>
                             <Text className="font-LINESeedRg text-white text-md -mt-3">เลขประจำตัว</Text>

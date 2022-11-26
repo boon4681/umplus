@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, Image, ImageBackground, Platform, NativeModules, TouchableOpacity } from 'react-native';
-import Avatar from 'react-native-boring-avatars';
+// import Avatar from 'react-native-boring-avatars';
 
 import Scan_btn from '../../assets/scan_btn.png'
 import Nav_bg from '../../assets/nav.png'
@@ -22,31 +22,31 @@ export default function Home() {
     if (!me) {
         return <View></View>
     }
-    return (
-        <Text>
-            {JSON.stringify(me)}
-        </Text>
-        // <Avatar
-        //     size={44}
-        //     name={`u${me.user_id}`}
-        //     variant="beam"
-        //     colors={['#FF5252', '#FF7752', '#FF9A52', '#FFB752', '#5E405B']}
-        // />
-    )
+    // return (
+    //     <Text>
+    //         {me.user_id}
+    //     </Text>
+    //     // <Avatar
+    //     //     size={44}
+    //     //     name={`u${me.user_id}`}
+    //     //     variant="beam"
+    //     //     colors={['#FF5252', '#FF7752', '#FF9A52', '#FFB752', '#5E405B']}
+    //     // />
+    // )
     return (
         <>
             <Container>
                 <View className="bg-[#0085FF] p-2 rounded-xl">
                     <View className=" bg-white p-1.5 rounded-xl flex flex-row items-center">
                         <View className="w-[44px] h-[44px]">
-                            {
+                            {/* {
                                 me ? <Avatar
                                     size={44}
                                     name={`u${me.user_id}`}
                                     variant="beam"
                                     colors={['#FF5252', '#FF7752', '#FF9A52', '#FFB752', '#5E405B']}
                                 /> : null
-                            }
+                            } */}
                         </View>
                         <View className="px-2 flex flex-col">
                             <Text className="font-LINESeedRg text-base">

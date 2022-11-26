@@ -6,7 +6,7 @@ import BackARROW from '../../assets/icons/back_arrow.png'
 import MENUICON from '../../assets/menu_icon.png'
 import DOWNARROW from '../../assets/icons/down_arrow.png'
 import CARD from '../../assets/card.png'
-import Avatar from 'react-native-boring-avatars';
+// import Avatar from 'react-native-boring-avatars';
 import { useAuth } from '../hooks/useAuth';
 import useMe from '../hooks/useMe';
 import { useState } from 'react';
@@ -52,12 +52,12 @@ export default () => {
                     <View className="w-full px-4 pb-3 flex flex-row">
                         <View className="basis-1/4">
                             <View className="w-[60px] h-[60px] rounded-[30px] border-2 border-[#1f232548]">
-                                <Avatar
+                                {/* <Avatar
                                     size={56}
                                     name={`u${user.user_id + user.firstname}w`}
                                     variant="beam"
                                     colors={['#FF5252', '#FF7752', '#FF9A52', '#FFB752', '#5E405B']}
-                                />
+                                /> */}
                             </View>
                         </View>
                         <View>
@@ -74,12 +74,12 @@ export default () => {
                     <View className="w-full px-4 pb-4 flex flex-row">
                         <View className="basis-1/4">
                             <View className="w-[60px] h-[60px] rounded-[30px] border-2 border-[#1f232548]">
-                                <Avatar
+                                {/* <Avatar
                                     size={56}
                                     name={`u${route.params.receiver.user_id + route.params.receiver.firstname}w`}
                                     variant="beam"
                                     colors={['#FF5252', '#FF7752', '#FF9A52', '#FFB752', '#5E405B']}
-                                />
+                                /> */}
                             </View>
                         </View>
                         <View>
