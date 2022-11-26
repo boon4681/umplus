@@ -22,7 +22,17 @@ export default function Home() {
     if (!me) {
         return <View></View>
     }
-
+    return (
+        <Text>
+            {JSON.stringify(me)}
+        </Text>
+        // <Avatar
+        //     size={44}
+        //     name={`u${me.user_id}`}
+        //     variant="beam"
+        //     colors={['#FF5252', '#FF7752', '#FF9A52', '#FFB752', '#5E405B']}
+        // />
+    )
     return (
         <>
             <Container>
