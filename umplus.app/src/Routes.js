@@ -34,27 +34,29 @@ export default () => {
         )
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-            <NavigationContainer theme={Theme}>
-                <Stack.Navigator
-                    initialRouteName={"Home"}
-                    screenOptions={
-                        {
-                            headerShown: false,
-                            animation: 'slide_from_right'
+            <MeProvinder>
+                <NavigationContainer theme={Theme}>
+                    <Stack.Navigator
+                        initialRouteName={"Home"}
+                        screenOptions={
+                            {
+                                headerShown: false,
+                                animation: 'slide_from_right'
+                            }
                         }
-                    }
-                >
-                    <Stack.Screen name="Home" component={Home} />
-                    <Stack.Screen name="Setting" component={Setting} />
-                    <Stack.Screen name="AddMoney" component={AddMoney} />
-                    <Stack.Screen name="WithDraw" component={WithDraw} />
-                    <Stack.Screen name="Transaction" component={Transaction} />
-                    <Stack.Screen name="Transfer" component={Transfer} />
-                    <Stack.Screen name="ConfirmTransfer" component={ConfirmTransfer} />
-                    <Stack.Screen name="News" component={News} />
-                    <Stack.Screen name="Camera" component={Camera} />
-                </Stack.Navigator>
-            </NavigationContainer>
+                    >
+                        <Stack.Screen name="Home" component={Home} />
+                        <Stack.Screen name="Setting" component={Setting} />
+                        <Stack.Screen name="AddMoney" component={AddMoney} />
+                        <Stack.Screen name="WithDraw" component={WithDraw} />
+                        <Stack.Screen name="Transaction" component={Transaction} />
+                        <Stack.Screen name="Transfer" component={Transfer} />
+                        <Stack.Screen name="ConfirmTransfer" component={ConfirmTransfer} />
+                        <Stack.Screen name="News" component={News} />
+                        <Stack.Screen name="Camera" component={Camera} />
+                    </Stack.Navigator>
+                </NavigationContainer>
+            </MeProvinder>
         </TouchableWithoutFeedback>
     )
 }

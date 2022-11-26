@@ -125,6 +125,8 @@ export default () => {
                                 if (a) {
                                     Toast.success(a.message)
                                     navigation.navigate('Home')
+                                }else{
+                                    Toast.error('ทำธุรกรรมไม่สำเร็จ')
                                 }
                                 setDisable(false)
                             })

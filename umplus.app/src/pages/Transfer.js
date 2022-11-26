@@ -54,14 +54,14 @@ export default () => {
     const { user, dip } = useAuth()
     const me = useMe()
     const [num, setNum] = useState(0)
-    const [account, setAccount] = useState(route.params.user_id ? route.params.user_id : '')
+    const [account, setAccount] = useState(route.params && route.params.user_id ? route.params.user_id : '')
     const [info, setInfo] = useState('')
     const [disable, setDisable] = useState(false)
     const [errors, setError] = useState({})
 
     const validator = yup.object().shape({
-        account: yup.string().length(5, 'เลขประจำตัวต้องมี 5 ตัวเท่านั้น').matches(/\d+/).notOneOf([user.user_id],'บัญชี่ที่โดนจะต้องไม่ใช่บัญชีของตนเอง').required(),
-        amount: yup.number().min(1,'ต้องโอนอย่างต่ำ 1 บาท').required()
+        account: yup.string().length(5, 'เลขประจำตัวต้องมี 5 ตัวเท่านั้น').matches(/\d+/).notOneOf([user.user_id], 'บัญชี่ที่โดนจะต้องไม่ใช่บัญชีของตนเอง').required(),
+        amount: yup.number().min(1, 'ต้องโอนอย่างต่ำ 1 บาท').max(me.balance, `จำนวนเงินของท่านไม่เพียงพอ`).required()
     })
 
     const onPress = async () => {
@@ -74,10 +74,10 @@ export default () => {
                 }
             }).then((a) => {
                 if (a) {
-                    navigation.navigate("ConfirmTransfer",{
-                        amount:num,
+                    navigation.navigate("ConfirmTransfer", {
+                        amount: num,
                         info,
-                        receiver:a
+                        receiver: a
                     })
                     setDisable(false)
                 } else {
@@ -93,12 +93,12 @@ export default () => {
         setDisable(!validate)
         return validate
     }
-    useEffect(()=>{
+    useEffect(() => {
         TestError()
-    },[account,num])
+    }, [account, num])
     return (
         <>
-            <Container header={Header}>
+            <Container scroll={true} header={Header}>
                 <View className="w-full relative mt-4" style={{ aspectRatio: 338 / 186 }}>
                     <Image className="w-full h-full absolute -scale-100" source={CARD} />
                     <View className="w-full h-full absolute px-4 py-3 flex flex-row">

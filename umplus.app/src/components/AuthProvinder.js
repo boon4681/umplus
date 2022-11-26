@@ -8,7 +8,7 @@ import LogTab from "./LogTab";
 // const host = 'http://159.223.71.170:5173'
 // const host = 'http://192.168.0.101:5173'
 // const host = 'http://192.168.0.102:5173'
-const host = 'http://192.168.87.29:5173'
+const host = 'http://192.168.214.29:5173'
 
 class dip {
     verify = false;
@@ -18,25 +18,30 @@ class dip {
     constructor(token, logout) {
         this.token = token
         this.logout = logout
-        this.wait = fetch(`${host}/api/user/auth/login`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${this.token}`
-            }
-        }).then(res => res.status < 500 ? res.json() : { code: res.status }).then(res => {
-            if (res.code === 200) {
-                this.verify = true
-            } else {
+        this.wait = async () => {
+            if(this.verify) return;
+            try {
+                const auth = await fetch(`${host}/api/user/auth/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    }
+                })
+                if (auth.status === 200) {
+                    this.verify = true
+                } else {
+                    this.logout()
+                }
+            } catch (error) {
                 this.logout()
+                this.verify = false
             }
-        }).catch(() => {
-            this.verify = false
-        })
+        }
     }
     async fetch(at, method, init) {
-        try{
-            await this.wait
+        try {
+            await this.wait()
             return this.verify ? (
                 axios({
                     ...init,
@@ -46,9 +51,9 @@ class dip {
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${this.token}`,
                     }
-                }).then(a => a.data).catch(a=>a.data)
+                }).then(a => a.data).catch(a => a.data)
             ) : null
-        }catch(error){
+        } catch (error) {
             return null
         }
     }
@@ -136,7 +141,6 @@ export const AuthProvider = ({ children }) => {
             setError(null)
         }
     }, [error])
-
     return (
         <AuthContext.Provider
             value={{

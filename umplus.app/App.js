@@ -62,11 +62,9 @@ export default function App() {
     return (
         <SafeAreaProvider>
             <ToastManager className="font-LINESeedRg select-none pointer-events-none" width={300} height={75} />
-            <View behavior='height' className="flex-1 relative" onLayout={onLayoutRootView}>
+            <View className="flex-1 relative" onLayout={onLayoutRootView}>
                 <AuthProvider>
-                    <MeProvinder>
-                        <Routes></Routes>
-                    </MeProvinder>
+                    <Routes></Routes>
                 </AuthProvider>
             </View>
             <StatusBar style="auto" />

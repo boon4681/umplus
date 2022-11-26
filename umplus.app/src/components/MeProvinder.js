@@ -6,24 +6,30 @@ import { useAuth } from "../hooks/useAuth";
 export const MeContext = React.createContext({})
 
 export const MeProvinder = ({ children }) => {
-    const { dip,isAuthenticated } = useAuth()
+    const { dip, isAuthenticated } = useAuth()
     const [me, setMe] = useState()
     const load = () => {
         if (dip) {
-            dip.fetch('user/@me','POST').then(data => {
+            dip.fetch('user/@me', 'POST').then(data => {
                 if (data) {
                     setMe(data)
                 }
             })
         }
     }
-    useEffect(()=>{
+    useEffect(() => {
         load()
-    },[isAuthenticated])
+    }, [isAuthenticated])
     useEffect(() => {
         load()
         const i = setInterval(() => {
-            load()
+            if (dip) {
+                dip.fetch('user/@me', 'POST').then(data => {
+                    if (data) {
+                        setMe(data)
+                    }
+                })
+            }
         }, 1000)
         return () => clearInterval(i)
     }, [])
