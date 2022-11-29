@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Image, ImageBackground, Platform, NativeModules, KeyboardAvoidingView } from 'react-native';
+import { StyleSheet, Text, View, Image, ImageBackground, Platform, NativeModules, KeyboardAvoidingView, Keyboard, TouchableWithoutFeedback } from 'react-native';
 import { useEffect, useCallback } from 'react';
 import { AuthProvider } from './src/components/AuthProvinder';
 import { useFonts } from 'expo-font';
@@ -30,6 +30,7 @@ function loadFont() {
         'LINESeedHe': require('./assets/fonts/LINESeedSansTH_W_He.otf'),
         'LINESeedBd': require('./assets/fonts/LINESeedSansTH_W_Bd.otf'),
         'LINESeedXBd': require('./assets/fonts/LINESeedSansTH_W_XBd.otf'),
+        'NotoSans': require('./assets/fonts/NotoSansThai-Regular.ttf'),
     });
 
     useEffect(() => {
@@ -62,11 +63,13 @@ export default function App() {
     return (
         <SafeAreaProvider>
             <ToastManager className="font-LINESeedRg select-none pointer-events-none" width={300} height={75} />
-            <View className="flex-1 relative" onLayout={onLayoutRootView}>
-                <AuthProvider>
-                    <Routes></Routes>
-                </AuthProvider>
-            </View>
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                <View className="flex-1 relative" onLayout={onLayoutRootView}>
+                    <AuthProvider>
+                        <Routes></Routes>
+                    </AuthProvider>
+                </View>
+            </TouchableWithoutFeedback>
             <StatusBar style="auto" />
         </SafeAreaProvider>
     );

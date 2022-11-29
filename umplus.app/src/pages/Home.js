@@ -14,6 +14,7 @@ import LogTab from '../components/LogTab';
 import BottomTab from '../components/BottomTab';
 import useMe from '../hooks/useMe';
 import { useNavigation } from '@react-navigation/native';
+import AvatarBeam from '../components/Avatar';
 
 export default function Home() {
     const { user, isAuthenticated } = useAuth()
@@ -39,14 +40,14 @@ export default function Home() {
                 <View className="bg-[#0085FF] p-2 rounded-xl">
                     <View className=" bg-white p-1.5 rounded-xl flex flex-row items-center">
                         <View className="w-[44px] h-[44px]">
-                            {/* {
-                                me ? <Avatar
+                            {
+                                me ? <AvatarBeam
                                     size={44}
                                     name={`u${me.user_id}`}
                                     variant="beam"
                                     colors={['#FF5252', '#FF7752', '#FF9A52', '#FFB752', '#5E405B']}
                                 /> : null
-                            } */}
+                            }
                         </View>
                         <View className="px-2 flex flex-col">
                             <Text className="font-LINESeedRg text-base">

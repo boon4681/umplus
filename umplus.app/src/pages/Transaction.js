@@ -18,6 +18,8 @@ import useMe from '../hooks/useMe';
 import { memo, useEffect, useMemo, useRef, useState } from 'react';
 import useHistory from '../hooks/useHistory';
 import LogTab from '../components/LogTab';
+import AvatarBeam from '../components/Avatar';
+import { joinDate } from '../utils/utilities';
 
 const Header = () => {
     const navigation = useNavigation()
@@ -50,13 +52,7 @@ const Header = () => {
     )
 }
 
-function joinDate(t, a, s = ' ', lang = 'en') {
-    function format(m) {
-        let f = new Intl.DateTimeFormat(lang, m);
-        return f.format(t);
-    }
-    return a.map(format).join(s);
-}
+
 
 function MiniTime(timestamp) {
     const date = new Date(timestamp)
@@ -185,12 +181,12 @@ export default () => {
                         <View className="basis-1/4">
                             <Image className='w-[52px] h-[42px]' source={LOGOLIGHT} />
                             <View className="w-[60px] h-[60px] rounded-[30px] border-2 border-[#1f232548]">
-                                {/* <Avatar
+                                <AvatarBeam
                                     size={56}
                                     name={`u${user.user_id}`}
                                     variant="beam"
                                     colors={['#FF5252', '#FF7752', '#FF9A52', '#FFB752', '#5E405B']}
-                                /> */}
+                                />
                             </View>
                             <Text className="font-LINESeedRg text-white text-xl mt-3">{user.user_id}</Text>
                             <Text className="font-LINESeedRg text-white text-md -mt-3">เลขประจำตัว</Text>
@@ -202,7 +198,7 @@ export default () => {
                         </View>
                     </View>
                 </View>
-                <View className="flex-1 pb-20">
+                <View className="flex-1">
                     <Text className="font-LINESeedRg text-black text-xl mt-2">Transaction</Text>
                     <ScrollView keyboardShouldPersistTaps="always" className="w-full h-full bg-white rounded-2xl mt-2 px-2 pt-2 flex flex-col space-y-1" >
                         {

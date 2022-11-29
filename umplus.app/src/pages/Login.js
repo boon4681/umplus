@@ -13,8 +13,8 @@ const validator = yup.object().shape({
 })
 
 export default function Login({ navigation }) {
-    const [username, setUsername] = useState('32396')
-    const [password, setPassword] = useState('1111111111111')
+    const [username, setUsername] = useState('')
+    const [password, setPassword] = useState('')
     const [disable, setDisable] = useState(false)
     const [errors, setError] = useState({})
     const { login, isAuthenticated } = useAuth()
@@ -49,7 +49,7 @@ export default function Login({ navigation }) {
             <View className="px-5 w-full h-full flex flex-col space-y-4 pt-10">
                 <View>
                     <Text className="font-LINESeedRg font-normal text-xl text-RaisinBlack">
-                        Username
+                        บัญชีผู้ใช้
                     </Text>
                     <TextInput
                         defaultValue={username}
@@ -63,13 +63,14 @@ export default function Login({ navigation }) {
                 </View>
                 <View>
                     <Text className="font-LINESeedRg font-normal text-xl text-RaisinBlack">
-                        Password
+                        รหัสผ่าน
                     </Text>
                     <TextInput
                         defaultValue={password}
                         onChangeText={(e) => {
                             setPassword(e)
                         }}
+                        secureTextEntry={true}
                         className="font-LINESeedRg font-normal text-lg bg-white text-SonicSilver px-5 py-3 w-full border-2 border-RaisinBlack rounded-xl"
                         placeholder="เลขบัตรประชาชน"
                     />

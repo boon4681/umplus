@@ -1,5 +1,4 @@
 import { memo, useEffect, useState } from 'react';
-import Svg, { Circle, Rect } from 'react-native-svg';
 import useMe from '../hooks/useMe';
 import LogTab from './LogTab';
 import { Canvas, Box, BoxShadow, Fill, rrect, rect, Group } from "@shopify/react-native-skia";

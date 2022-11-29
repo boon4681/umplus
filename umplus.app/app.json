@@ -1,46 +1,56 @@
 {
-  "expo": {
-    "name": "umplus",
-    "slug": "umplus",
-    "version": "1.0.0",
-    "orientation": "portrait",
-    "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
-    "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
-    },
-    "updates": {
-      "fallbackToCacheTimeout": 0
-    },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
-    "ios": {
-      "supportsTablet": false,
-      "infoPlist": {
-        "NSCameraUsageDescription": "This app uses the camera to scan qrcodes on scan to pay."
-      },
-      "bundleIdentifier": "com.boon4681.umplus"
-    },
-    "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#FFFFFF"
-      },
-      "permissions": [
-        "CAMERA"
-      ],
-      "package": "com.boon4681.umplus"
-    },
-    "web": {
-      "favicon": "./assets/favicon.png"
-    },
-    "extra": {
-      "eas": {
-        "projectId": "f3ed0c92-4670-430e-a114-1bdc7c3bf954"
-      }
+    "expo": {
+        "name": "umplus",
+        "slug": "umplus",
+        "version": "1.0.0",
+        "orientation": "portrait",
+        "icon": "./assets/icon.png",
+        "userInterfaceStyle": "light",
+        "splash": {
+            "image": "./assets/splash.png",
+            "resizeMode": "contain",
+            "backgroundColor": "#ffffff"
+        },
+        "updates": {
+            "fallbackToCacheTimeout": 0
+        },
+        "assetBundlePatterns": [
+            "**/*"
+        ],
+        "ios": {
+            "supportsTablet": false,
+            "infoPlist": {
+                "NSCameraUsageDescription": "This app uses the camera to scan qrcodes on scan to pay."
+            },
+            "bundleIdentifier": "com.boon4681.umplus"
+        },
+        "android": {
+            "adaptiveIcon": {
+                "foregroundImage": "./assets/favicon.png",
+                "backgroundColor": "#FFFFFF"
+            },
+            "permissions": [
+                "CAMERA"
+            ],
+            "package": "com.boon4681.umplus"
+        },
+        "web": {
+            "favicon": "./assets/favicon.png"
+        },
+        "extra": {
+            "eas": {
+                "projectId": "f3ed0c92-4670-430e-a114-1bdc7c3bf954"
+            }
+        },
+        "plugins": [
+            [
+                "expo-media-library",
+                {
+                    "photosPermission": "Allow $(PRODUCT_NAME) to access your photos.",
+                    "savePhotosPermission": "Allow $(PRODUCT_NAME) to save photos.",
+                    "isAccessMediaLocationEnabled": true
+                }
+            ]
+        ]
     }
-  }
 }

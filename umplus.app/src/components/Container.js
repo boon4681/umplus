@@ -20,7 +20,7 @@ export default function Container({ children, header, scroll }) {
                     {children}
                 </ScrollView>
                 :
-                <View className="px-5 pt-3 flex flex-col w-full box-border relative" style={{ flex: 1, marginTop: Platform.OS === 'ios' ? -keyboard / 2 : -keyboard }}>
+                <View className="px-5 pt-3 flex flex-col w-full box-border relative" style={{ flex: 1 }}>
                     {children}
                 </View>
             }

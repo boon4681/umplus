@@ -15,6 +15,7 @@ import { Toast } from 'toastify-react-native'
 import * as yup from 'yup'
 import useValidator from '../hooks/useValidator';
 import { StatusBar } from 'expo-status-bar';
+import AvatarBeam from '../components/Avatar';
 
 const Header = () => {
     const navigation = useNavigation()
@@ -105,12 +106,12 @@ export default () => {
                         <View className="basis-1/4">
                             <Image className='w-[52px] h-[42px]' source={LOGOLIGHT} />
                             <View className="w-[60px] h-[60px] rounded-[30px] border-2 border-[#1f232548]">
-                                {/* <Avatar
+                                <AvatarBeam
                                     size={56}
                                     name={`u${user.user_id}`}
                                     variant="beam"
                                     colors={['#FF5252', '#FF7752', '#FF9A52', '#FFB752', '#5E405B']}
-                                /> */}
+                                />
                             </View>
                             <Text className="font-LINESeedRg text-white text-xl mt-3">{user.user_id}</Text>
                             <Text className="font-LINESeedRg text-white text-md -mt-3">เลขประจำตัว</Text>

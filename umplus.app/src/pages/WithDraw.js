@@ -13,6 +13,7 @@ import { TextInput } from 'react-native-gesture-handler';
 import { useState } from 'react';
 import useMe from '../hooks/useMe';
 import { UmplusQrCode } from '../components/UmplusQrCode';
+import AvatarBeam from '../components/Avatar';
 
 const Header = () => {
     const navigation = useNavigation()
@@ -51,12 +52,12 @@ export default () => {
                     <View className="basis-1/4">
                         <Image className='w-[52px] h-[42px]' source={LOGOLIGHT} />
                         <View className="w-[60px] h-[60px] rounded-[30px] border-2 border-[#1f232548]">
-                            {/* <Avatar
+                            <AvatarBeam
                                 size={56}
                                 name={`u${user.user_id}`}
                                 variant="beam"
                                 colors={['#FF5252', '#FF7752', '#FF9A52', '#FFB752', '#5E405B']}
-                            /> */}
+                            />
                         </View>
                         <Text className="font-LINESeedRg text-white text-xl mt-3">{user.user_id}</Text>
                         <Text className="font-LINESeedRg text-white text-md -mt-3">เลขประจำตัว</Text>

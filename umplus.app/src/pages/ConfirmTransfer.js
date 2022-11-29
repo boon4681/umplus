@@ -12,6 +12,7 @@ import useMe from '../hooks/useMe';
 import { useState } from 'react';
 import { TextInput } from 'react-native-gesture-handler';
 import { Toast } from 'toastify-react-native'
+import AvatarBeam from '../components/Avatar';
 
 const Header = () => {
     const navigation = useNavigation()
@@ -52,12 +53,12 @@ export default () => {
                     <View className="w-full px-4 pb-3 flex flex-row">
                         <View className="basis-1/4">
                             <View className="w-[60px] h-[60px] rounded-[30px] border-2 border-[#1f232548]">
-                                {/* <Avatar
+                                <AvatarBeam
                                     size={56}
-                                    name={`u${user.user_id + user.firstname}w`}
+                                    name={`u${user.user_id}`}
                                     variant="beam"
                                     colors={['#FF5252', '#FF7752', '#FF9A52', '#FFB752', '#5E405B']}
-                                /> */}
+                                />
                             </View>
                         </View>
                         <View>
@@ -74,12 +75,12 @@ export default () => {
                     <View className="w-full px-4 pb-4 flex flex-row">
                         <View className="basis-1/4">
                             <View className="w-[60px] h-[60px] rounded-[30px] border-2 border-[#1f232548]">
-                                {/* <Avatar
+                                <AvatarBeam
                                     size={56}
-                                    name={`u${route.params.receiver.user_id + route.params.receiver.firstname}w`}
+                                    name={`u${route.params.receiver.user_id}`}
                                     variant="beam"
                                     colors={['#FF5252', '#FF7752', '#FF9A52', '#FFB752', '#5E405B']}
-                                /> */}
+                                />
                             </View>
                         </View>
                         <View>
@@ -124,8 +125,8 @@ export default () => {
                             }).then(a => {
                                 if (a) {
                                     Toast.success(a.message)
-                                    navigation.navigate('Home')
-                                }else{
+                                    navigation.navigate('Slip',{...a.data})
+                                } else {
                                     Toast.error('ทำธุรกรรมไม่สำเร็จ')
                                 }
                                 setDisable(false)
