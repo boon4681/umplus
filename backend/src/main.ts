@@ -13,7 +13,7 @@ app.use(express.urlencoded({
     extended: true
 }))
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms'))
-app.use('/download',express.static('download'))
+app.use('/download',express.static('./download'))
 app.use(Router)
 
 app.listen(3000, () => {
