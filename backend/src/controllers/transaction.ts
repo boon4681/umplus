@@ -38,7 +38,7 @@ export async function create(req: Request, res: Response, next: NextFunction) {
                         balance: {
                             decrement: amount
                         },
-                        expense:{
+                        expense: {
                             increment: amount
                         }
                     }
@@ -86,7 +86,24 @@ export async function create(req: Request, res: Response, next: NextFunction) {
             })
             return res.status(200).json({
                 code: 200,
-                message: 'done'
+                message: 'done',
+                data: await prisma.transaction.findFirst({
+                    where: {
+                        transaction_id: sender.transaction_id
+                    },
+                    select: {
+                        transaction_id: true,
+                        amount: true,
+                        timestamp: true,
+                        receiver: {
+                            select: {
+                                user_id: true,
+                                firstname: true,
+                                lastname: true
+                            }
+                        }
+                    }
+                })
             })
         } catch (error: any) {
             await prisma.transaction.update({
@@ -102,7 +119,7 @@ export async function create(req: Request, res: Response, next: NextFunction) {
                 message: error.message
             })
         }
-    } catch (error:any) {
+    } catch (error: any) {
         return res.status(400).json({
             code: 400,
             message: 'ไม่พบเลขบัญชีนี้'
