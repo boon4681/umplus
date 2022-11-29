@@ -10,6 +10,10 @@ export default defineConfig({
         target: 'http://localhost:3000',
         changeOrigin: true
       },
+      'download':{
+        target:'http://localhost:3000',
+        changeOrigin: true
+      },
       '/assets/images/articles/':{
         target: 'http://www.ammart.ac.th',
         changeOrigin: true
