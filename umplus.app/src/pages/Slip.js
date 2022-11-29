@@ -6,12 +6,12 @@ import * as MediaLibrary from 'expo-media-library';
 
 import Container from "../components/Container"
 import SlipTemplate from "../components/SlipTemplate"
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { joinDate } from "../utils/utilities";
 
 function MiniTime(timestamp) {
     const date = new Date(timestamp)
-    return `${joinDate(date, [{ 'day': '2-digit' }, { 'month': 'short' }], ' ', 'th-TH')} ${(Number(joinDate(date, [{ 'year': 'numeric' }])) + 543).toString().slice(-2)} - ${joinDate(date, [{ 'hour': '2-digit' }, { 'minute': '2-digit' }], '.').replace(/ PM| AM/, '')}`
+    return `${joinDate(date, [{ 'day': '2-digit' }, { 'month': 'short' }], '-', 'th-TH')} ${(Number(joinDate(date, [{ 'year': 'numeric' }])) + 543).toString().slice(-2)}-${joinDate(date, [{ 'hour': '2-digit' }, { 'minute': '2-digit' }], '.').replace(/ PM| AM/, '')}`
 }
 
 export default () => {
@@ -34,7 +34,8 @@ export default () => {
             // })
 
             const asset = await MediaLibrary.createAssetAsync(localUri)
-            await MediaLibrary.createAlbumAsync('umplus', asset, false);
+            await MediaLibrary.createAlbumAsync('umplus', asset);
+            // await MediaLibrary.deleteAssetsAsync(asset)
             console.log("SAVE")
         } catch (e) {
             console.log(e);
@@ -42,7 +43,9 @@ export default () => {
     }
 
     const onCapture = useCallback(localUri => {
-        onSaveImageAsync(localUri)
+        setTimeout(()=>{
+            onSaveImageAsync(localUri)
+        },200)
     }, []);
 
     return (
@@ -54,7 +57,7 @@ export default () => {
                     quality: 1,
                     height: 500,
                     fileName: `${route.params.transaction_id}-${MiniTime(route.params.timestamp)}`,
-                    format: 'png'
+                    format: 'jpg'
                 }}
                 captureMode="mount"
                 collapsable={false}
