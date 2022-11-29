@@ -13,6 +13,9 @@ function App() {
                     มิติใหม่ของ E-wallet สำหรับโรงเรียน
                 </div>
                 <button
+                    onClick={() => {
+                        window.location.href = 'https://workspace.boon4681.com/download/umplus-app.apk'
+                    }}
                     className="w-full shadow-xl sm:w-auto flex bg-[#1c1d1e] hover:bg-[#1c1d1e]/95 focus:ring-4 focus:ring-gray-500 text-white rounded-xl items-center justify-center px-4 py-4 mt-10 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700">
                     {/* <svg className="mr-3 w-9 h-9" aria-hidden="true" focusable="false" data-prefix="fab" data-icon="google-play"
                         role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
